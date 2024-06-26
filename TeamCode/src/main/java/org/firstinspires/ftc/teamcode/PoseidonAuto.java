@@ -23,17 +23,17 @@ import org.opencv.core.Rect;
 public class PoseidonAuto extends LinearOpMode {
 
     private OpenCvCamera camera;
-    private Mat processedFrame = new Mat();
+    private final Mat processedFrame = new Mat();
 
     // HSV color ranges for light purple, blue, and red
-    private Scalar lightPurpleLow = new Scalar(125, 50, 50);
-    private Scalar lightPurpleHigh = new Scalar(150, 255, 255);
+    private final Scalar lightPurpleLow = new Scalar(125, 50, 50);
+    private final Scalar lightPurpleHigh = new Scalar(150, 255, 255);
 
-    private Scalar blueLow = new Scalar(100, 50, 50);
-    private Scalar blueHigh = new Scalar(130, 255, 255);
+    private final Scalar blueLow = new Scalar(100, 50, 50);
+    private final Scalar blueHigh = new Scalar(130, 255, 255);
 
-    private Scalar redLow = new Scalar(0, 50, 50);
-    private Scalar redHigh = new Scalar(10, 255, 255);
+    private final Scalar redLow = new Scalar(0, 50, 50);
+    private final Scalar redHigh = new Scalar(10, 255, 255);
 
     @Override
     public void runOpMode() {
@@ -111,7 +111,7 @@ public class PoseidonAuto extends LinearOpMode {
                 telemetry.addData(colorName + " Center X", centerX);
 
                 // Decide which position to move to
-                if (centerX < input.width() / 3) {
+                /*if (centerX < input.width() / 3) {
                     telemetry.addData(colorName + " Position", "Left");
                     // Move to position 1
                 } else if (centerX < 2 * input.width() / 3) {
@@ -120,7 +120,7 @@ public class PoseidonAuto extends LinearOpMode {
                 } else {
                     telemetry.addData(colorName + " Position", "Right");
                     // Move to position 3
-                }
+                }*/
             }
         }
     }
