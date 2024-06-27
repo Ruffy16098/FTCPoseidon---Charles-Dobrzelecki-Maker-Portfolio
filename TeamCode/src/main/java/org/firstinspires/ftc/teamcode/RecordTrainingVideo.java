@@ -28,7 +28,6 @@ public class RecordTrainingVideo extends LinearOpMode {
     private static final String COUNT_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/teleop_run_count.txt";
     private static final String SAVED_VIDEOS_DIRECTORY = Environment.getExternalStorageDirectory().getPath() + "/saved_videos/";
 
-    @SuppressLint("DefaultLocale")
     @Override
     public void runOpMode() {
         // Initialize the webcam

@@ -6,6 +6,7 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -18,7 +19,6 @@ import java.util.List;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Rect;
 
-//TODO: fix input not a variable
 @Autonomous(name="PoseidonAuto", group="Linear Opmode")
 public class PoseidonAuto extends LinearOpMode {
 
@@ -80,15 +80,14 @@ public class PoseidonAuto extends LinearOpMode {
             Core.inRange(processedFrame, redLow, redHigh, redMask);
 
             // Analyze masks to determine position of the colors
-            // For simplicity, we assume each color is represented by the largest contour found in each mask
-            analyzePosition(lightPurpleMask, "Light Purple");
-            analyzePosition(blueMask, "Blue");
-            analyzePosition(redMask, "Red");
+            analyzePosition(lightPurpleMask, "Light Purple", input.width());
+            analyzePosition(blueMask, "Blue", input.width());
+            analyzePosition(redMask, "Red", input.width());
 
-            return input;
+            return processedFrame;
         }
 
-        private void analyzePosition(Mat mask, String colorName) {
+        private void analyzePosition(Mat mask, String colorName, int inputWidth) {
             // Find contours
             List<MatOfPoint> contours = new ArrayList<>();
             Mat hierarchy = new Mat();
@@ -103,24 +102,27 @@ public class PoseidonAuto extends LinearOpMode {
                     }
                 }
 
-                // Get the bounding rectangle of the largest contour
+                // Draw rectangle and label
                 Rect boundingRect = Imgproc.boundingRect(largestContour);
+                Imgproc.rectangle(processedFrame, boundingRect.tl(), boundingRect.br(), new Scalar(255, 255, 255), 2);
+                Imgproc.putText(processedFrame, colorName, new Point(boundingRect.x, boundingRect.y - 10),
+                        Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255), 2);
 
-                // Determine the position
+                // Determine the position based on centerX
                 int centerX = boundingRect.x + (boundingRect.width / 2);
                 telemetry.addData(colorName + " Center X", centerX);
 
                 // Decide which position to move to
-                /*if (centerX < input.width() / 3) {
+                if (centerX < inputWidth / 3) {
                     telemetry.addData(colorName + " Position", "Left");
                     // Move to position 1
-                } else if (centerX < 2 * input.width() / 3) {
+                } else if (centerX < 2 * inputWidth / 3) {
                     telemetry.addData(colorName + " Position", "Center");
                     // Move to position 2
                 } else {
                     telemetry.addData(colorName + " Position", "Right");
                     // Move to position 3
-                }*/
+                }
             }
         }
     }
