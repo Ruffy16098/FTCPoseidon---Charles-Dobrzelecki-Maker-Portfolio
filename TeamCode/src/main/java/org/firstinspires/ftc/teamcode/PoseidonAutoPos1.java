@@ -1,26 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
-import org.opencv.core.Point;
+import com.qualcomm.robotcore.eventloop.opmode.*;
+
+import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvInternalCamera;
-import org.openftc.easyopencv.OpenCvPipeline;
+import org.openftc.easyopencv.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Rect;
+import java.util.*;
 
-@Autonomous(name="PoseidonAuto", group="Linear Opmode")
-public class PoseidonAuto extends LinearOpMode {
+@Autonomous(name = "Color Recognition OpMode 720p", group = "Linear Opmode")
+public class PoseidonAutoPos1 extends LinearOpMode {
 
     private OpenCvCamera camera;
     private final Mat processedFrame = new Mat();
@@ -34,6 +23,13 @@ public class PoseidonAuto extends LinearOpMode {
 
     private final Scalar redLow = new Scalar(0, 50, 50);
     private final Scalar redHigh = new Scalar(10, 255, 255);
+
+    // HSV color ranges for light white and dark white
+    private final Scalar lightWhiteLow = new Scalar(0, 0, 200);
+    private final Scalar lightWhiteHigh = new Scalar(180, 50, 255);
+
+    private final Scalar darkWhiteLow = new Scalar(0, 0, 100);
+    private final Scalar darkWhiteHigh = new Scalar(180, 50, 200);
 
     @Override
     public void runOpMode() {
@@ -74,20 +70,26 @@ public class PoseidonAuto extends LinearOpMode {
             Mat lightPurpleMask = new Mat();
             Mat blueMask = new Mat();
             Mat redMask = new Mat();
+            Mat lightWhiteMask = new Mat();
+            Mat darkWhiteMask = new Mat();
 
             Core.inRange(processedFrame, lightPurpleLow, lightPurpleHigh, lightPurpleMask);
             Core.inRange(processedFrame, blueLow, blueHigh, blueMask);
             Core.inRange(processedFrame, redLow, redHigh, redMask);
+            Core.inRange(processedFrame, lightWhiteLow, lightWhiteHigh, lightWhiteMask);
+            Core.inRange(processedFrame, darkWhiteLow, darkWhiteHigh, darkWhiteMask);
 
-            // Analyze masks to determine position of the colors
-            analyzePosition(lightPurpleMask, "Light Purple", input.width());
-            analyzePosition(blueMask, "Blue", input.width());
-            analyzePosition(redMask, "Red", input.width());
+            // Analyze masks to determine the position of the colors
+            analyzePosition(input, lightPurpleMask, "Light Purple");
+            analyzePosition(input, blueMask, "Blue");
+            analyzePosition(input, redMask, "Red");
+            analyzePosition(input, lightWhiteMask, "Light White");
+            analyzePosition(input, darkWhiteMask, "Dark White");
 
-            return processedFrame;
+            return input;
         }
 
-        private void analyzePosition(Mat mask, String colorName, int inputWidth) {
+        private void analyzePosition(Mat input, Mat mask, String colorName) {
             // Find contours
             List<MatOfPoint> contours = new ArrayList<>();
             Mat hierarchy = new Mat();
@@ -102,26 +104,23 @@ public class PoseidonAuto extends LinearOpMode {
                     }
                 }
 
-                // Draw rectangle and label
+                // Get the bounding rectangle of the largest contour
                 Rect boundingRect = Imgproc.boundingRect(largestContour);
-                Imgproc.rectangle(processedFrame, boundingRect.tl(), boundingRect.br(), new Scalar(255, 255, 255), 2);
-                Imgproc.putText(processedFrame, colorName, new Point(boundingRect.x, boundingRect.y - 10),
-                        Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255), 2);
 
-                // Determine the position based on centerX
+                // Determine the position
                 int centerX = boundingRect.x + (boundingRect.width / 2);
                 telemetry.addData(colorName + " Center X", centerX);
 
                 // Decide which position to move to
-                if (centerX < inputWidth / 3) {
+                if (centerX < input.width() / 3) {
                     telemetry.addData(colorName + " Position", "Left");
-                    // Move to position 1
-                } else if (centerX < 2 * inputWidth / 3) {
+                    // Add code to move the robot to the left position
+                } else if (centerX < 2 * input.width() / 3) {
                     telemetry.addData(colorName + " Position", "Center");
-                    // Move to position 2
+                    // Add code to move the robot to the center position
                 } else {
                     telemetry.addData(colorName + " Position", "Right");
-                    // Move to position 3
+                    // Add code to move the robot to the right position
                 }
             }
         }
