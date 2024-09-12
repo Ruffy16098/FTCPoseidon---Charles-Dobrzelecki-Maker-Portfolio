@@ -16,7 +16,7 @@ public class MeepMeepTesting {
         MeepMeep meepMeep = new MeepMeep(800);
         Image img = null;
         try {
-            img = ImageIO.read(new File("<PATH TO IMAGE>"));
+            img = ImageIO.read(new File(""));
         } catch (IOException e) {
 
         }
