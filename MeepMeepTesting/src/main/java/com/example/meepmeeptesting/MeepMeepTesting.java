@@ -12,13 +12,13 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class MeepMeepTesting {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         MeepMeep meepMeep = new MeepMeep(800);
         Image img = null;
         try {
             img = ImageIO.read(new File(""));
         } catch (IOException e) {
-
+            throw(e);
         }
         meepMeep.setBackground(img);
 
