@@ -26,7 +26,7 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(0, 0, 0))
+                        drive.trajectorySequenceBuilder(new Pose2d(-32, -61, 0))
                                 .forward(30)
                                 .turn(Math.toRadians(90))
                                 .forward(30)
@@ -38,6 +38,7 @@ public class MeepMeepTesting {
                                 .build()
                 );
 
+        // Waiting for next meepmeep repo update to get intothedeep images
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
