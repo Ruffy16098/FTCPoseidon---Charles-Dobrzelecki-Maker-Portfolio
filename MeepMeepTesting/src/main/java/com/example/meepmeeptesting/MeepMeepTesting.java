@@ -16,7 +16,7 @@ public class MeepMeepTesting {
         MeepMeep meepMeep = new MeepMeep(800);
         Image img = null;
         try {
-            img = ImageIO.read(new File("<PATH TO IMAGE>"));
+            img = ImageIO.read(new File("MeepMeepTesting/src/main/assests/intoTheDeepField.png"));
         } catch (IOException e) {
 
         }
@@ -39,10 +39,13 @@ public class MeepMeepTesting {
                 );
 
         // Waiting for next meepmeep repo update to get intothedeep images
-        meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
+        // old image MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK
+        /*meepMeep.setBackground(img)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 .addEntity(myBot)
-                .start();
+                .start();\
+
+         */
     }
 }
