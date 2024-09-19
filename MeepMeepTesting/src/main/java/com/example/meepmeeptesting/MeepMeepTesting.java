@@ -18,7 +18,7 @@ public class MeepMeepTesting {
 
         Action leftRedAll = myBot.getDrive().actionBuilder(new Pose2d(-11.4, -61.5, Math.toRadians(90)))
                 .strafeToLinearHeading(new Vector2d(-47,-47), Math.toRadians(45))
-                .waitSeconds(1) // goes to put away starting sample
+                .waitSeconds(1) // goes to hook on starting sample
 
                 .turn(Math.toRadians(45))
                 .waitSeconds(1)
