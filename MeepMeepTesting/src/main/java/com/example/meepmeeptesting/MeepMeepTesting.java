@@ -16,7 +16,7 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        Action leftRedAll = myBot.getDrive().actionBuilder(new Pose2d(-11.4, -59.5, Math.toRadians(90)))
+        Action leftRedAll = myBot.getDrive().actionBuilder(new Pose2d(-11.4, -61.5, Math.toRadians(90)))
                 .strafeToLinearHeading(new Vector2d(-47,-47), Math.toRadians(45))
                 .waitSeconds(1) // goes to put away starting sample
 
@@ -42,7 +42,8 @@ public class MeepMeepTesting {
 
                 .build();
 
-        /*Action rightRed = myBot.getDrive().actionBuilder(new Pose2d(11, -59.5, Math.toRadians(0)))
+        Action rightRed = myBot.getDrive().actionBuilder(new Pose2d(11, -61.5, Math.toRadians(0)))
+                .strafeToLinearHeading(new Vector2d(0,-38), Math.toRadians(-90))
                 .splineToLinearHeading(new Pose2d(35, -36, Math.toRadians(270)), Math.toRadians(90))
                 .strafeTo(new Vector2d(35, -11)) // gets behind the red samples
 
@@ -55,9 +56,8 @@ public class MeepMeepTesting {
 
                 .build();
 
-         */
-
-        myBot.runAction(leftRedAll);
+        //myBot.runAction(leftRedAll);
+        myBot.runAction(rightRed);
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
