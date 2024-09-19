@@ -1,47 +1,68 @@
 package com.example.meepmeeptesting;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
-        Image img = null;
-        try {
-            img = ImageIO.read(new File(""));
-        } catch (IOException e) {
-
-        }
-        meepMeep.setBackground(img);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
-                .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(0, 0, 0))   ///test
-                                .forward(30)
-                                .turn(Math.toRadians(90))
-                                .forward(30)
-                                .turn(Math.toRadians(90))
-                                .forward(30)
-                                .turn(Math.toRadians(90))
-                                .forward(30)
-                                .turn(Math.toRadians(90))
-                                .build()
-                );
+                .build();
 
-        /*meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
+        Action leftRedAll = myBot.getDrive().actionBuilder(new Pose2d(-11.4, -59.5, Math.toRadians(90)))
+                .strafeToLinearHeading(new Vector2d(-47,-47), Math.toRadians(45))
+                .waitSeconds(1) // goes to put away starting sample
+
+                .turn(Math.toRadians(45))
+                .waitSeconds(1)
+                .turn(Math.toRadians(-45)) // grabs first sample and puts away
+                .waitSeconds(1)
+
+                .strafeToLinearHeading(new Vector2d(-58, -47), Math.toRadians(120))
+                .waitSeconds(1) // grabs third sample
+
+                .strafeToLinearHeading(new Vector2d(-47, -47), Math.toRadians(45))
+                .waitSeconds(1) // puts away third sample
+
+                .strafeToLinearHeading(new Vector2d(-58, -47), Math.toRadians(90))
+                .waitSeconds(1) // grabs second sample
+
+                .strafeToLinearHeading(new Vector2d(-47, -47), Math.toRadians(45))
+                .waitSeconds(1) // puts away second sample
+
+                .splineTo(new Vector2d(-25,12), Math.toRadians(0))
+                .waitSeconds(1) // just to show ending
+
+                .build();
+
+        /*Action rightRed = myBot.getDrive().actionBuilder(new Pose2d(11, -59.5, Math.toRadians(0)))
+                .splineToLinearHeading(new Pose2d(35, -36, Math.toRadians(270)), Math.toRadians(90))
+                .strafeTo(new Vector2d(35, -11)) // gets behind the red samples
+
+                //.strafeTo(new Vector2d(48, -11))
+                .splineToLinearHeading(new Pose2d(48, -11, Math.toRadians(270)), Math.toRadians(270))
+                .strafeTo(new Vector2d(48, -36))
+                //.strafeTo(new Vector2d(48, -11))
+                .splineToLinearHeading(new Pose2d(58, -11, Math.toRadians(270)), Math.toRadians(0))
+                .strafeTo(new Vector2d(58, -36))
+
+                .build();
+
+         */
+
+        myBot.runAction(leftRedAll);
+
+        meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 .addEntity(myBot)
-                .start();*/
+                .start();
     }
 }
