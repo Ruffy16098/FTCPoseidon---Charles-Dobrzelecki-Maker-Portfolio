@@ -42,27 +42,40 @@ public class MeepMeepTesting {
 
                 .build();
 
-        Action rightRed = myBot.getDrive().actionBuilder(new Pose2d(11, -61.5, Math.toRadians(0)))
-                .strafeToLinearHeading(new Vector2d(0,-38), Math.toRadians(-90))
+        Action rightRedSpecimens = myBot.getDrive().actionBuilder(new Pose2d(11, -61.5, Math.toRadians(0)))
+                .strafeToLinearHeading(new Vector2d(0,-38), Math.toRadians(270)) // puts away starting specimen
+
                 .splineToLinearHeading(new Pose2d(35, -36, Math.toRadians(270)), Math.toRadians(90))
                 .strafeTo(new Vector2d(35, -11)) // gets behind the red samples
 
-                //.strafeTo(new Vector2d(48, -11))
                 .splineToLinearHeading(new Pose2d(48, -11, Math.toRadians(270)), Math.toRadians(270))
-                .strafeTo(new Vector2d(48, -46))
-                //.strafeTo(new Vector2d(48, -11))
+                .strafeTo(new Vector2d(48, -46)) // moves first sample into observation zone
+
                 .strafeTo(new Vector2d(48, -11))
                 .splineToLinearHeading(new Pose2d(58, -11, Math.toRadians(270)), Math.toRadians(270))
-                .strafeTo(new Vector2d(58, -46))
+                .strafeTo(new Vector2d(58, -46)) // moves second sample into observation zone
 
                 .strafeToLinearHeading(new Vector2d(48, -25.5), 0)
-                .strafeToLinearHeading(new Vector2d(48, -46), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(58, -46), Math.toRadians(270)) // moves third sample into observation zone
+
+                .strafeTo(new Vector2d(48, -46))
+                .splineToLinearHeading(new Pose2d(1.5,-38, Math.toRadians(270)), Math.toRadians(90))
+                .waitSeconds(1) // collects and puts away first specimen
+
+                .strafeTo(new Vector2d(48, -46))
+                .strafeTo(new Vector2d(3, -38))
+                .waitSeconds(1) // collects and puts away second specimen
+
+                .strafeTo(new Vector2d(48, -46))
+                .strafeTo(new Vector2d(4.5, -38))
+                .waitSeconds(1) // collects and puts away third specimen
+
+                .strafeToLinearHeading(new Vector2d(63, -63), Math.toRadians(90)) // parks into observation zone
 
                 .build();
 
-
-
-        myBot.runAction(rightRed);
+        // chose which auto you want to run here
+        myBot.runAction(rightRedSpecimens);
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
