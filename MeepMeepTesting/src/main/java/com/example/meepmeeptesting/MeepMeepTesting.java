@@ -54,8 +54,9 @@ public class MeepMeepTesting {
                 .strafeTo(new Vector2d(48, -11))
                 .splineToLinearHeading(new Pose2d(58, -11, Math.toRadians(270)), Math.toRadians(270))
                 .strafeTo(new Vector2d(58, -46))
+
                 .strafeToLinearHeading(new Vector2d(48, -25.5), 0)
-                .strafeToLinearHeading(new Vector2d(48, -46), 270)
+                .strafeToLinearHeading(new Vector2d(48, -46), Math.toRadians(270))
 
                 .build();
 
