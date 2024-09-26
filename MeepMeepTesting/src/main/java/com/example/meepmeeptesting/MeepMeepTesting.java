@@ -25,19 +25,41 @@ public class MeepMeepTesting {
                 .turn(Math.toRadians(-45)) // grabs first sample and puts away
                 .waitSeconds(1)
 
-                .strafeToLinearHeading(new Vector2d(-58, -47), Math.toRadians(120))
-                .waitSeconds(1) // grabs third sample
-
-                .strafeToLinearHeading(new Vector2d(-47, -47), Math.toRadians(45))
-                .waitSeconds(1) // puts away third sample
-
                 .strafeToLinearHeading(new Vector2d(-58, -47), Math.toRadians(90))
                 .waitSeconds(1) // grabs second sample
 
                 .strafeToLinearHeading(new Vector2d(-47, -47), Math.toRadians(45))
                 .waitSeconds(1) // puts away second sample
 
+                .strafeToLinearHeading(new Vector2d(-58, -47), Math.toRadians(120))
+                .waitSeconds(1) // grabs third sample
+
+                .strafeToLinearHeading(new Vector2d(-47, -47), Math.toRadians(45))
+                .waitSeconds(1) // puts away third sample
+
+
                 .splineTo(new Vector2d(-25,12), Math.toRadians(0))
+                .waitSeconds(1) // just to show ending
+
+                .build();
+
+        Action leftBlueAll = myBot.getDrive().actionBuilder(new Pose2d(11.4, 61.5, Math.toRadians(270)))
+                .strafeToLinearHeading(new Vector2d(47,47), Math.toRadians(225))
+                .waitSeconds(1) // goes to hook on starting sample
+
+                .turn(Math.toRadians(45))
+                .waitSeconds(1)
+                .turn(Math.toRadians(-45)) // grabs first sample and puts away
+                .waitSeconds(1)
+
+                .strafeToLinearHeading(new Vector2d(58, 47), Math.toRadians(270))
+                .waitSeconds(1) // grabs second sample
+
+                .strafeToLinearHeading(new Vector2d(47, 47), Math.toRadians(270))
+                .waitSeconds(1) // puts away second sample
+
+
+                .splineTo(new Vector2d(25,-12), Math.toRadians(180))
                 .waitSeconds(1) // just to show ending
 
                 .build();
@@ -75,7 +97,7 @@ public class MeepMeepTesting {
                 .build();
 
         // chose which auto you want to run here
-        myBot.runAction(rightRedSpecimens);
+        myBot.runAction(leftBlueAll);
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
