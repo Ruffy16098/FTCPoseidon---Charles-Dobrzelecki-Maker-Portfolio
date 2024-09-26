@@ -58,8 +58,7 @@ public class MeepMeepTesting {
                 .strafeToLinearHeading(new Vector2d(47, 47), Math.toRadians(270))
                 .waitSeconds(1) // puts away second sample
 
-
-                .splineTo(new Vector2d(25,-12), Math.toRadians(180))
+                .splineTo(new Vector2d(24,0), Math.toRadians(180))
                 .waitSeconds(1) // just to show ending
 
                 .build();
