@@ -1,0 +1,6 @@
+Use this file to list things for the programming to-do list
+
+1. Tune RR
+2. Set up actions
+3. Design outline for teleop
+4. Design outline for autos
