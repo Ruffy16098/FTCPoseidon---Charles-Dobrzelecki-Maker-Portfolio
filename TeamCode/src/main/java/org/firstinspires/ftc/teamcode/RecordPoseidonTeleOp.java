@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import android.annotation.SuppressLint;
 import android.os.Environment;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -25,6 +26,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /** @noinspection ALL*/
+@Disabled
 @TeleOp(name="RecordPoseidonTeleOp")
 public class RecordPoseidonTeleOp extends LinearOpMode {
     //Motor variables

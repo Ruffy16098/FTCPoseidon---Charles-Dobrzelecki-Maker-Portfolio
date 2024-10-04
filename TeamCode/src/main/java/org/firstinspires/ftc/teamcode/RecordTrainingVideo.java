@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import android.os.Environment;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -20,6 +21,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+@Disabled
 @TeleOp
 public class RecordTrainingVideo extends LinearOpMode {
 
