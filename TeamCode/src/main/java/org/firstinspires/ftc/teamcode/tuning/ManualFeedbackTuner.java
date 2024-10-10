@@ -3,12 +3,16 @@ package org.firstinspires.ftc.teamcode.tuning;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 public final class ManualFeedbackTuner extends LinearOpMode {
     public static double DISTANCE = 64;
+    public DcMotor slides;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        slides = hardwareMap.get(DcMotor.class, "slides");
+        slides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         if (TuningOpModes.DRIVE_CLASS.equals(MecanumDrive.class)) {
             MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
             
@@ -50,6 +54,7 @@ public final class ManualFeedbackTuner extends LinearOpMode {
                             .lineToX(DISTANCE)
                             .lineToX(0)
                             .build());
+
             }
         } else {
             throw new RuntimeException();

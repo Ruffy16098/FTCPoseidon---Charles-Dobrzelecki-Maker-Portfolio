@@ -61,6 +61,7 @@ public class PoseidonTeleOp extends LinearOpMode {
         rightClawOut = hardwareMap.get(Servo.class, "ORClaw");
         clawOutRotator = hardwareMap.get(Servo.class, "Outtake");
         planeShooter = hardwareMap.get(Servo.class, "Airplane");
+
         // Set behaviors for motors
         slidesLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slidesLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

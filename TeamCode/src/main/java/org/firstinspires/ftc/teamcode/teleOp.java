@@ -102,31 +102,31 @@ public class teleOp extends LinearOpMode {
             // gamepad 2
 
             // lifts
-            if(gamepad2.a && gamepad2.left_bumper){
+            if (gamepad2.a && gamepad2.left_bumper){
                 //Actions.runBlocking(intake.extendOut(slides, 15));
             } else if (gamepad2.b && gamepad2.left_bumper) {
                 //Actions.runBlocking(intake.extendOut(slides, 0));
             }
 
-            if(gamepad2.a && !gamepad2.left_bumper){
+            if (gamepad2.a && !gamepad2.left_bumper){
                 Actions.runBlocking(lift.elevate(liftRight, liftLeft, 0.2));
-            } else if(gamepad2.b && !gamepad2.left_bumper) {
+            } else if (gamepad2.b && !gamepad2.left_bumper) {
                 Actions.runBlocking(lift.elevate(liftRight, liftLeft, -0.2));
-            } else{
+            } else {
                 Actions.runBlocking(lift.elevate(liftRight, liftLeft, 0));
             }
 
             // intake
             // extend intake out by 0 or 15
-            if(gamepad2.y && gamepad2.left_bumper){
+            if (gamepad2.y && gamepad2.left_bumper){
                 Actions.runBlocking(intake.extendOut(slides, 15, gamepad2));
             } else if (gamepad2.x && gamepad2.left_bumper) {
                 Actions.runBlocking(intake.extendOut(slides, 0, gamepad2));
             }
 
-            if(gamepad2.right_stick_y != 0 && !gamepad2.left_bumper){
+            if (gamepad2.right_stick_y != 0 && !gamepad2.left_bumper){
                 Actions.runBlocking(intake.extend(slides, -gamepad2.right_stick_y));
-            } else{
+            } else {
                 Actions.runBlocking(intake.extend(slides, 0));
             }
 
