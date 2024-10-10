@@ -1,5 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_TO_POSITION;
+import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
+import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
+
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
+
 import androidx.annotation.NonNull;
 
 // RR-specific imports
@@ -10,6 +16,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -17,54 +24,129 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class actions {
 
     // lift class
-    public static class Lift {
+    public static class lift {
 
         // defines lift motors
-        private static DcMotor liftRight;
+        /*private static DcMotor liftRight;
         private static DcMotor liftLeft;
-        public void liftRight(HardwareMap hardwareMap) {
+        public  void liftRight(HardwareMap hardwareMap) {
             liftRight = hardwareMap.get(DcMotor.class, "liftRight");
             liftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             liftRight.setDirection(DcMotorSimple.Direction.FORWARD);
+            liftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            liftLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
         public void liftLeft(HardwareMap hardwareMap) {
             liftLeft = hardwareMap.get(DcMotor.class, "liftLeft");
             liftLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             liftLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+            liftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            liftLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
+
+         */
 
         // Lifts the lifts up by a certain amount
-        // example code from RR docs
-        public static class LiftUp implements Action {
-            private boolean initialized = false;
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                if (!initialized) {
-                    liftRight.setPower(0.8);
-                    initialized = true;
-                }
-
-                double pos = liftRight.getCurrentPosition();
-                packet.put("liftPos", pos);
-                if (pos < 3000.0) {
-                    return true;
-                } else {
-                    liftRight.setPower(0);
+        /*
+        static Action Elevate(DcMotor liftRight, DcMotor liftLeft, double power){
+            return new Action() {
+                private boolean initialized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initialized) {
+                        liftRight.setPower(power);
+                        liftLeft.setPower(power);
+                        initialized = true;
+                    }
                     return false;
                 }
-            }
+            };
         }
 
-        public Action liftUp() {
-            return new LiftUp();
+         */
+
+        static Action Elevate(DcMotor liftRight, DcMotor liftLeft, double power){
+            return new Action() {
+                private boolean initialized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initialized) {
+                        liftRight.setPower(power);
+                        liftLeft.setPower(power);
+                        initialized = true;
+                    }
+                    return false;
+                }
+            };
         }
+
+        public static Action elevate(DcMotor liftRight, DcMotor liftLeft, double power) {
+            return Elevate(liftRight, liftLeft, power);
+        }
+
+        /*
+        static Action ElevateOut(DcMotor liftRight, DcMotor liftLeft, double in){
+            in = in * ;
+            double finalIn = in;
+            return new Action() {
+                private boolean initialized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initialized) {
+                        while(liftRight.getCurrentPosition() != ) {
+                            if(liftRight.getCurrentPosition() > (int)finalIn){
+                                liftRight.setPower(-0.1);
+                            }else{
+                                liftRight.setPower(0.1);
+                            }
+
+                        }
+                        initialized = true;
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static Action elevateOut(DcMotor liftRight, DcMotor liftLeft, double in) {
+            return Elevate(liftRight, liftLeft, in);
+        }
+
+         */
+
+        /*static Action Correct(DcMotor liftRight, DcMotor liftLeft){
+            return new Action() {
+                private boolean initialized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initialized) {
+                        while(liftLeft.getCurrentPosition() != liftRight.getCurrentPosition()) {
+                            if(liftLeft.getCurrentPosition() > liftRight.getCurrentPosition()){
+                                liftLeft.setPower(-0.2);
+                            }else{
+                                liftLeft.setPower(0.2);
+                            }
+
+                        }
+                        initialized = true;
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static Action correct(DcMotor liftRight, DcMotor liftLeft) {
+            return Correct(liftRight, liftLeft);
+        }
+
+         */
     }
 
     // intake class
     public static class intake{
 
         // define intake motors and servos
-        private static DcMotor slides;
+        /*public static DcMotor slides;
         private DcMotor intakeMotor;
         private Servo intakeServoRight;
         private Servo intakeServoLeft;
@@ -72,11 +154,14 @@ public class actions {
             slides = hardwareMap.get(DcMotor.class, "slides");
             slides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             slides.setDirection(DcMotorSimple.Direction.FORWARD);
+            slides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            slides.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
         public void intakeMotor(HardwareMap hardwareMap) {
             intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
             intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+            intakeMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
         public void intakeServoRight(HardwareMap hardwareMap) {
             intakeServoRight = hardwareMap.get(Servo.class, "setIntakeServoRight");
@@ -87,15 +172,21 @@ public class actions {
             intakeServoLeft.setDirection(Servo.Direction.REVERSE);
         }
 
+         */
+
         // extends the intake arm
         // made like this to allow parameters
-        static Action Extend(){
+        static Action Extend(DcMotor slides, double power){
             return new Action() {
                 private boolean initialized = false;
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initialized) {
-                        slides.setPower(0.8);
+                        if(!(slides.getCurrentPosition() >= 557 && power > 0) && !(slides.getCurrentPosition() <= 0 && power < 0)){
+                            slides.setPower(power);
+                        }else{
+                            slides.setPower(0);
+                        }
                         initialized = true;
                     }
                     return false;
@@ -103,8 +194,70 @@ public class actions {
             };
         }
 
-        public static Action extend() {
-            return Extend();
+        public static Action extend(DcMotor slides, double power) {
+            return Extend(slides, power);
+        }
+
+        // extends out by however inches
+        static Action ExtendOut(DcMotor slides, Gamepad gamepad2, double in){
+            // setTargetPosition
+
+            // inches
+            // 26 5/8 - 8 1/2
+            // 26.625 - 8.5 = 18.125
+
+            // ticks
+            // 557
+
+            // math
+            // 557 / 18.125 = 30.73103448275862
+
+            // ticks per inch
+            in = in * 30.73103448275862;
+            double finalIn = in;
+            return new Action() {
+                private boolean initialized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initialized) {
+                        while(slides.getCurrentPosition() != (int)finalIn) {
+                            if(slides.getCurrentPosition() > (int)finalIn){
+                                slides.setPower(-0.3);
+                            }else{
+                                slides.setPower(0.3);
+                            }
+                            //abandons the movement/extension for if the intake gets stuck on something
+                            if(gamepad2.right_bumper){
+                                break;
+                            }
+                        }
+                        initialized = true;
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static Action extendOut(DcMotor slides, double in, Gamepad gamepad2) {
+            return ExtendOut(slides, gamepad2, in);
+        }
+
+        static Action Spin(DcMotor intake, double power){
+            return new Action() {
+                private boolean initialized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initialized) {
+                        intake.setPower(power);
+                        initialized = true;
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static Action spin(DcMotor intake, double power){
+            return Spin(intake, power);
         }
     }
 }
