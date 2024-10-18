@@ -72,6 +72,9 @@ public final class MecanumDrive {
         public double inPerTick = 8.814163317916446e-4;
         // need to get the actual tick value from lateral ramp
         public double lateralInPerTick = 0.00042796503184830816;
+        //0.00042796503184830816
+        //0.00038631041728516476
+        //0.0004034149973710741
         public double trackWidthTicks = 14508.653558417116;
 
         // feedforward parameters (in tick units)
