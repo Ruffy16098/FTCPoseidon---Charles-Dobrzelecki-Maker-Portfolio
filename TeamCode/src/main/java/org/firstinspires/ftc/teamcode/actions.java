@@ -84,6 +84,27 @@ public class actions {
             return Elevate(liftRight, liftLeft, power);
         }
 
+        static Action ElevateOther(DcMotor liftRight, DcMotor liftLeft, double power){
+            return new Action() {
+                private boolean initialized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initialized) {
+                        liftRight.setPower(power);
+                        liftLeft.setPower(0.2);
+                        liftLeft.setTargetPosition(liftRight.getCurrentPosition());
+                        liftLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        initialized = true;
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static Action elevateOther(DcMotor liftRight, DcMotor liftLeft, double power) {
+            return Elevate(liftRight, liftLeft, power);
+        }
+
         /*
         static Action ElevateOut(DcMotor liftRight, DcMotor liftLeft, double in){
             in = in * ;
@@ -220,17 +241,21 @@ public class actions {
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initialized) {
-                        while(slides.getCurrentPosition() != (int) finalIn) {
-                            if (slides.getCurrentPosition() > (int) finalIn){
+                        /*while(slides.getCurrentPosition() != (int)finalIn) {
+                            if(slides.getCurrentPosition() > (int)finalIn){
                                 slides.setPower(-0.3);
-                            } else{
+                            }else{
                                 slides.setPower(0.3);
                             }
                             //abandons the movement/extension for if the intake gets stuck on something
-                            if (gamepad2.right_bumper){
+                            if(gamepad2.right_bumper){
                                 break;
                             }
                         }
+                         */
+                        slides.setPower(0.3);
+                        slides.setTargetPosition((int) finalIn);
+                        slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         initialized = true;
                     }
                     return false;

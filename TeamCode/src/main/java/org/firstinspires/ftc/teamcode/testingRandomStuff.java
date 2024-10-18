@@ -65,14 +65,10 @@ public class testingRandomStuff extends LinearOpMode {
         while (opModeIsActive()) {
 
             if(gamepad1.x){
-                //slides.setPower(0.1);
                 ticks = 154;
 
             } else if (gamepad1.y) {
-                //slides.setPower(-0.1);
                 ticks = 0;
-            }else{
-                //slides.setPower(0);
             }
 
             slides.setTargetPosition(ticks);
