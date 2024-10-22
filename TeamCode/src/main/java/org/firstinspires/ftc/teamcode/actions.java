@@ -15,6 +15,7 @@ import com.acmerobotics.roadrunner.Action;
 // Non-RR imports
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -22,6 +23,29 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @Disabled
 public class actions {
+
+    // drive class
+    public static class drive {
+
+        // forward action or whatever
+        static Action Forward(){
+            return new Action() {
+                private boolean initialized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initialized) {
+                        // drive controls here
+                        initialized = true;
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static Action forward() {
+            return Forward();
+        }
+    }
 
     // lift class
     public static class lift {
@@ -197,17 +221,17 @@ public class actions {
 
         // extends the intake arm
         // made like this to allow parameters
-        static Action Extend(DcMotor slides, double power){
+        static Action Extend(DcMotorEx slides, double power){
             return new Action() {
                 private boolean initialized = false;
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initialized) {
-                        if(!(slides.getCurrentPosition() >= 557 && power > 0) && !(slides.getCurrentPosition() <= 0 && power < 0)){
-                            slides.setPower(power);
-                        }else{
-                            slides.setPower(0);
-                        }
+                        //if(!(slides.getCurrentPosition() >= 628 && power > 0) && !(slides.getCurrentPosition() <= 0 && power < 0)){
+                        slides.setVelocity(power);
+                       // }else{
+                            //slides.setPower(0);
+                        //}
                         initialized = true;
                     }
                     return false;
@@ -215,26 +239,25 @@ public class actions {
             };
         }
 
-        public static Action extend(DcMotor slides, double power) {
+        public static Action extend(DcMotorEx slides, double power) {
             return Extend(slides, power);
         }
 
         // extends out by however inches
-        static Action ExtendOut(DcMotor slides, Gamepad gamepad2, double in){
+        static Action ExtendOut(DcMotorEx slides, Gamepad gamepad2, double in){
             // setTargetPosition
 
             // inches
-            // 26 5/8 - 8 1/2
-            // 26.625 - 8.5 = 18.125
+            // 20 7/8 = 20.875
 
             // ticks
-            // 557
+            // 628
 
             // math
-            // 557 / 18.125 = 30.73103448275862
+            // 628 / 20.875 = 30.08383233532934
 
             // ticks per inch
-            in = in * 30.73103448275862;
+            in = in * 30.08383233532934;
             double finalIn = in;
             return new Action() {
                 private boolean initialized = false;
@@ -263,7 +286,7 @@ public class actions {
             };
         }
 
-        public static Action extendOut(DcMotor slides, double in, Gamepad gamepad2) {
+        public static Action extendOut(DcMotorEx slides, double in, Gamepad gamepad2) {
             return ExtendOut(slides, gamepad2, in);
         }
 
