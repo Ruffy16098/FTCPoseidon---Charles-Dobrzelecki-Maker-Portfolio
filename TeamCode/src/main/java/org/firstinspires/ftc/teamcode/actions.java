@@ -221,6 +221,7 @@ public class actions {
 
         // extends the intake arm
         // made like this to allow parameters
+        // replace static with class... maybe?
         static Action Extend(DcMotorEx slides, double power){
             return new Action() {
                 private boolean initialized = false;
