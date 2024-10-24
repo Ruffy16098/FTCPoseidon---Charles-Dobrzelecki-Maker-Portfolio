@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-@TeleOp(name="testSlides")
-public class testSlides extends LinearOpMode {
+//@TeleOp(name="testLifts")
+public class testRobot extends LinearOpMode {
     public DcMotor leftFront;
     public DcMotor leftBack;
     public DcMotor rightFront;
@@ -55,30 +55,20 @@ public class testSlides extends LinearOpMode {
         liftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //liftLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-        int in = 0;
+        int selection = 0;
         waitForStart();
         while (opModeIsActive()) {
-            // intake
-            // extend intake out by 0 or 15
-            if(gamepad2.y && gamepad2.left_bumper){
-                in = 15;
-            } else if (gamepad2.x && gamepad2.left_bumper) {
-                in = 0;
-            }
-
-            if(gamepad2.right_stick_y != 0 && !gamepad2.left_bumper) {
-                Actions.runBlocking(intake.extend(slides, -gamepad2.right_stick_y));
-                in = (int)(slides.getCurrentPosition()/30.73103448275862);
+            if(selection == 0){
+                telemetry.addLine("Run test:");
+                telemetry.addLine("Test 1: select x");
+            }else if (selection == 1){
+                // dah
 
             }
-            Actions.runBlocking(intake.extendOut(slides, in, gamepad2));
-            telemetry.addLine("running test for slides");
-            telemetry.addData("slides position", slides.getCurrentPosition());
-            telemetry.addData("liftRight position", liftRight.getCurrentPosition());
-            telemetry.addData("liftLeft position", liftLeft.getCurrentPosition());
+
+
             telemetry.update();
         }
     }
 }
+

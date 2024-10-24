@@ -50,53 +50,21 @@ public class actions {
     // lift class
     public static class lift {
 
-        // defines lift motors
-        /*private static DcMotor liftRight;
-        private static DcMotor liftLeft;
-        public  void liftRight(HardwareMap hardwareMap) {
-            liftRight = hardwareMap.get(DcMotor.class, "liftRight");
-            liftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            liftRight.setDirection(DcMotorSimple.Direction.FORWARD);
-            liftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            liftLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-        public void liftLeft(HardwareMap hardwareMap) {
-            liftLeft = hardwareMap.get(DcMotor.class, "liftLeft");
-            liftLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            liftLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-            liftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            liftLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-
-         */
-
-        // Lifts the lifts up by a certain amount
-        /*
         static Action Elevate(DcMotor liftRight, DcMotor liftLeft, double power){
+            // max = 3091 & 3114 ticks, 56 - 17 = 39 inches
+            // min = 0 ticks, 0 inches
             return new Action() {
                 private boolean initialized = false;
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initialized) {
-                        liftRight.setPower(power);
-                        liftLeft.setPower(power);
-                        initialized = true;
-                    }
-                    return false;
-                }
-            };
-        }
-
-         */
-
-        static Action Elevate(DcMotor liftRight, DcMotor liftLeft, double power){
-            return new Action() {
-                private boolean initialized = false;
-                @Override
-                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                    if (!initialized) {
-                        liftRight.setPower(power);
-                        liftLeft.setPower(power);
+                        if(!(liftRight.getCurrentPosition() > 2991 && power > 0)){
+                            liftRight.setPower(power);
+                            liftLeft.setPower(power);
+                        }else{
+                            liftRight.setPower(0);
+                            liftLeft.setPower(0);
+                        }
                         initialized = true;
                     }
                     return false;
@@ -107,132 +75,27 @@ public class actions {
         public static Action elevate(DcMotor liftRight, DcMotor liftLeft, double power) {
             return Elevate(liftRight, liftLeft, power);
         }
-
-        static Action ElevateOther(DcMotor liftRight, DcMotor liftLeft, double power){
-            return new Action() {
-                private boolean initialized = false;
-                @Override
-                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                    if (!initialized) {
-                        liftRight.setPower(power);
-                        liftLeft.setPower(0.2);
-                        liftLeft.setTargetPosition(liftRight.getCurrentPosition());
-                        liftLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        initialized = true;
-                    }
-                    return false;
-                }
-            };
-        }
-
-        public static Action elevateOther(DcMotor liftRight, DcMotor liftLeft, double power) {
-            return Elevate(liftRight, liftLeft, power);
-        }
-
-        /*
-        static Action ElevateOut(DcMotor liftRight, DcMotor liftLeft, double in){
-            in = in * ;
-            double finalIn = in;
-            return new Action() {
-                private boolean initialized = false;
-                @Override
-                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                    if (!initialized) {
-                        while(liftRight.getCurrentPosition() != ) {
-                            if(liftRight.getCurrentPosition() > (int)finalIn){
-                                liftRight.setPower(-0.1);
-                            }else{
-                                liftRight.setPower(0.1);
-                            }
-
-                        }
-                        initialized = true;
-                    }
-                    return false;
-                }
-            };
-        }
-
-        public static Action elevateOut(DcMotor liftRight, DcMotor liftLeft, double in) {
-            return Elevate(liftRight, liftLeft, in);
-        }
-
-         */
-
-        /*static Action Correct(DcMotor liftRight, DcMotor liftLeft){
-            return new Action() {
-                private boolean initialized = false;
-                @Override
-                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                    if (!initialized) {
-                        while(liftLeft.getCurrentPosition() != liftRight.getCurrentPosition()) {
-                            if(liftLeft.getCurrentPosition() > liftRight.getCurrentPosition()){
-                                liftLeft.setPower(-0.2);
-                            }else{
-                                liftLeft.setPower(0.2);
-                            }
-
-                        }
-                        initialized = true;
-                    }
-                    return false;
-                }
-            };
-        }
-
-        public static Action correct(DcMotor liftRight, DcMotor liftLeft) {
-            return Correct(liftRight, liftLeft);
-        }
-
-         */
     }
 
     // intake class
     public static class intake{
-
-        // define intake motors and servos
-        /*public static DcMotor slides;
-        private DcMotor intakeMotor;
-        private Servo intakeServoRight;
-        private Servo intakeServoLeft;
-        public void slides(HardwareMap hardwareMap) {
-            slides = hardwareMap.get(DcMotor.class, "slides");
-            slides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            slides.setDirection(DcMotorSimple.Direction.FORWARD);
-            slides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            slides.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-        public void intakeMotor(HardwareMap hardwareMap) {
-            intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
-            intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-            intakeMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-        public void intakeServoRight(HardwareMap hardwareMap) {
-            intakeServoRight = hardwareMap.get(Servo.class, "setIntakeServoRight");
-            intakeServoRight.setDirection(Servo.Direction.FORWARD);
-        }
-        public void intakeServoLeft(HardwareMap hardwareMap) {
-            intakeServoLeft = hardwareMap.get(Servo.class, "intakeServoLeft");
-            intakeServoLeft.setDirection(Servo.Direction.REVERSE);
-        }
-
-         */
-
         // extends the intake arm
         // made like this to allow parameters
         // replace static with class... maybe?
         static Action Extend(DcMotorEx slides, double power){
+            // max value = 628 ticks
+            // min value = 0 ticks
             return new Action() {
                 private boolean initialized = false;
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initialized) {
-                        //if(!(slides.getCurrentPosition() >= 628 && power > 0) && !(slides.getCurrentPosition() <= 0 && power < 0)){
-                        slides.setVelocity(power);
-                       // }else{
-                            //slides.setPower(0);
-                        //}
+                        slides.setMode(RUN_USING_ENCODER);
+                        if(!(slides.getCurrentPosition() > 628 && power > 0)){
+                            slides.setPower(power);
+                        }else{
+                            slides.setPower(0);
+                        }
                         initialized = true;
                     }
                     return false;
@@ -245,7 +108,7 @@ public class actions {
         }
 
         // extends out by however inches
-        static Action ExtendOut(DcMotorEx slides, Gamepad gamepad2, double in){
+        static Action ExtendOut(DcMotorEx slides, double in){
             // setTargetPosition
 
             // inches
@@ -273,9 +136,9 @@ public class actions {
                             }
                             //abandons the movement/extension for if the intake gets stuck on something
                             if(gamepad2.right_bumper){
-                                break;
+                                break
+                        };
                             }
-                        }
                          */
                         slides.setPower(0.3);
                         slides.setTargetPosition((int) finalIn);
@@ -287,11 +150,11 @@ public class actions {
             };
         }
 
-        public static Action extendOut(DcMotorEx slides, double in, Gamepad gamepad2) {
-            return ExtendOut(slides, gamepad2, in);
+        public static Action extendOut(DcMotorEx slides, double in) {
+            return ExtendOut(slides, in);
         }
 
-        static Action Spin(DcMotor intake, double power){
+        static Action Spin(DcMotorEx intake, double power){
             return new Action() {
                 private boolean initialized = false;
                 @Override
@@ -305,7 +168,7 @@ public class actions {
             };
         }
 
-        public static Action spin(DcMotor intake, double power){
+        public static Action spin(DcMotorEx intake, double power){
             return Spin(intake, power);
         }
     }
