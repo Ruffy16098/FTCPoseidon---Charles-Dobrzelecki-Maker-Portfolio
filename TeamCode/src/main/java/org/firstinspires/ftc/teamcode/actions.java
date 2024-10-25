@@ -171,5 +171,34 @@ public class actions {
         public static Action spin(DcMotorEx intake, double power){
             return Spin(intake, power);
         }
+
+        // servo stuff
+
+        /*
+        left: max = 0.5, min = 0.05
+        right: max = 0.55, min = 0.05
+         */
+
+
+        // idea is that it would get a velocity on how much to add or subtract from the current position...
+        public static Action Rotate(Servo center, double velocity){
+            return new Action() {
+                double position;
+                private boolean initalized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initalized){
+
+                        center.setPosition(velocity);
+                        initalized = true;
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static Action rotate(Servo center, double velocity) {
+            return Rotate(center, velocity);
+        }
     }
 }

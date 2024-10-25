@@ -20,6 +20,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.onbotjava.OnBotJavaStandardFileManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,14 +78,19 @@ public class teleopPoseidon extends OpMode {
         liftLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         intakeServoRight = hardwareMap.get(Servo.class, "intakeServoRight");
+        intakeServoRight.setDirection(Servo.Direction.FORWARD);
+        //intakeServoRight.setPosition(0);
 
         intakeServoLeft = hardwareMap.get(Servo.class, "intakeServoLeft");
+        intakeServoLeft.setDirection(Servo.Direction.REVERSE);
 
         intakeServoCenter = hardwareMap.get(Servo.class, "intakeServoCenter");
+        intakeServoCenter.setDirection(Servo.Direction.FORWARD);
+        //intakeServoCenter.setPosition(0);
 
     }
 
-    boolean slidesOn = true;
+    boolean pos = true;
     @Override
     public void loop() {
         TelemetryPacket packet = new TelemetryPacket();
@@ -107,11 +114,23 @@ public class teleopPoseidon extends OpMode {
 
 
         // grabber actions
-        if(gamepad2.a) {
+        if(gamepad2.left_bumper) {
             runningActions.add(intake.spin(intakeMotor, 0.1));
         }else{
             runningActions.add(intake.spin(intakeMotor, 0));
         }
+
+
+
+        runningActions.add(new SequentialAction(
+                new InstantAction(() -> intakeServoRight.setPosition(gamepad1.left_stick_x))
+        ));
+
+
+
+
+
+
 
         // lifts actions
         runningActions.add(lift.elevate(liftRight, liftLeft, -gamepad2.left_stick_y/2));
@@ -129,6 +148,9 @@ public class teleopPoseidon extends OpMode {
         runningActions = newActions;
 
         dash.sendTelemetryPacket(packet);
+        telemetry.addData("Servo right position", intakeServoRight.getPosition());
+        telemetry.addData("Servo center position", intakeServoCenter.getPosition());
+        telemetry.addData("Servo left position", intakeServoLeft.getPosition());
         telemetry.addData("slides position", slides.getCurrentPosition());
         telemetry.addData("liftRight position", liftRight.getCurrentPosition());
         telemetry.addData("liftLeft position", liftLeft.getCurrentPosition());
