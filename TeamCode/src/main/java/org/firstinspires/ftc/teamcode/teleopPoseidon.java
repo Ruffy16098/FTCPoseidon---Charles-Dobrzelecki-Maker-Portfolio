@@ -26,7 +26,7 @@ import org.firstinspires.ftc.onbotjava.OnBotJavaStandardFileManager;
 import java.util.ArrayList;
 import java.util.List;
 
-@TeleOp(name="Im screaming")
+@TeleOp(name="teleopPoseidon")
 public class teleopPoseidon extends OpMode {
     private FtcDashboard dash = FtcDashboard.getInstance();
     private List<Action> runningActions = new ArrayList<>();
@@ -110,7 +110,7 @@ public class teleopPoseidon extends OpMode {
             // extends 10 inches out when HOLDING x, will stop when no longer HOLDING x
             runningActions.add(intake.extendOut(slides, 10));
         } else if (gamepad2.y) {
-            runningActions.add(new ParallelAction(
+            runningActions.add(new SequentialAction(
                     new InstantAction(() -> intake.extendOut(slides, 0)),
                     new InstantAction(() -> intake.tilt(intakeServoLeft, intakeServoRight, true))
             ));
@@ -129,15 +129,22 @@ public class teleopPoseidon extends OpMode {
             runningActions.add(intake.spin(intakeMotor, 0));
         }
 
-        if(gamepad2.a){
+
+        if(gamepad2.dpad_up){
             posChange = 0.01;
             runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, pastPos, posChange));
             //runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, true));
-        } else if (gamepad2.b) {
+        } else if (gamepad2.dpad_down) {
             posChange = -0.01;
             runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, pastPos, posChange));
             //runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, false));
+        }else if(gamepad2.dpad_right){
+            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, false));
+        }else if(gamepad2.dpad_left){
+            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, true));
         }
+
+
 
 
         // lifts actions
