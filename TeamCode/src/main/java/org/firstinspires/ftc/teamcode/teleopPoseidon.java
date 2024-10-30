@@ -8,6 +8,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.InstantAction;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -107,7 +108,10 @@ public class teleopPoseidon extends OpMode {
             // extends 10 inches out when HOLDING x, will stop when no longer HOLDING x
             runningActions.add(intake.extendOut(slides, 10));
         } else if (gamepad2.y) {
-            runningActions.add(intake.extendOut(slides, 0));
+            runningActions.add(new ParallelAction(
+                    new InstantAction(() -> intake.extendOut(slides, 0)),
+                    new InstantAction(() -> intake.tilt(intakeServoLeft, intakeServoRight, true))
+            ));
         } else{
             runningActions.add(intake.extend(slides, -gamepad2.right_stick_y/2));
         }
@@ -118,14 +122,16 @@ public class teleopPoseidon extends OpMode {
             runningActions.add(intake.spin(intakeMotor, -0.3));
         }else if(gamepad2.right_bumper){
             runningActions.add(intake.spin(intakeMotor, 0.3));
+
         } else{
             runningActions.add(intake.spin(intakeMotor, 0));
         }
 
-
-
-
-
+        if(gamepad2.a){
+            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, true));
+        } else if (gamepad2.b) {
+            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, false));
+        }
 
 
         // lifts actions
