@@ -6,6 +6,9 @@ import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENC
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 import androidx.annotation.NonNull;
 
 // RR-specific imports
@@ -223,6 +226,27 @@ public class actions {
 
         public static Action tilt(Servo left, Servo right, boolean up) {
             return Tilt(left, right, up);
+        }
+
+        public static Action Tilt(Servo left, Servo right, double pastPos, double posChange) {
+            return new Action() {
+                private boolean initalized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initalized){
+                        double futurePos = max(0.05, pastPos + posChange);
+                        futurePos = min(futurePos, 0.5);
+                        left.setPosition(futurePos);
+                        right.setPosition(futurePos);
+                        initalized = true;
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static Action tilt(Servo left, Servo right, double pastPos, double posChange) {
+            return Tilt(left, right, pastPos, posChange);
         }
     }
 }
