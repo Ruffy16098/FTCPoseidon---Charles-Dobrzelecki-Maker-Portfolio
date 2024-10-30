@@ -110,7 +110,7 @@ public class teleopPoseidon extends OpMode {
             // extends 10 inches out when HOLDING x, will stop when no longer HOLDING x
             runningActions.add(intake.extendOut(slides, 10));
         } else if (gamepad2.y) {
-            runningActions.add(new ParallelAction((
+            runningActions.add(new SequentialAction((
                     intake.tilt(intakeServoLeft, intakeServoRight, true)),
                     intake.rotate(intakeServoCenter, 0.48),
                     intake.extendOut(slides, 0))
@@ -120,12 +120,11 @@ public class teleopPoseidon extends OpMode {
         }
 
 
-        // grabber actions                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ
+        // grabber actions
         if(gamepad2.left_bumper) {
             runningActions.add(intake.spin(intakeMotor, -0.3));
         }else if(gamepad2.right_bumper){
             runningActions.add(intake.spin(intakeMotor, 0.3));
-
         } else{
             runningActions.add(intake.spin(intakeMotor, 0));
         }
