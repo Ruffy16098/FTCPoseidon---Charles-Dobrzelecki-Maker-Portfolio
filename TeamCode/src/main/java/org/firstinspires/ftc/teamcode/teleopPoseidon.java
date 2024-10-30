@@ -92,6 +92,7 @@ public class teleopPoseidon extends OpMode {
     }
 
     boolean pos = true;
+    double pastPos = 0.05;
     @Override
     public void loop() {
         TelemetryPacket packet = new TelemetryPacket();
@@ -128,9 +129,11 @@ public class teleopPoseidon extends OpMode {
         }
 
         if(gamepad2.a){
-            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, true));
+            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, pastPos, 0.01));
+            //runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, true));
         } else if (gamepad2.b) {
-            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, false));
+            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, pastPos, -0.01));
+            //runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, false));
         }
 
 
