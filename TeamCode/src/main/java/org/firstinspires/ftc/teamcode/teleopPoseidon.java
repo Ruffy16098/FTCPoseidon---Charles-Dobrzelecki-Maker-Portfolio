@@ -110,16 +110,17 @@ public class teleopPoseidon extends OpMode {
             // extends 10 inches out when HOLDING x, will stop when no longer HOLDING x
             runningActions.add(intake.extendOut(slides, 10));
         } else if (gamepad2.y) {
-            runningActions.add(new SequentialAction(
-                    new InstantAction(() -> intake.extendOut(slides, 0)),
-                    new InstantAction(() -> intake.tilt(intakeServoLeft, intakeServoRight, true))
-            ));
+            runningActions.add(new ParallelAction((
+                    intake.tilt(intakeServoLeft, intakeServoRight, true)),
+                    intake.rotate(intakeServoCenter, 0.48),
+                    intake.extendOut(slides, 0))
+            );
         } else{
             runningActions.add(intake.extend(slides, -gamepad2.right_stick_y/2));
         }
 
 
-        // grabber actions
+        // grabber actions                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ
         if(gamepad2.left_bumper) {
             runningActions.add(intake.spin(intakeMotor, -0.3));
         }else if(gamepad2.right_bumper){
