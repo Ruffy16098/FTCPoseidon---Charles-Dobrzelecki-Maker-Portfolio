@@ -203,12 +203,17 @@ public class actions {
 
         public static Action Tilt(Servo left, Servo right, boolean up){
             return new Action() {
-                double position;
                 private boolean initalized = false;
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initalized){
-
+                        if (up) {
+                            left.setPosition(0.5);
+                            right.setPosition(0.5);
+                        } else {
+                            left.setPosition(0.05);
+                            right.setPosition(0.05);
+                        }
                         initalized = true;
                     }
                     return false;
