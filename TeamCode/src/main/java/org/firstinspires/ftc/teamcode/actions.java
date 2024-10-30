@@ -200,5 +200,24 @@ public class actions {
         public static Action rotate(Servo center, double velocity) {
             return Rotate(center, velocity);
         }
+
+        public static Action Tilt(Servo left, Servo right, boolean up){
+            return new Action() {
+                double position;
+                private boolean initalized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initalized){
+
+                        initalized = true;
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static Action tilt(Servo left, Servo right, boolean up) {
+            return Tilt(left, right, up);
+        }
     }
 }

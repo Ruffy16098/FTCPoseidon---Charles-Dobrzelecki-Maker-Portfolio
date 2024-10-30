@@ -115,16 +115,12 @@ public class teleopPoseidon extends OpMode {
 
         // grabber actions
         if(gamepad2.left_bumper) {
-            runningActions.add(intake.spin(intakeMotor, 0.1));
-        }else{
+            runningActions.add(intake.spin(intakeMotor, -0.3));
+        }else if(gamepad2.right_bumper){
+            runningActions.add(intake.spin(intakeMotor, 0.3));
+        } else{
             runningActions.add(intake.spin(intakeMotor, 0));
         }
-
-
-
-        runningActions.add(new SequentialAction(
-                new InstantAction(() -> intakeServoRight.setPosition(gamepad1.left_stick_x))
-        ));
 
 
 
