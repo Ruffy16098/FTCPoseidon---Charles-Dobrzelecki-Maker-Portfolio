@@ -220,11 +220,18 @@ public class actions {
             return new Action() {
                 double position;
                 private boolean initalized = false;
+                double pos;
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initalized){
-
-                        center.setPosition(velocity);
+                        if(velocity > 1){
+                             pos = 1;
+                        } else if (velocity < 0) {
+                            pos = 0;
+                        }else{
+                            pos = velocity;
+                        }
+                        center.setPosition(pos);
                         initalized = true;
                     }
                     return false;

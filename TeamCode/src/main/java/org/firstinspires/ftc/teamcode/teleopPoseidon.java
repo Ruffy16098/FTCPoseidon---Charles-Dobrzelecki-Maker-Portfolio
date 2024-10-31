@@ -89,6 +89,10 @@ public class teleopPoseidon extends OpMode {
         intakeServoCenter.setDirection(Servo.Direction.FORWARD);
         //intakeServoCenter.setPosition(0);
 
+        intakeServoLeft.setPosition(0.5);
+        intakeServoRight.setPosition(0.5);
+        intakeServoRight.setPosition(0.48);
+
     }
 
     boolean pos = true;
@@ -106,41 +110,34 @@ public class teleopPoseidon extends OpMode {
 
         // intake
         // slides actions
-        if(gamepad2.x){
-            // extends 10 inches out when HOLDING x, will stop when no longer HOLDING x
-            runningActions.add(intake.extendOut(slides, 10));
-        } else if (gamepad2.y) {
-            runningActions.add(new SequentialAction((
+        if(gamepad2.y){
+            runningActions.add(new ParallelAction((
                     intake.tilt(intakeServoLeft, intakeServoRight, true)),
                     intake.rotate(intakeServoCenter, 0.48),
                     intake.extendOut(slides, 0))
             );
-        } else{
+        }else{
             runningActions.add(intake.extend(slides, -gamepad2.right_stick_y/2));
         }
 
 
         // grabber actions
-        if(gamepad2.left_bumper) {
+        if(gamepad2.b && gamepad2.right_bumper) {
             runningActions.add(intake.spin(intakeMotor, -0.3));
-        }else if(gamepad2.right_bumper){
+        }else if(gamepad2.b && !gamepad2.right_bumper){
             runningActions.add(intake.spin(intakeMotor, 0.3));
         } else{
             runningActions.add(intake.spin(intakeMotor, 0));
         }
 
 
-        if(gamepad2.dpad_up){
-            posChange = 0.01;
-            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, pastPos, posChange));
-            //runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, true));
-        } else if (gamepad2.dpad_down) {
-            posChange = -0.01;
-            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, pastPos, posChange));
-            //runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, false));
-        }else if(gamepad2.dpad_right){
+        if(gamepad2.dpad_left){
+            runningActions.add(intake.rotate(intakeServoCenter, intakeServoCenter.getPosition()+0.02));
+        } else if (gamepad2.dpad_right) {
+            runningActions.add(intake.rotate(intakeServoCenter, intakeServoCenter.getPosition()-0.02));
+        }else if(gamepad2.dpad_down){
             runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, false));
-        }else if(gamepad2.dpad_left){
+        }else if(gamepad2.dpad_up){
             runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, true));
         }
 
