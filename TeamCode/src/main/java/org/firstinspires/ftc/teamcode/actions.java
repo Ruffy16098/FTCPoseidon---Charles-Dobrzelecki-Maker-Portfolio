@@ -78,6 +78,38 @@ public class actions {
         public static Action elevate(DcMotor liftRight, DcMotor liftLeft, double power) {
             return Elevate(liftRight, liftLeft, power);
         }
+
+        public static Action Outake(Servo left, Servo right, int pos){
+            // pos 0 = set down, pos 1 = specimen, pos 2 = bucket
+            return new Action() {
+                private boolean initalized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initalized){
+                        switch(pos){
+                            case 0:
+                                //left.setPosition(0.5);
+                                //right.setPosition(0.5);
+                                break;
+                            case 1:
+                                //left.setPosition(0.5);
+                                //right.setPosition(0.5);
+                                break;
+                            case 2:
+                                //left.setPosition(0.5);
+                                //right.setPosition(0.5);
+                                break;
+                        }
+                        initalized = true;
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static Action outake(Servo left, Servo right, int pos) {
+            return Outake(left, right, pos);
+        }
     }
 
     // intake class
