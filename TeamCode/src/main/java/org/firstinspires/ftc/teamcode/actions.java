@@ -61,6 +61,8 @@ public class actions {
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initialized) {
+                        liftRight.setMode(RUN_USING_ENCODER);
+                        liftLeft.setMode(RUN_USING_ENCODER);
                         if(!(liftRight.getCurrentPosition() > 2991 && power > 0)){
                             liftRight.setPower(power);
                             liftLeft.setPower(power);
@@ -79,7 +81,47 @@ public class actions {
             return Elevate(liftRight, liftLeft, power);
         }
 
-        public static Action Outake(Servo left, Servo right, int pos){
+        // elevates out by however inches
+        static Action ElevateOut(DcMotor liftRight, DcMotor liftLeft, double in){
+            // max = 3091 & 3114 ticks, 56 - 17 = 39 inches
+            // min = 0 ticks, 0 inches
+
+            // ticks per inch
+            in = in * 79.84615384615385;
+            double finalIn = in;
+            return new Action() {
+                private boolean initialized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initialized) {
+
+                        // sets lifts to run to a certain spot in inches
+                        liftRight.setPower(0.3);
+                        liftRight.setTargetPosition((int) finalIn);
+                        liftRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                        liftLeft.setPower(0.3);
+                        liftLeft.setTargetPosition((int) finalIn);
+                        liftLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        initialized = true;
+
+
+                        // stops the left lift trying to go down when cant
+                        // saves power
+                        if(liftRight.getCurrentPosition() == 0) {
+                            liftLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+                        }
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static Action elevateOut(DcMotor liftRight, DcMotor liftLeft, double in) {
+            return ElevateOut(liftRight, liftLeft, in);
+        }
+
+        static Action Outake(Servo left, Servo right, int pos){
             // pos 0 = set down, pos 1 = specimen, pos 2 = bucket
             return new Action() {
                 private boolean initalized = false;
@@ -163,18 +205,6 @@ public class actions {
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initialized) {
-                        /*while(slides.getCurrentPosition() != (int)finalIn) {
-                            if(slides.getCurrentPosition() > (int)finalIn){
-                                slides.setPower(-0.3);
-                            }else{
-                                slides.setPower(0.3);
-                            }
-                            //abandons the movement/extension for if the intake gets stuck on something
-                            if(gamepad2.right_bumper){
-                                break
-                        };
-                            }
-                         */
                         slides.setPower(0.3);
                         slides.setTargetPosition((int) finalIn);
                         slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -267,14 +297,24 @@ public class actions {
             return Tilt(left, right, up);
         }
 
-        public static Action Tilt(Servo left, Servo right, double pastPos, double posChange) {
+        public static Action Tilt(Servo left, Servo right, double pos) {
             return new Action() {
                 private boolean initalized = false;
+                double futurePos;
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initalized){
-                        double futurePos = max(0.05, pastPos + posChange);
+                        /*double futurePos = max(0.05, pastPos + posChange);
                         futurePos = min(futurePos, 0.5);
+
+                         */
+                        if(pos > 1){
+                            futurePos = 1;
+                        } else if (pos < 0) {
+                            futurePos = 0;
+                        }else{
+                            futurePos = pos;
+                        }
                         left.setPosition(futurePos);
                         right.setPosition(futurePos);
                         initalized = true;
@@ -284,8 +324,8 @@ public class actions {
             };
         }
 
-        public static Action tilt(Servo left, Servo right, double pastPos, double posChange) {
-            return Tilt(left, right, pastPos, posChange);
+        public static Action tilt(Servo left, Servo right, double pos) {
+            return Tilt(left, right, pos);
         }
     }
 }

@@ -104,7 +104,40 @@ public class teleopPoseidon extends OpMode {
         // updated based on gamepads
 
         // gamepad 1
+        float leftjoystick_x = gamepad1.left_stick_x;
+        float leftjoystick_y = gamepad1.left_stick_y;
+        float rightjoystick_x = gamepad1.right_stick_x;
+        float rightjoystick_y = gamepad1.right_stick_y;
 
+        if (gamepad1.right_bumper) {
+            leftjoystick_x /= 4F;
+            leftjoystick_y /= 4F;
+            rightjoystick_x /= 4F;
+            rightjoystick_y /= 4F;
+        } else if (!gamepad1.left_bumper) {
+            leftjoystick_x /= 1.5F;
+            leftjoystick_y /= 1.5F;
+            rightjoystick_x /= 1.5F;
+            rightjoystick_y /= 1.5F;
+        }
+
+        //gamepad 1, driving controls
+        if (gamepad1.right_stick_x > 0 && gamepad1.left_stick_x > 0) {
+            leftFront.setPower(-2.0 * ((rightjoystick_x + leftjoystick_x) / 3.0));
+            leftBack.setPower(2.0 * (rightjoystick_x + leftjoystick_x) / 3.0);
+            rightFront.setPower(-2.0 * (rightjoystick_x + leftjoystick_x) / 3.0);
+            rightBack.setPower(-2.0 * -(rightjoystick_x + leftjoystick_x) / 3.0);
+        } else if (gamepad1.right_stick_x < 0 && gamepad1.left_stick_x < 0) {
+            leftFront.setPower(-2.0 * ((rightjoystick_x + leftjoystick_x) / 3.0));
+            leftBack.setPower(2.0 * (rightjoystick_x + leftjoystick_x) / 3.0);
+            rightFront.setPower(-2.0 * (rightjoystick_x + leftjoystick_x) / 3.0);
+            rightBack.setPower(2.0 * (rightjoystick_x + leftjoystick_x) / 3.0);
+        } else {
+            leftFront.setPower(4.0 * leftjoystick_y / 3.0);
+            leftBack.setPower(4.0 * leftjoystick_y / 3.0);
+            rightFront.setPower(-4.0 * rightjoystick_y / 3.0);
+            rightBack.setPower(-4.0 * rightjoystick_y / 3.0);
+        }
 
         // gamepad 2
 
@@ -136,16 +169,27 @@ public class teleopPoseidon extends OpMode {
         } else if (gamepad2.dpad_right) {
             runningActions.add(intake.rotate(intakeServoCenter, intakeServoCenter.getPosition()-0.02));
         }else if(gamepad2.dpad_down){
-            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, false));
+            //runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, false));
+            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, intakeServoRight.getPosition()+0.02));
         }else if(gamepad2.dpad_up){
-            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, true));
+            //runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, true));
+            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, intakeServoRight.getPosition()-0.02));
         }
 
 
 
 
         // lifts actions
-        runningActions.add(lift.elevate(liftRight, liftLeft, -gamepad2.left_stick_y/2));
+
+        // if the joystick isn't active, than the lifts will keep it self up right
+        // elevateOut to current position must be the second to last conditional in the whole statements
+        if(gamepad2.x){
+            runningActions.add(lift.elevateOut(liftRight, liftLeft, 25));
+        } else if(gamepad2.left_stick_y == 0){
+            runningActions.add(lift.elevateOut(liftRight, liftLeft, liftRight.getCurrentPosition()/79.84615384615385));
+        }else{
+            runningActions.add(lift.elevate(liftRight, liftLeft, -gamepad2.left_stick_y/2));
+        }
 
 
 
