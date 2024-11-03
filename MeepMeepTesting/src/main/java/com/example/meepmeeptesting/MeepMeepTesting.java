@@ -55,10 +55,10 @@ public class MeepMeepTesting {
                 .strafeToLinearHeading(new Vector2d(58, 47), Math.toRadians(270))
                 .waitSeconds(1) // grabs second sample
 
-                .strafeToLinearHeading(new Vector2d(47, 47), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(47, 47), Math.toRadians(225))
                 .waitSeconds(1) // puts away second sample
 
-                .splineTo(new Vector2d(24,0), Math.toRadians(180))
+                .splineTo(new Vector2d(30,0), Math.toRadians(180))
                 .waitSeconds(1) // just to show ending
 
                 .build();
@@ -126,13 +126,9 @@ public class MeepMeepTesting {
 
                 .build();
 
-        Action test = myBot.getDrive().actionBuilder(new Pose2d(12, 12, Math.toRadians(0)))
-                .splineTo(new Vector2d(36, 36), Math.PI / 2)
-                .splineTo(new Vector2d(12, 60), Math.PI)
-                .build();
 
         // chose which auto you want to run here
-        myBot.runAction(test);
+        myBot.runAction(leftBlueAll);
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
