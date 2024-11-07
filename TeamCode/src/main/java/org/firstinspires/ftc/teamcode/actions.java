@@ -152,6 +152,31 @@ public class actions {
         // extends the intake arm
         // made like this to allow parameters
         // replace static with class... maybe?
+        static Action Extend(DcMotorEx slides, double power){
+            // max value = 628 ticks
+            // min value = 0 ticks
+            return new Action() {
+                private boolean initialized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initialized) {
+                        slides.setMode(RUN_USING_ENCODER);
+                        if(!(slides.getCurrentPosition() > 628 && power > 0)) {
+                            slides.setPower(power);
+                        }else{
+                            slides.setPower(0);
+                        }
+                        initialized = true;
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static Action extend(DcMotorEx slides, double power) {
+            return Extend(slides, power);
+        }
+
         static Action Extend(DcMotorEx slides, Servo left, Servo right, double power){
             // max value = 628 ticks
             // min value = 0 ticks
