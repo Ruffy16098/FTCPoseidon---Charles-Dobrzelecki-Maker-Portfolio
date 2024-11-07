@@ -1,10 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_TO_POSITION;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
-import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
-
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -19,9 +15,6 @@ import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Disabled
@@ -159,7 +152,7 @@ public class actions {
         // extends the intake arm
         // made like this to allow parameters
         // replace static with class... maybe?
-        static Action Extend(DcMotorEx slides, double power){
+        static Action Extend(DcMotorEx slides, Servo left, Servo right, double power){
             // max value = 628 ticks
             // min value = 0 ticks
             return new Action() {
@@ -168,7 +161,10 @@ public class actions {
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initialized) {
                         slides.setMode(RUN_USING_ENCODER);
-                        if(!(slides.getCurrentPosition() > 628 && power > 0)){
+                        if(!(slides.getCurrentPosition() > 628 && power > 0)) {
+                            if (right.getPosition() <= 0.5 && left.getPosition() <= 0.5 && slides.getCurrentPosition() <= 200 && power < 0) {
+                                intake.Tilt(left, right, 0.5);
+                            }
                             slides.setPower(power);
                         }else{
                             slides.setPower(0);
@@ -180,8 +176,8 @@ public class actions {
             };
         }
 
-        public static Action extend(DcMotorEx slides, double power) {
-            return Extend(slides, power);
+        public static Action extend(DcMotorEx slides, Servo right, Servo left, double power) {
+            return Extend(slides, right, left, power);
         }
 
         // extends out by however inches
