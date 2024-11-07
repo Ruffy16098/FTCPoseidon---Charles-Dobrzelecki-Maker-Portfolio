@@ -1,0 +1,146 @@
+package org.firstinspires.ftc.teamcode;
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.ParallelAction;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import org.firstinspires.ftc.teamcode.tuning.MecanumDrive;
+
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+
+import static org.firstinspires.ftc.teamcode.actions.intake;
+import static org.firstinspires.ftc.teamcode.actions.lift;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Config
+@Autonomous(name = "autoBlueLeft", group = "Autonomous")
+public class autoBlueLeft extends LinearOpMode {
+
+    private FtcDashboard dash = FtcDashboard.getInstance();
+    private List<Action> runningActions = new ArrayList<>();
+
+    public DcMotorEx leftFront;
+    public DcMotorEx leftBack;
+    public DcMotorEx rightFront;
+    public DcMotorEx rightBack;
+
+    public DcMotorEx slides;
+    public DcMotorEx intakeMotor;
+    public DcMotorEx liftRight;
+    public DcMotorEx liftLeft;
+
+    public Servo intakeServoRight;
+    public Servo intakeServoLeft;
+    public Servo intakeServoCenter;
+
+    @Override
+    public void runOpMode() {
+        leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
+        leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
+        rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
+
+        slides = hardwareMap.get(DcMotorEx.class, "slides");
+        slides.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        slides.setDirection(DcMotorSimple.Direction.REVERSE);
+        slides.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        slides.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+        intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
+        intakeMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+        liftRight = hardwareMap.get(DcMotorEx.class, "liftRight");
+        liftRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        liftRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        liftRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        liftRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+        liftLeft = hardwareMap.get(DcMotorEx.class, "liftLeft");
+        liftLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        liftLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        liftLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+        intakeServoRight = hardwareMap.get(Servo.class, "intakeServoRight");
+        intakeServoRight.setDirection(Servo.Direction.FORWARD);
+        //intakeServoRight.setPosition(0);
+
+        intakeServoLeft = hardwareMap.get(Servo.class, "intakeServoLeft");
+        intakeServoLeft.setDirection(Servo.Direction.REVERSE);
+
+        intakeServoCenter = hardwareMap.get(Servo.class, "intakeServoCenter");
+        intakeServoCenter.setDirection(Servo.Direction.FORWARD);
+
+        Pose2d initialPose = new Pose2d(11.4, 61.5, Math.toRadians(270));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
+        double currentX = 0;
+        double currentY = 0;
+
+
+
+
+
+
+        Action test = drive.actionBuilder(initialPose)
+                .strafeToLinearHeading(new Vector2d(47,47), Math.toRadians(225))
+                .waitSeconds(1)
+
+                .turn(Math.toRadians(45))
+                .waitSeconds(1)
+                .turn(Math.toRadians(-45)) // grabs first sample and puts away
+                .waitSeconds(1)
+
+                .strafeToLinearHeading(new Vector2d(58, 47), Math.toRadians(270))
+                .waitSeconds(1) // grabs second sample
+
+                .strafeToLinearHeading(new Vector2d(47, 47), Math.toRadians(225))
+                .waitSeconds(1) // puts away second sample
+
+                .splineTo(new Vector2d(30,0), Math.toRadians(180))
+                .waitSeconds(1)
+                .build(); // just to show ending
+
+
+
+        TrajectoryActionBuilder tab2 = drive.actionBuilder(initialPose)
+                .lineToY(37)
+                .setTangent(Math.toRadians(0))
+                .lineToX(18)
+                .waitSeconds(3)
+                .setTangent(Math.toRadians(0))
+                .lineToXSplineHeading(46, Math.toRadians(180))
+                .waitSeconds(3);
+
+        Action emote = new SequentialAction(
+                drive.actionBuilder(initialPose).turnTo(90).build(),
+                intake.extendOut(slides, 5),
+                new ParallelAction(
+                        //intake.extendOut(slides, 1),
+                        //drive.actionBuilder(initialPose).strafeToLinearHeading(tab2.fresh()).build()
+                )
+        );
+
+
+        Actions.runBlocking(new SequentialAction(
+                test
+            )
+        );
+    }
+}
