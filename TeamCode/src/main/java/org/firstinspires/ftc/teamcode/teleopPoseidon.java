@@ -91,7 +91,7 @@ public class teleopPoseidon extends OpMode {
 
         intakeServoLeft.setPosition(0.5);
         intakeServoRight.setPosition(0.5);
-        intakeServoRight.setPosition(0.48);
+        intakeServoCenter.setPosition(0.48);
 
     }
 

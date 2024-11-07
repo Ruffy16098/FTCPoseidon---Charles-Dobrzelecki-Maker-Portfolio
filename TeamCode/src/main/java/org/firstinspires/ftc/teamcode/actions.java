@@ -283,8 +283,8 @@ public class actions {
                             left.setPosition(0.5);
                             right.setPosition(0.5);
                         } else {
-                            left.setPosition(0.05);
-                            right.setPosition(0.05);
+                            left.setPosition(0.88);
+                            right.setPosition(0.88);
                         }
                         initalized = true;
                     }

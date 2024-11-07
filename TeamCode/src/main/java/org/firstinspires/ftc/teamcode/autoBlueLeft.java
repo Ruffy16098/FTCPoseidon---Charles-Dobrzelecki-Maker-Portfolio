@@ -88,7 +88,7 @@ public class autoBlueLeft extends LinearOpMode {
         intakeServoCenter = hardwareMap.get(Servo.class, "intakeServoCenter");
         intakeServoCenter.setDirection(Servo.Direction.FORWARD);
 
-        Pose2d initialPose = new Pose2d(11.4, 61.5, Math.toRadians(270));
+        Pose2d initialPose = new Pose2d(12, 60, Math.toRadians(270));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
         double currentX = 0;
         double currentY = 0;
