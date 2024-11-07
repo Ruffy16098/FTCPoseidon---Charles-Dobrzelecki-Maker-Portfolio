@@ -187,7 +187,7 @@ public class actions {
                     if (!initialized) {
                         slides.setMode(RUN_USING_ENCODER);
                         if(!(slides.getCurrentPosition() > 628 && power > 0)) {
-                            if (right.getPosition() <= 0.5 && left.getPosition() <= 0.5 && slides.getCurrentPosition() <= 200 && power < 0) {
+                            if (right.getPosition() <= 0.5 && left.getPosition() <= 0.5 && slides.getCurrentPosition() <= 200) {
                                 intake.Tilt(left, right, 0.5);
                             }
                             slides.setPower(power);
