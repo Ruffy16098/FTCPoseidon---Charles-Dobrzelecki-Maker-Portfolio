@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
@@ -96,7 +97,23 @@ public class autoBlueLeft extends LinearOpMode {
 
 
 
+        Action sampleOne = new SequentialAction(
+          drive.actionBuilder(initialPose)
+                  .strafeToLinearHeading(new Vector2d(47,47), Math.toRadians(225))
+                  .waitSeconds(1)
 
+                  .turn(Math.toRadians(45))
+                  .waitSeconds(1)
+                  .build(),
+          intake.extendOut(slides, 5),
+          new ParallelAction(
+                  intake.spin(intakeMotor, 0.3),
+                  intake.tilt(intakeServoLeft, intakeServoRight, false)
+          ),
+          intake.spin(intakeMotor, 0),
+          intake.extendOut(slides, 0),
+          new SleepAction(10)
+        );
 
         Action test = drive.actionBuilder(initialPose)
                 .strafeToLinearHeading(new Vector2d(47,47), Math.toRadians(225))
@@ -139,7 +156,8 @@ public class autoBlueLeft extends LinearOpMode {
 
 
         Actions.runBlocking(new SequentialAction(
-                test
+                sampleOne
+
             )
         );
     }

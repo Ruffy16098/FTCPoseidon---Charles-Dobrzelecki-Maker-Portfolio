@@ -123,12 +123,12 @@ public class actions {
                     if (!initalized){
                         switch(pos){
                             case 0:
-                                //left.setPosition(0.5);
-                                //right.setPosition(0.5);
+                                left.setPosition(0);
+                                right.setPosition(0);
                                 break;
                             case 1:
-                                //left.setPosition(0.5);
-                                //right.setPosition(0.5);
+                                left.setPosition(1);
+                                right.setPosition(1);
                                 break;
                             case 2:
                                 //left.setPosition(0.5);

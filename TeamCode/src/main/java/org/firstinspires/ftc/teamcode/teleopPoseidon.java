@@ -45,6 +45,9 @@ public class teleopPoseidon extends OpMode {
     public Servo intakeServoLeft;
     public Servo intakeServoCenter;
 
+    public Servo outtakeServoRight;
+    public Servo outtakeServoLeft;
+
 
     @Override
     public void init() {
@@ -88,6 +91,12 @@ public class teleopPoseidon extends OpMode {
         intakeServoCenter = hardwareMap.get(Servo.class, "intakeServoCenter");
         intakeServoCenter.setDirection(Servo.Direction.FORWARD);
         //intakeServoCenter.setPosition(0);
+
+        outtakeServoRight = hardwareMap.get(Servo.class, "outtakeServoRight");
+        outtakeServoRight.setDirection(Servo.Direction.FORWARD);
+
+        outtakeServoLeft = hardwareMap.get(Servo.class, "outtakeServoLeft");
+        outtakeServoLeft.setDirection(Servo.Direction.REVERSE);
 
         intakeServoLeft.setPosition(0.5);
         intakeServoRight.setPosition(0.5);
@@ -199,6 +208,12 @@ public class teleopPoseidon extends OpMode {
             runningActions.add(lift.elevateOut(liftRight, liftLeft, liftRight.getCurrentPosition()/79.84615384615385));
         } else{
             runningActions.add(lift.elevate(liftRight, liftLeft, -gamepad2.left_stick_y/2));
+        }
+
+        if(gamepad2.left_bumper && !gamepad2.right_bumper){
+            runningActions.add(lift.outake(outtakeServoRight, outtakeServoLeft, 0));
+        }else if(gamepad2.left_bumper && gamepad2.right_bumper){
+            runningActions.add(lift.outake(outtakeServoRight, outtakeServoLeft, 1));
         }
 
         // all actions
