@@ -128,8 +128,16 @@ public class MeepMeepTesting {
 
                 .build();
 
+        Action emote = myBot.getDrive().actionBuilder(new Pose2d(0, 0, Math.toRadians(0)))
+                .strafeToLinearHeading(new Vector2d(-8, 0), Math.toRadians(0))
+                .waitSeconds(1)
+                .strafeToLinearHeading(new Vector2d(-16, 0), Math.toRadians(0))
+                .waitSeconds(1)
+                .strafeToLinearHeading(new Vector2d(-15, 0), Math.toRadians(0))
+                .build();
+
         // chose which auto you want to run here
-        myBot.runAction(leftBlueAll);
+        myBot.runAction(emote);
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)

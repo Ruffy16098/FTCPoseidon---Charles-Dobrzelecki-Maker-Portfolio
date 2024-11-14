@@ -210,10 +210,10 @@ public class teleopPoseidon extends OpMode {
             runningActions.add(lift.elevate(liftRight, liftLeft, -gamepad2.left_stick_y/2));
         }
 
-        if(gamepad2.left_bumper && !gamepad2.right_bumper){
-            runningActions.add(lift.outake(outtakeServoRight, outtakeServoLeft, 0));
-        }else if(gamepad2.left_bumper && gamepad2.right_bumper){
-            runningActions.add(lift.outake(outtakeServoRight, outtakeServoLeft, 1));
+        if(gamepad2.left_bumper){
+            runningActions.add(lift.outtake(outtakeServoRight, outtakeServoLeft, 0));
+        }else if(gamepad2.right_bumper){
+            runningActions.add(lift.outtake(outtakeServoRight, outtakeServoLeft, 1));
         }
 
         // all actions

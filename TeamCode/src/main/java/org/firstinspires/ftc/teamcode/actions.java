@@ -114,7 +114,7 @@ public class actions {
             return ElevateOut(liftRight, liftLeft, in);
         }
 
-        static Action Outake(Servo left, Servo right, int pos){
+        static Action Outtake(Servo right, Servo left, int pos){
             // pos 0 = set down, pos 1 = specimen, pos 2 = bucket
             return new Action() {
                 private boolean initalized = false;
@@ -142,8 +142,8 @@ public class actions {
             };
         }
 
-        public static Action outake(Servo left, Servo right, int pos) {
-            return Outake(left, right, pos);
+        public static Action outtake(Servo right, Servo left, int pos) {
+            return Outtake(right, left, pos);
         }
     }
 
@@ -226,7 +226,7 @@ public class actions {
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initialized) {
-                        slides.setPower(0.3);
+                        slides.setPower(0.5);
                         slides.setTargetPosition((int) finalIn);
                         slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         initialized = true;
