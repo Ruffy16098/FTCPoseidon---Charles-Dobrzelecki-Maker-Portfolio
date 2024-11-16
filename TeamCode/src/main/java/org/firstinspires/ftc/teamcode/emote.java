@@ -95,6 +95,8 @@ public class emote extends LinearOpMode {
         Pose2d initialPose = new Pose2d(0, 0, Math.toRadians(0));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
+        waitForStart();
+
         TrajectoryActionBuilder step = drive.actionBuilder(initialPose)
                 .strafeToLinearHeading(new Vector2d(-8, 0), Math.toRadians(0))
                 .waitSeconds(1)

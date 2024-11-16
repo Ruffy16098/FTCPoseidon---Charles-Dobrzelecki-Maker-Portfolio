@@ -89,30 +89,43 @@ public class autoBlueLeft extends LinearOpMode {
         intakeServoCenter = hardwareMap.get(Servo.class, "intakeServoCenter");
         intakeServoCenter.setDirection(Servo.Direction.FORWARD);
 
-        Pose2d initialPose = new Pose2d(12, 60, Math.toRadians(270));
+        Pose2d initialPose = new Pose2d(15, 63, Math.toRadians(270));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
-        double currentX = 0;
-        double currentY = 0;
+
+        waitForStart();
 
 
 
 
         Action sampleOne = new SequentialAction(
+          intake.tilt(intakeServoLeft, intakeServoRight, true),
+          intake.rotate(intakeServoCenter, 0.48),
           drive.actionBuilder(initialPose)
-                  .strafeToLinearHeading(new Vector2d(47,47), Math.toRadians(225))
+                  .strafeToLinearHeading(new Vector2d(54,54), Math.toRadians(222))
                   .waitSeconds(1)
 
-                  .turn(Math.toRadians(45))
+                  .turn(Math.toRadians(40))
+                  .strafeTo(new Vector2d(48, 48))
                   .waitSeconds(1)
                   .build(),
-          intake.extendOut(slides, 5),
-          new ParallelAction(
-                  intake.spin(intakeMotor, 0.3),
-                  intake.tilt(intakeServoLeft, intakeServoRight, false)
-          ),
+          intake.extendOut(slides, 22),
+          new SleepAction(2),
+          intake.tilt(intakeServoLeft, intakeServoRight, false),
+          new SleepAction(1),
+          intake.spin(intakeMotor, -0.3),
+          new SleepAction(2),
           intake.spin(intakeMotor, 0),
-          intake.extendOut(slides, 0),
-          new SleepAction(10)
+          new SleepAction(2),
+          new ParallelAction(
+                  intake.extendOut(slides, 0),
+                  intake.tilt(intakeServoLeft, intakeServoRight, true)
+          ),
+          new SleepAction(5),
+          drive.actionBuilder(new Pose2d(54, 54, Math.toRadians(262)))
+                  .strafeToLinearHeading(new Vector2d(15,63), Math.toRadians(270))
+                  .waitSeconds(1)
+                  .build(),
+          new SleepAction(2)
         );
 
         Action test = drive.actionBuilder(initialPose)
@@ -144,15 +157,6 @@ public class autoBlueLeft extends LinearOpMode {
                 .setTangent(Math.toRadians(0))
                 .lineToXSplineHeading(46, Math.toRadians(180))
                 .waitSeconds(3);
-
-        Action emote = new SequentialAction(
-                drive.actionBuilder(initialPose).turnTo(90).build(),
-                intake.extendOut(slides, 5),
-                new ParallelAction(
-                        //intake.extendOut(slides, 1),
-                        //drive.actionBuilder(initialPose).strafeToLinearHeading(tab2.fresh()).build()
-                )
-        );
 
 
         Actions.runBlocking(new SequentialAction(

@@ -123,11 +123,11 @@ public class teleopPoseidon extends OpMode {
             leftjoystick_y /= 4F;
             rightjoystick_x /= 4F;
             rightjoystick_y /= 4F;
-        } else if (!gamepad1.left_bumper) {
-            leftjoystick_x /= 1.5F;
-            leftjoystick_y /= 1.5F;
-            rightjoystick_x /= 1.5F;
-            rightjoystick_y /= 1.5F;
+        } else if (!gamepad1.left_bumper) { // was 1.5
+            leftjoystick_x /= 1F;
+            leftjoystick_y /= 1F;
+            rightjoystick_x /= 1F;
+            rightjoystick_y /= 1F;
         }
 
         //gamepad 1, driving controls
@@ -166,9 +166,9 @@ public class teleopPoseidon extends OpMode {
 
         // grabber actions
         if (gamepad2.b && !gamepad2.right_bumper) {
-            runningActions.add(intake.spin(intakeMotor, -0.3));
+            runningActions.add(intake.spin(intakeMotor, -0.2));
         } else if(gamepad2.b && gamepad2.right_bumper){
-            runningActions.add(intake.spin(intakeMotor, 0.3));
+            runningActions.add(intake.spin(intakeMotor, 0.2));
         } else{
             runningActions.add(intake.spin(intakeMotor, 0));
         }

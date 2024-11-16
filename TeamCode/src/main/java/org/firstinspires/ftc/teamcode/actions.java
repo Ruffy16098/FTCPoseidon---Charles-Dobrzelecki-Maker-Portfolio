@@ -89,11 +89,11 @@ public class actions {
                     if (!initialized) {
 
                         // sets lifts to run to a certain spot in inches
-                        liftRight.setPower(0.5);
+                        liftRight.setPower(0.8);
                         liftRight.setTargetPosition((int) finalIn);
                         liftRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-                        liftLeft.setPower(0.5);
+                        liftLeft.setPower(0.8);
                         liftLeft.setTargetPosition((int) finalIn);
                         liftLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         initialized = true;
