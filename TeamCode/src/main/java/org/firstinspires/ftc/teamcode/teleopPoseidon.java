@@ -98,9 +98,9 @@ public class teleopPoseidon extends OpMode {
         outtakeServoLeft = hardwareMap.get(Servo.class, "outtakeServoLeft");
         outtakeServoLeft.setDirection(Servo.Direction.REVERSE);
 
-        intakeServoLeft.setPosition(0.5);
-        intakeServoRight.setPosition(0.5);
-        intakeServoCenter.setPosition(0.48);
+        //intakeServoLeft.setPosition(0.5);
+        //intakeServoRight.setPosition(0.5);
+        //intakeServoCenter.setPosition(0.48);
 
     }
 

@@ -301,11 +301,11 @@ public class actions {
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initalized){
                         if (up) {
-                            left.setPosition(0.5);
-                            right.setPosition(0.5);
+                            left.setPosition(1);
+                            right.setPosition(1);
                         } else {
-                            left.setPosition(0.88);
-                            right.setPosition(0.88);
+                            left.setPosition(0);
+                            right.setPosition(0);
                         }
                         initalized = true;
                     }
