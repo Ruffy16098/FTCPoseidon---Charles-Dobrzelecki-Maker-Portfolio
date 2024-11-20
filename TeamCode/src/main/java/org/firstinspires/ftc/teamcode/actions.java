@@ -226,7 +226,7 @@ public class actions {
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initialized) {
-                        slides.setPower(0.5);
+                        slides.setPower(0.3);
                         slides.setTargetPosition((int) finalIn);
                         slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         initialized = true;
@@ -301,11 +301,11 @@ public class actions {
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initalized){
                         if (up) {
-                            left.setPosition(1);
-                            right.setPosition(1);
+                            left.setPosition(0.12);
+                            right.setPosition(0.12);
                         } else {
-                            left.setPosition(0);
-                            right.setPosition(0);
+                            left.setPosition(0.48);
+                            right.setPosition(0.48);
                         }
                         initalized = true;
                     }

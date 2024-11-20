@@ -99,13 +99,13 @@ public class autoBlueLeft extends LinearOpMode {
 
         Action sampleOne = new SequentialAction(
           intake.tilt(intakeServoLeft, intakeServoRight, true),
-          intake.rotate(intakeServoCenter, 0.48),
+          intake.rotate(intakeServoCenter, 0.76),
           drive.actionBuilder(initialPose)
                   .strafeToLinearHeading(new Vector2d(54,54), Math.toRadians(222))
                   .waitSeconds(1)
 
-                  .turn(Math.toRadians(40))
-                  .strafeTo(new Vector2d(48, 48))
+                  .turn(Math.toRadians(45))
+                  .strafeTo(new Vector2d(48, 47))
                   .waitSeconds(1)
                   .build(),
           intake.extendOut(slides, 22),
