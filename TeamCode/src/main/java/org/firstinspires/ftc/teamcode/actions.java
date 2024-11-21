@@ -46,7 +46,7 @@ public class actions {
     // lift class
     public static class lift {
 
-        static Action Elevate(DcMotor liftRight, DcMotor liftLeft, double power){
+        static Action Elevate(DcMotor liftRight, DcMotor liftLeft, double power) {
             // max = 3091 & 3114 ticks, 56 - 17 = 39 inches
             // min = 0 ticks, 0 inches
             return new Action() {
@@ -56,10 +56,10 @@ public class actions {
                     if (!initialized) {
                         liftRight.setMode(RUN_USING_ENCODER);
                         liftLeft.setMode(RUN_USING_ENCODER);
-                        if(!(liftRight.getCurrentPosition() > 2991 && power > 0)){
+                        if (!(liftRight.getCurrentPosition() > 2991 && power > 0)){
                             liftRight.setPower(power);
                             liftLeft.setPower(power);
-                        }else{
+                        } else{
                             liftRight.setPower(0);
                             liftLeft.setPower(0);
                         }
@@ -114,7 +114,34 @@ public class actions {
             return ElevateOut(liftRight, liftLeft, in);
         }
 
-        static Action Outtake(Servo right, Servo left, int pos){
+        public static Action Rotate(Servo center, double velocity){
+            return new Action() {
+                double position;
+                private boolean initalized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initalized){
+                        position = center.getPosition();
+                        if (position == 1 && velocity > 0) {
+                            position = 1;
+                        } else if (position == 0 && velocity < 0) {
+                            position = 0;
+                        } else {
+                            position += velocity;
+                        }
+                        center.setPosition(position);
+                        initalized = true;
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static Action rotate(Servo center, double velocity) {
+            return Rotate(center, velocity);
+        }
+
+        static Action Outtake (Servo right, Servo left, int pos){
             // pos 0 = set down, pos 1 = specimen, pos 2 = bucket
             return new Action() {
                 private boolean initalized = false;
@@ -123,12 +150,12 @@ public class actions {
                     if (!initalized){
                         switch(pos){
                             case 0:
-                                left.setPosition(0);
-                                right.setPosition(0);
+                                left.setPosition(0.1);
+                                right.setPosition(0.1);
                                 break;
                             case 1:
-                                left.setPosition(1);
-                                right.setPosition(1);
+                                left.setPosition(.98);
+                                right.setPosition(.98);
                                 break;
                             case 2:
                                 //left.setPosition(0.5);
@@ -155,6 +182,7 @@ public class actions {
         static Action Extend(DcMotorEx slides, double power){
             // max value = 628 ticks
             // min value = 0 ticks
+            // new min value to avoid outtake claw = 226 ticks
             return new Action() {
                 private boolean initialized = false;
                 @Override
@@ -162,8 +190,11 @@ public class actions {
                     if (!initialized) {
                         slides.setMode(RUN_USING_ENCODER);
                         if(!(slides.getCurrentPosition() > 628 && power > 0)) {
-                            slides.setPower(power);
-                        }else{
+                            if (!(slides.getCurrentPosition() < 226 && power < 0)) {
+                                slides.setPower(power);
+                            }
+                        } else{
+                            slides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                             slides.setPower(0);
                         }
                         initialized = true;
@@ -180,18 +211,21 @@ public class actions {
         static Action Extend(DcMotorEx slides, Servo left, Servo right, double power){
             // max value = 628 ticks
             // min value = 0 ticks
+            // new min value to avoid outtake claw = 226 ticks
             return new Action() {
                 private boolean initialized = false;
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initialized) {
                         slides.setMode(RUN_USING_ENCODER);
-                        if(!(slides.getCurrentPosition() > 628 && power > 0)) {
-                            if (right.getPosition() <= 0.5 && left.getPosition() <= 0.5 && slides.getCurrentPosition() <= 200) {
-                                intake.Tilt(left, right, 0.5);
+                        if (!(slides.getCurrentPosition() > 628 && power > 0)) {
+                            if (!(slides.getCurrentPosition() < 226 && power < 0)) {
+                                if (right.getPosition() <= 0.5 && left.getPosition() <= 0.5 && slides.getCurrentPosition() <= 200) {
+                                    intake.Tilt(left, right, 0.5);
+                                }
+                                slides.setPower(power);
                             }
-                            slides.setPower(power);
-                        }else{
+                        } else{
                             slides.setPower(0);
                         }
                         initialized = true;

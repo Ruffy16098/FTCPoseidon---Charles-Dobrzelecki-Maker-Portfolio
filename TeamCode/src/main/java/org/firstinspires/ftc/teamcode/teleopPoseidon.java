@@ -47,6 +47,7 @@ public class teleopPoseidon extends OpMode {
 
     public Servo outtakeServoRight;
     public Servo outtakeServoLeft;
+    public Servo outtakeServoCenter;
 
 
     @Override
@@ -98,10 +99,12 @@ public class teleopPoseidon extends OpMode {
         outtakeServoLeft = hardwareMap.get(Servo.class, "outtakeServoLeft");
         outtakeServoLeft.setDirection(Servo.Direction.REVERSE);
 
+        outtakeServoCenter = hardwareMap.get(Servo.class, "outtakeServoCenter");
+        outtakeServoCenter.setDirection(Servo.Direction.FORWARD);
+
         //intakeServoLeft.setPosition(0.5);
         //intakeServoRight.setPosition(0.5);
         //intakeServoCenter.setPosition(0.76);
-
     }
 
     boolean pos = true;
@@ -129,7 +132,6 @@ public class teleopPoseidon extends OpMode {
             rightjoystick_x /= 1F;
             rightjoystick_y /= 1F;
         }
-
         // DO NOT TOUCH!!!
         if (gamepad1.right_stick_x > 0 && gamepad1.left_stick_x > 0) {
             leftFront.setPower(-2.0 * ((rightjoystick_x + leftjoystick_x) / 3.0));
@@ -166,8 +168,8 @@ public class teleopPoseidon extends OpMode {
             X = let's go
 
         All mode
-            Joystick Left Y axis - hort
-            Joystick Right Y axis - vert
+            Joystick Left Y axis - hort (done)
+            Joystick Right Y axis - vert (done)
             Right bumper - outtake and intake comes in
             Left bumper - specimen
          */
@@ -176,36 +178,36 @@ public class teleopPoseidon extends OpMode {
 
         // slides actions
         if (gamepad2.right_bumper){
-            runningActions.add(new ParallelAction((
-                    intake.tilt(intakeServoLeft, intakeServoRight, true)),
-                    intake.rotate(intakeServoCenter, 0.76),
-                    intake.extendOut(slides, 0))
+            runningActions.add(new ParallelAction(
+                lift.Outtake(outtakeServoRight, outtakeServoLeft, 1),
+                intake.tilt(intakeServoLeft, intakeServoRight, true),
+                intake.rotate(intakeServoCenter, 0.77),
+                intake.extendOut(slides, 7.51))
             );
-        } else{
+        } else {
             runningActions.add(intake.extend(slides, intakeServoLeft, intakeServoRight, -gamepad2.right_stick_y/2));
         }
-
 
         // grabber actions
         if (gamepad2.right_trigger > 0) {
             runningActions.add(intake.spin(intakeMotor, -1));
-        } else if(gamepad2.left_trigger > 0){
+        } else if (gamepad2.left_trigger > 0) {
             runningActions.add(intake.spin(intakeMotor, 1));
-        } else{
+        } else {
             runningActions.add(intake.spin(intakeMotor, 0));
         }
 
         // rotates the intake
         if (gamepad2.dpad_left && !gamepad2.right_bumper){
-            runningActions.add(intake.rotate(intakeServoCenter, intakeServoCenter.getPosition()+0.02));
+            runningActions.add(intake.rotate(intakeServoCenter, intakeServoCenter.getPosition() + 0.02));
         } else if (gamepad2.dpad_right && !gamepad2.right_bumper) {
-            runningActions.add(intake.rotate(intakeServoCenter, intakeServoCenter.getPosition()-0.02));
-        } else if(gamepad2.dpad_down && !gamepad2.right_bumper){
+            runningActions.add(intake.rotate(intakeServoCenter, intakeServoCenter.getPosition() - 0.02));
+        } else if (gamepad2.dpad_down && !gamepad2.right_bumper){
             //runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, false));
-            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, intakeServoRight.getPosition()+0.02));
-        } else if(gamepad2.dpad_up && !gamepad2.right_bumper){
+            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, intakeServoRight.getPosition() + 0.02));
+        } else if (gamepad2.dpad_up && !gamepad2.right_bumper){
             //runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, true));
-            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, intakeServoRight.getPosition()-0.02));
+            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, intakeServoRight.getPosition() - 0.02));
         }
 
         // other actions that go to specific positions
@@ -219,30 +221,30 @@ public class teleopPoseidon extends OpMode {
 
          */
 
-
-
-
         // lifts actions
 
         // if the joystick isn't active, than the lifts will keep it self up right
         // elevateOut to current position must be the second to last conditional in the whole statements
-        if (gamepad2.x && !gamepad2.right_bumper){
+        if (gamepad2.x && !gamepad2.right_bumper) {
             runningActions.add(lift.elevateOut(liftRight, liftLeft, 25));
-        } else if(gamepad2.x && gamepad2.right_bumper){
+        } else if (gamepad2.x && gamepad2.right_bumper) {
             runningActions.add(lift.elevateOut(liftRight, liftLeft, 0));
-        } else if(gamepad2.left_stick_y == 0){
+        } else if (gamepad2.left_stick_y == 0) {
             runningActions.add(lift.elevateOut(liftRight, liftLeft, liftRight.getCurrentPosition()/79.84615384615385));
-        } else{
-            runningActions.add(lift.elevate(liftRight, liftLeft, -gamepad2.left_stick_y/2));
+        } else {
+            //runningActions.add(lift.elevate(liftRight, liftLeft, -gamepad2.left_stick_y/2));
+            if (-gamepad2.left_stick_y > 0) {
+                runningActions.add(lift.rotate(outtakeServoCenter, 0.05));
+            } else {
+                runningActions.add(lift.rotate(outtakeServoCenter,  -0.05));
+            }
         }
 
-        if(gamepad2.a){
+        if (gamepad2.a) {
             runningActions.add(lift.outtake(outtakeServoRight, outtakeServoLeft, 0));
-        }else if(gamepad2.b){
+        } else if (gamepad2.b) {
             runningActions.add(lift.outtake(outtakeServoRight, outtakeServoLeft, 1));
         }
-
-
 
         // update running actions
         List<Action> newActions = new ArrayList<>();
@@ -262,6 +264,9 @@ public class teleopPoseidon extends OpMode {
         telemetry.addData("slides position", slides.getCurrentPosition());
         telemetry.addData("liftRight position", liftRight.getCurrentPosition());
         telemetry.addData("liftLeft position", liftLeft.getCurrentPosition());
+        telemetry.addData("Outtake servo  center position", outtakeServoCenter.getPosition());
+        telemetry.addData("Outtake servo right position", outtakeServoRight.getPosition());
+        telemetry.addData("Outtake servo left position", outtakeServoLeft.getPosition());
         telemetry.update();
     }
 }
