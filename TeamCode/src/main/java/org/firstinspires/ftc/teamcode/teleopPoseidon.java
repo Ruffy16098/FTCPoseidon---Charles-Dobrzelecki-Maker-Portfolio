@@ -179,7 +179,7 @@ public class teleopPoseidon extends OpMode {
         // slides actions
         if (gamepad2.right_bumper){
             runningActions.add(new ParallelAction(
-                lift.Outtake(outtakeServoRight, outtakeServoLeft, 1),
+                lift.Outtake(outtakeServoRight, outtakeServoLeft, 0),
                 lift.ElevateOut(liftRight, liftLeft,0),
                 intake.tilt(intakeServoLeft, intakeServoRight, true),
                 intake.rotate(intakeServoCenter, 0.77),
@@ -210,17 +210,6 @@ public class teleopPoseidon extends OpMode {
             //runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, true));
             runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, intakeServoRight.getPosition() - 0.02));
         }
-
-        // other actions that go to specific positions
-        /*
-        // fully up or fully down
-        else if(gamepad2.dpad_down && gamepad2.right_bumper){
-            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, false));
-        } else if(gamepad2.dpad_up && gamepad2.right_bumper){
-            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, true));
-        }
-
-         */
 
         // lifts actions
 

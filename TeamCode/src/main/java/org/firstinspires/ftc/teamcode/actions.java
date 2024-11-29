@@ -101,8 +101,10 @@ public class actions {
 
                         // stops the left lift trying to go down when cant
                         // saves power
-                        if (liftRight.getCurrentPosition() <= 0) {
+                        if (liftRight.getCurrentPosition() < 0) {
                             liftLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+                            liftRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+
                         }
                     }
                     return false;
