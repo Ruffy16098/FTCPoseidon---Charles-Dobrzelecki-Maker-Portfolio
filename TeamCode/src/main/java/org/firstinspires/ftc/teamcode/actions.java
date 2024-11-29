@@ -153,6 +153,7 @@ public class actions {
                                 center.setPosition(0);
                                 break;
                             case 1:
+                                center.setPosition(1);
                                 break;
                             case 2:
                                 break;
