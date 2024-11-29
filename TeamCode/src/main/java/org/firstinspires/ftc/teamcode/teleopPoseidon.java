@@ -260,7 +260,7 @@ public class teleopPoseidon extends OpMode {
         telemetry.addData("slides position", slides.getCurrentPosition());
         telemetry.addData("liftRight position", liftRight.getCurrentPosition());
         telemetry.addData("liftLeft position", liftLeft.getCurrentPosition());
-        telemetry.addData("Outtake servo  center position", outtakeServoCenter.getPosition());
+        telemetry.addData("Outtake servo center position", outtakeServoCenter.getPosition());
         telemetry.addData("Outtake servo right position", outtakeServoRight.getPosition());
         telemetry.addData("Outtake servo left position", outtakeServoLeft.getPosition());
         telemetry.update();

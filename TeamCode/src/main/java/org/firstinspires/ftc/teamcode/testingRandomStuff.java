@@ -1,83 +1,120 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.actions.intake;
 import static org.firstinspires.ftc.teamcode.actions.lift;
 
-import com.acmerobotics.roadrunner.ftc.Actions;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.acmerobotics.roadrunner.Action;
+import com.qualcomm.robotcore.hardware.Servo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @TeleOp(name="testingRandomStuff")
-public class testingRandomStuff extends LinearOpMode {
-    public DcMotor leftFront;
-    public DcMotor leftBack;
-    public DcMotor rightFront;
-    public DcMotor rightBack;
+public class testingRandomStuff extends OpMode {
+    private FtcDashboard dash = FtcDashboard.getInstance();
+    private List<Action> runningActions = new ArrayList<>();
 
-    public DcMotor slides;
-    public DcMotor intakeMotor;
-    public DcMotor liftRight;
-    public DcMotor liftLeft;
+    public DcMotorEx leftFront;
+    public DcMotorEx leftBack;
+    public DcMotorEx rightFront;
+    public DcMotorEx rightBack;
+
+    public DcMotorEx slides;
+    public DcMotorEx intakeMotor;
+    public DcMotorEx liftRight;
+    public DcMotorEx liftLeft;
+
+    public Servo intakeServoRight;
+    public Servo intakeServoLeft;
+    public Servo intakeServoCenter;
+
+    public Servo outtakeServoRight;
+    public Servo outtakeServoLeft;
+    public Servo outtakeServoCenter;
 
     int ticks = 0;
-
-    public void runOpMode() {
+    @Override
+    public void init() {
         // Initialize motors
-        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-        leftBack = hardwareMap.get(DcMotor.class, "leftBack");
-        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+        leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
+        leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
+        rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
 
-        slides = hardwareMap.get(DcMotor.class, "slides");
-        slides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slides = hardwareMap.get(DcMotorEx.class, "slides");
+        slides.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         slides.setDirection(DcMotorSimple.Direction.REVERSE);
-        slides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slides.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slides.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        slides.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
-        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
+        intakeMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        liftRight = hardwareMap.get(DcMotor.class, "liftRight");
-        liftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        liftRight = hardwareMap.get(DcMotorEx.class, "liftRight");
+        liftRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         liftRight.setDirection(DcMotorSimple.Direction.FORWARD);
-        liftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //liftRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        liftRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        liftLeft = hardwareMap.get(DcMotor.class, "liftLeft");
-        liftLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        liftLeft = hardwareMap.get(DcMotorEx.class, "liftLeft");
+        liftLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         liftLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        liftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //liftLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        liftLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        slides.setPower(0.1);
-        slides.setTargetPosition(0);
-        slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        waitForStart();
-        while (opModeIsActive()) {
+        intakeServoRight = hardwareMap.get(Servo.class, "intakeServoRight");
+        intakeServoRight.setDirection(Servo.Direction.FORWARD);
+        //intakeServoRight.setPosition(0);
 
-            if(gamepad1.x){
-                ticks = 154;
+        intakeServoLeft = hardwareMap.get(Servo.class, "intakeServoLeft");
+        intakeServoLeft.setDirection(Servo.Direction.REVERSE);
 
-            } else if (gamepad1.y) {
-                ticks = 0;
-            }
+        intakeServoCenter = hardwareMap.get(Servo.class, "intakeServoCenter");
+        intakeServoCenter.setDirection(Servo.Direction.FORWARD);
+        //intakeServoCenter.setPosition(0);
 
-            slides.setTargetPosition(ticks);
-            slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        outtakeServoRight = hardwareMap.get(Servo.class, "outtakeServoRight");
+        outtakeServoRight.setDirection(Servo.Direction.FORWARD);
 
-            telemetry.addData("slides position", slides.getCurrentPosition());
-            telemetry.addData("liftRight position", liftRight.getCurrentPosition());
-            telemetry.addData("liftLeft position", liftLeft.getCurrentPosition());
-            telemetry.update();
+        outtakeServoLeft = hardwareMap.get(Servo.class, "outtakeServoLeft");
+        outtakeServoLeft.setDirection(Servo.Direction.REVERSE);
+
+        outtakeServoCenter = hardwareMap.get(Servo.class, "outtakeServoCenter");
+        outtakeServoCenter.setDirection(Servo.Direction.FORWARD);
+
+        //intakeServoLeft.setPosition(0.5);
+        //intakeServoRight.setPosition(0.5);
+        //intakeServoCenter.setPosition(0.76);
+    }
+    @Override
+    public void loop() {
+        TelemetryPacket packet = new TelemetryPacket();
+        if (-gamepad2.right_stick_y > 0) {
+            runningActions.add(lift.rotate(outtakeServoCenter, 0.05));
+        } else {
+            runningActions.add(lift.rotate(outtakeServoCenter,  -0.05));
         }
+
+        // update running actions
+        List<Action> newActions = new ArrayList<>();
+        for (Action action : runningActions) {
+            action.preview(packet.fieldOverlay());
+            if (action.run(packet)) {
+                newActions.add(action);
+            }
+        }
+        runningActions = newActions;
+
+        telemetry.addData("Outtake servo center position", outtakeServoCenter.getPosition());
+        telemetry.update();
     }
 }
