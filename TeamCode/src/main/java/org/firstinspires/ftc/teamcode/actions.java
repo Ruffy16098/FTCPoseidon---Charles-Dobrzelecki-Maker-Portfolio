@@ -158,8 +158,8 @@ public class actions {
                                 right.setPosition(.98);
                                 break;
                             case 2:
-                                //left.setPosition(0.5);
-                                //right.setPosition(0.5);
+                                left.setPosition(0.5);
+                                right.setPosition(0.5);
                                 break;
                         }
                         initalized = true;

@@ -48,6 +48,10 @@ public class autoBlueLeft extends LinearOpMode {
     public Servo intakeServoLeft;
     public Servo intakeServoCenter;
 
+    public Servo outtakeServoRight;
+    public Servo outtakeServoLeft;
+    public Servo outtakeServoCenter;
+
     @Override
     public void runOpMode() {
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
@@ -89,7 +93,16 @@ public class autoBlueLeft extends LinearOpMode {
         intakeServoCenter = hardwareMap.get(Servo.class, "intakeServoCenter");
         intakeServoCenter.setDirection(Servo.Direction.FORWARD);
 
-        Pose2d initialPose = new Pose2d(15, 63, Math.toRadians(270));
+        outtakeServoRight = hardwareMap.get(Servo.class, "outtakeServoRight");
+        outtakeServoRight.setDirection(Servo.Direction.FORWARD);
+
+        outtakeServoLeft = hardwareMap.get(Servo.class, "outtakeServoLeft");
+        outtakeServoLeft.setDirection(Servo.Direction.REVERSE);
+
+        outtakeServoCenter = hardwareMap.get(Servo.class, "outtakeServoCenter");
+        outtakeServoCenter.setDirection(Servo.Direction.FORWARD);
+
+        Pose2d initialPose = new Pose2d(15, 63, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         waitForStart();
@@ -158,9 +171,19 @@ public class autoBlueLeft extends LinearOpMode {
                 .lineToXSplineHeading(46, Math.toRadians(180))
                 .waitSeconds(3);
 
+        Action specimenOne = new SequentialAction(
+                lift.rotate(outtakeServoCenter, 0),
+                lift.elevateOut(liftRight, liftLeft, 3),
+                lift.outtake(outtakeServoRight, outtakeServoLeft, 2),
+                drive.actionBuilder(initialPose)
+                .strafeTo(new Vector2d(9, 35))
+                .build()
+        );
+
+
 
         Actions.runBlocking(new SequentialAction(
-                sampleOne
+                specimenOne
 
             )
         );

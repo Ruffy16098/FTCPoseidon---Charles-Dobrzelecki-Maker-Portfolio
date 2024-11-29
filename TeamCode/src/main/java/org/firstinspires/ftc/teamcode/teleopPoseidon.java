@@ -163,7 +163,7 @@ public class teleopPoseidon extends OpMode {
 
         Outtake mode
             Y = dump
-            A = grabby for outtake
+            A = grabby from1    q outtake
             B = grab
             X = let's go
 
@@ -232,12 +232,7 @@ public class teleopPoseidon extends OpMode {
         } else if (gamepad2.left_stick_y == 0) {
             runningActions.add(lift.elevateOut(liftRight, liftLeft, liftRight.getCurrentPosition()/79.84615384615385));
         } else {
-            //runningActions.add(lift.elevate(liftRight, liftLeft, -gamepad2.left_stick_y/2));
-            if (-gamepad2.left_stick_y > 0) {
-                runningActions.add(lift.rotate(outtakeServoCenter, 0.05));
-            } else {
-                runningActions.add(lift.rotate(outtakeServoCenter,  -0.05));
-            }
+            runningActions.add(lift.elevate(liftRight, liftLeft, -gamepad2.left_stick_y/2));
         }
 
         if (gamepad2.a) {
