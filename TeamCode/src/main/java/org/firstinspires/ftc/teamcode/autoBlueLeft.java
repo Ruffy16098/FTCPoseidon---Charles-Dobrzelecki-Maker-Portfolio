@@ -176,8 +176,11 @@ public class autoBlueLeft extends LinearOpMode {
                 lift.elevateOut(liftRight, liftLeft, 3),
                 lift.outtake(outtakeServoRight, outtakeServoLeft, 2),
                 drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(9, 35))
-                .build()
+                .strafeTo(new Vector2d(9, 33))
+                .build(),
+                new SleepAction(500),
+                lift.elevateOut(liftRight, liftLeft, 5),
+                new SleepAction(1000)
         );
 
 
