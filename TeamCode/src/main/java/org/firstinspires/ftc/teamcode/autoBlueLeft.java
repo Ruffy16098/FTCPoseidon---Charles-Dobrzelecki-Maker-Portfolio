@@ -105,86 +105,50 @@ public class autoBlueLeft extends LinearOpMode {
         Pose2d initialPose = new Pose2d(15, 63, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
+        Actions.runBlocking(lift.rotatePos(outtakeServoCenter, 0));
+
         waitForStart();
 
-
-
-
-        Action sampleOne = new SequentialAction(
-          intake.tilt(intakeServoLeft, intakeServoRight, true),
-          intake.rotate(intakeServoCenter, 0.76),
-          drive.actionBuilder(initialPose)
-                  .strafeToLinearHeading(new Vector2d(54,54), Math.toRadians(222))
-                  .waitSeconds(1)
-
-                  .turn(Math.toRadians(45))
-                  .strafeTo(new Vector2d(48, 47))
-                  .waitSeconds(1)
-                  .build(),
-          intake.extendOut(slides, 22),
-          new SleepAction(2),
-          intake.tilt(intakeServoLeft, intakeServoRight, false),
-          new SleepAction(1),
-          intake.spin(intakeMotor, -0.3),
-          new SleepAction(2),
-          intake.spin(intakeMotor, 0),
-          new SleepAction(2),
-          new ParallelAction(
-                  intake.extendOut(slides, 0),
-                  intake.tilt(intakeServoLeft, intakeServoRight, true)
-          ),
-          new SleepAction(5),
-          drive.actionBuilder(new Pose2d(54, 54, Math.toRadians(262)))
-                  .strafeToLinearHeading(new Vector2d(15,63), Math.toRadians(270))
-                  .waitSeconds(1)
-                  .build(),
-          new SleepAction(2)
-        );
-
-        Action test = drive.actionBuilder(initialPose)
-                .strafeToLinearHeading(new Vector2d(47,47), Math.toRadians(225))
-                .waitSeconds(1)
-
-                .turn(Math.toRadians(45))
-                .waitSeconds(1)
-                .turn(Math.toRadians(-45)) // grabs first sample and puts away
-                .waitSeconds(1)
-
-                .strafeToLinearHeading(new Vector2d(58, 47), Math.toRadians(270))
-                .waitSeconds(1) // grabs second sample
-
-                .strafeToLinearHeading(new Vector2d(47, 47), Math.toRadians(225))
-                .waitSeconds(1) // puts away second sample
-
-                .splineTo(new Vector2d(30,0), Math.toRadians(180))
-                .waitSeconds(1)
-                .build(); // just to show ending
-
-
-
-        TrajectoryActionBuilder tab2 = drive.actionBuilder(initialPose)
-                .lineToY(37)
-                .setTangent(Math.toRadians(0))
-                .lineToX(18)
-                .waitSeconds(3)
-                .setTangent(Math.toRadians(0))
-                .lineToXSplineHeading(46, Math.toRadians(180))
-                .waitSeconds(3);
-
         Action specimenOne = new SequentialAction(
-                lift.rotatePos(outtakeServoCenter, 0),
-                lift.elevateOut(liftRight, liftLeft, 3),
+                //lift.rotatePos(outtakeServoCenter, 0),
                 lift.outtake(outtakeServoRight, outtakeServoLeft, 2),
                 drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(9, 34))
+                .strafeTo(new Vector2d(9, 35))
                 .build(),
-                new SleepAction(0.5),
-                lift.elevateOut(liftRight, liftLeft, 5),
-                new ParallelAction(
-                        lift.elevateOut(liftRight, liftLeft, 10),
-                        lift.rotatePos(outtakeServoCenter, 1)
-                ),
+                new SleepAction(1),
+                lift.elevateOut(liftRight, liftLeft, 10),
                 new SleepAction(5)
+        );
+
+        Action sampleOne = new SequentialAction(
+                intake.tilt(intakeServoLeft, intakeServoRight, true),
+                intake.rotate(intakeServoCenter, 0.76),
+                drive.actionBuilder(initialPose)
+                        .strafeToLinearHeading(new Vector2d(54,54), Math.toRadians(222))
+                        .waitSeconds(1)
+
+                        .turn(Math.toRadians(45))
+                        .strafeTo(new Vector2d(48, 47))
+                        .waitSeconds(1)
+                        .build(),
+                intake.extendOut(slides, 22),
+                new SleepAction(2),
+                intake.tilt(intakeServoLeft, intakeServoRight, false),
+                new SleepAction(1),
+                intake.spin(intakeMotor, -0.3),
+                new SleepAction(2),
+                intake.spin(intakeMotor, 0),
+                new SleepAction(2),
+                new ParallelAction(
+                        intake.extendOut(slides, 0),
+                        intake.tilt(intakeServoLeft, intakeServoRight, true)
+                ),
+                new SleepAction(5),
+                drive.actionBuilder(new Pose2d(54, 54, Math.toRadians(262)))
+                        .strafeToLinearHeading(new Vector2d(15,63), Math.toRadians(270))
+                        .waitSeconds(1)
+                        .build(),
+                new SleepAction(2)
         );
 
         Actions.runBlocking(new SequentialAction(

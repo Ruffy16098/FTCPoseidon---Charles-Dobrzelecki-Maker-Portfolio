@@ -98,11 +98,13 @@ public class testingRandomStuff extends OpMode {
     @Override
     public void loop() {
         TelemetryPacket packet = new TelemetryPacket();
-        if (-gamepad2.right_stick_y > 0) {
+        /*if (-gamepad2.right_stick_y > 0) {
             runningActions.add(lift.rotate(outtakeServoCenter, 0.05));
         } else {
             runningActions.add(lift.rotate(outtakeServoCenter,  -0.05));
         }
+
+         */
 
         if (gamepad2.x) {
             runningActions.add(lift.rotatePos(outtakeServoCenter, 0));
