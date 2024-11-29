@@ -172,15 +172,19 @@ public class autoBlueLeft extends LinearOpMode {
                 .waitSeconds(3);
 
         Action specimenOne = new SequentialAction(
-                lift.rotate(outtakeServoCenter, 0),
+                lift.rotate(outtakeServoCenter, -1),
                 lift.elevateOut(liftRight, liftLeft, 3),
                 lift.outtake(outtakeServoRight, outtakeServoLeft, 2),
                 drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(9, 33))
+                .strafeTo(new Vector2d(9, 34))
                 .build(),
-                new SleepAction(500),
+                new SleepAction(0.5),
                 lift.elevateOut(liftRight, liftLeft, 5),
-                new SleepAction(1000)
+                new ParallelAction(
+                        lift.elevateOut(liftRight, liftLeft, 10),
+                        lift.rotate(outtakeServoCenter, 1)
+                ),
+                new SleepAction(5)
         );
 
         Actions.runBlocking(new SequentialAction(
