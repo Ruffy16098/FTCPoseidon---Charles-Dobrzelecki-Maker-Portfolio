@@ -183,8 +183,6 @@ public class autoBlueLeft extends LinearOpMode {
                 new SleepAction(1000)
         );
 
-
-
         Actions.runBlocking(new SequentialAction(
                 specimenOne
 

@@ -156,10 +156,10 @@ public class teleopPoseidon extends OpMode {
         FTC gamepad 2 controls
 
         Intake mode
-            Dpad up/Dpad down = up/down for intake
-            Dpad left/Dpad right = left/right for intake
-            Right trigger = intake sucking
-            Left trigger = intake hawk tuah
+            Dpad up/Dpad down = up/down for intake (done)
+            Dpad left/Dpad right = left/right for intake (done)
+            Right trigger = intake sucking (done)
+            Left trigger = intake hawk tuah (done)
 
         Outtake mode
             Y = dump
@@ -180,6 +180,7 @@ public class teleopPoseidon extends OpMode {
         if (gamepad2.right_bumper){
             runningActions.add(new ParallelAction(
                 lift.Outtake(outtakeServoRight, outtakeServoLeft, 1),
+                lift.ElevateOut(liftRight, liftLeft,0),
                 intake.tilt(intakeServoLeft, intakeServoRight, true),
                 intake.rotate(intakeServoCenter, 0.77),
                 intake.extendOut(slides, 7.51))

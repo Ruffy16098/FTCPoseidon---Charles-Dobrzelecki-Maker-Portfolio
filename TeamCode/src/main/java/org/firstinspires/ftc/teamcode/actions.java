@@ -59,7 +59,7 @@ public class actions {
                         if (!(liftRight.getCurrentPosition() > 2991 && power > 0)){
                             liftRight.setPower(power);
                             liftLeft.setPower(power);
-                        } else{
+                        } else {
                             liftRight.setPower(0);
                             liftLeft.setPower(0);
                         }
@@ -101,7 +101,7 @@ public class actions {
 
                         // stops the left lift trying to go down when cant
                         // saves power
-                        if(liftRight.getCurrentPosition() <= 0) {
+                        if (liftRight.getCurrentPosition() <= 0) {
                             liftLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
                         }
                     }
@@ -139,6 +139,32 @@ public class actions {
 
         public static Action rotate(Servo center, double velocity) {
             return Rotate(center, velocity);
+        }
+
+        public static Action RotatePos(Servo center, int pos){
+            return new Action() {
+                double position;
+                private boolean initalized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initalized){
+                        switch(pos){
+                            case 0:
+                                center.setPosition(0);
+                                break;
+                            case 1:
+                                break;
+                            case 2:
+                                break;
+                        }
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static Action rotatePos(Servo center, int pos) {
+            return RotatePos(center, pos);
         }
 
         static Action Outtake (Servo right, Servo left, int pos){
