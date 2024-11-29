@@ -104,6 +104,14 @@ public class testingRandomStuff extends OpMode {
             runningActions.add(lift.rotate(outtakeServoCenter,  -0.05));
         }
 
+        if (gamepad2.x) {
+            runningActions.add(lift.rotatePos(outtakeServoCenter, 0));
+        } else if (gamepad2.a) {
+            runningActions.add(lift.rotatePos(outtakeServoCenter, 2));
+        } else if (gamepad2.b) {
+            runningActions.add(lift.rotatePos(outtakeServoCenter, 1));
+        }
+
         // update running actions
         List<Action> newActions = new ArrayList<>();
         for (Action action : runningActions) {
