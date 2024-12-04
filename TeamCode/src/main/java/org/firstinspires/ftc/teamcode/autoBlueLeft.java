@@ -152,7 +152,7 @@ public class autoBlueLeft extends LinearOpMode {
         );
 
         Actions.runBlocking(new SequentialAction(
-                specimenOne
+                sampleOne
 
             )
         );

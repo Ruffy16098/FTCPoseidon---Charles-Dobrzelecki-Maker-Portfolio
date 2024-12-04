@@ -178,7 +178,7 @@ public class teleopPoseidon extends OpMode {
 
         // slides actions
         if (gamepad2.right_bumper){
-            runningActions.add(new ParallelAction(
+            runningActions.add(new SequentialAction(
                 lift.Outtake(outtakeServoRight, outtakeServoLeft, 0),
                 lift.ElevateOut(liftRight, liftLeft,0),
                 intake.tilt(intakeServoLeft, intakeServoRight, true),
