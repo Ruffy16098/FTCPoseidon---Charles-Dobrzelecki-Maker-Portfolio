@@ -69,18 +69,18 @@ public final class MecanumDrive {
         // went 47.375 in
         // went 53291 ticks
         // 47.375 / 53291 =
-        public double inPerTick = 0.0008889868833386501;
+        public double inPerTick = 0.000903529;
         // need to get the actual tick value from lateral ramp
-        public double lateralInPerTick = 0.0004398254470467557;
+        public double lateralInPerTick = 0.00046531809253717773;
         //0.00042796503184830816
         //0.00038631041728516476
         //0.0004034149973710741
-        public double trackWidthTicks = 14334.103340952532;
+        public double trackWidthTicks = 15100.704646077786;
 
         // feedforward parameters (in tick units)
         //1.6875064514760738
-        public double kS = 1.7097698269191924;
-        public double kV = 0.0001103997644834552;
+        public double kS = 1.6110764990976016;
+        public double kV = 0.0001244012257616967;
         public double kA = 0.000039;
 
         // path profile parameters (in inches)
