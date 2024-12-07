@@ -163,7 +163,7 @@ public class teleopPoseidon extends OpMode {
 
         Outtake mode
             Y = dump
-            A = grabby from1    q outtake
+            A = grabby from outtake
             B = grab
             X = let's go
 
