@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.actions.lift;
+import static org.firstinspires.ftc.teamcode.actions.intake;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -107,11 +107,7 @@ public class testingRandomStuff extends OpMode {
          */
 
         if (gamepad2.x) {
-            runningActions.add(lift.rotatePos(outtakeServoCenter, 0));
-        } else if (gamepad2.a) {
-            runningActions.add(lift.rotatePos(outtakeServoCenter, 2));
-        } else if (gamepad2.b) {
-            runningActions.add(lift.rotatePos(outtakeServoCenter, 1));
+            runningActions.add(intake.rotate(intakeServoCenter, 0.77));
         }
 
         // update running actions

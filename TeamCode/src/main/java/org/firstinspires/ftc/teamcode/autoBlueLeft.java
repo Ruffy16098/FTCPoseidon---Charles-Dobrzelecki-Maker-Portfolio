@@ -113,17 +113,16 @@ public class autoBlueLeft extends LinearOpMode {
                 //lift.rotatePos(outtakeServoCenter, 0),
                 lift.outtake(outtakeServoRight, outtakeServoLeft, 1),
                 drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(9, 36))
+                .strafeTo(new Vector2d(9, 32))
                 .build(),
                 new SleepAction(1),
-                lift.elevateOut(liftRight, liftLeft, 10),
-                new SleepAction(5)
+                lift.elevateOut(liftRight, liftLeft, 10)
         );
 
         Action sampleOne = new SequentialAction(
                 intake.tilt(intakeServoLeft, intakeServoRight, true),
                 intake.rotate(intakeServoCenter, 0.76),
-                drive.actionBuilder(initialPose)
+                drive.actionBuilder(new Pose2d(9,32, Math.toRadians(90)))
                         .strafeToLinearHeading(new Vector2d(54,54), Math.toRadians(222))
                         .waitSeconds(1)
 
@@ -152,8 +151,8 @@ public class autoBlueLeft extends LinearOpMode {
         );
 
         Actions.runBlocking(new SequentialAction(
-                specimenOne
-
+                specimenOne,
+                sampleOne
             )
         );
     }

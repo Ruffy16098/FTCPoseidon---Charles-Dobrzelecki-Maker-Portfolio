@@ -215,11 +215,7 @@ public class teleopPoseidon extends OpMode {
 
         // if the joystick isn't active, than the lifts will keep it self up right
         // elevateOut to current position must be the second to last conditional in the whole statements
-        if (gamepad2.x && !gamepad2.right_bumper) {
-            runningActions.add(lift.elevateOut(liftRight, liftLeft, 25));
-        } else if (gamepad2.x && gamepad2.right_bumper) {
-            runningActions.add(lift.elevateOut(liftRight, liftLeft, 0));
-        } else if (gamepad2.left_stick_y == 0) {
+        if (gamepad2.left_stick_y == 0) {
             runningActions.add(lift.elevateOut(liftRight, liftLeft, liftRight.getCurrentPosition()/79.84615384615385));
         } else {
             runningActions.add(lift.elevate(liftRight, liftLeft, -gamepad2.left_stick_y/2));
@@ -227,8 +223,14 @@ public class teleopPoseidon extends OpMode {
 
         if (gamepad2.a) {
             runningActions.add(lift.outtake(outtakeServoRight, outtakeServoLeft, 0));
-        } else if (gamepad2.b) {
+        } else if (gamepad2.y) {
             runningActions.add(lift.outtake(outtakeServoRight, outtakeServoLeft, 1));
+        }
+
+        if (gamepad2.b) {
+            runningActions.add(lift.rotatePos(outtakeServoCenter, 0));
+        } else if (gamepad2.x) {
+            runningActions.add(lift.rotatePos(outtakeServoCenter, 1));
         }
 
         // update running actions
