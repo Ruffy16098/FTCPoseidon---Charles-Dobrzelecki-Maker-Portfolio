@@ -221,16 +221,16 @@ public class actions {
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initialized) {
                         slides.setMode(RUN_USING_ENCODER);
-                        if(!(slides.getCurrentPosition() > 628 && power > 0)) {
-                            if (!(slides.getCurrentPosition() < 226 && power < 0)) {
+                        //if(!(slides.getCurrentPosition() > 628 && power > 0)) {
+                            //if (!(slides.getCurrentPosition() < 226 && power < 0)) {
                                 slides.setPower(power);
-                            }
-                        } else{
-                            slides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                            //}
+                        } else {
+                            //slides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                             slides.setPower(0);
                         }
                         initialized = true;
-                    }
+                    //}
                     return false;
                 }
             };
@@ -250,18 +250,16 @@ public class actions {
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initialized) {
                         slides.setMode(RUN_USING_ENCODER);
-                        if (!(slides.getCurrentPosition() > 628 && power > 0)) {
-                            if (!(slides.getCurrentPosition() < 226 && power < 0)) {
-                                if (right.getPosition() <= 0.5 && left.getPosition() <= 0.5 && slides.getCurrentPosition() <= 200) {
-                                    intake.Tilt(left, right, 0.5);
-                                }
-                                slides.setPower(power);
+                        //if (!(slides.getCurrentPosition() > 628 && power > 0)) {
+                            if (right.getPosition() <= 0.5 && left.getPosition() <= 0.5 && slides.getCurrentPosition() <= 200) {
+                                intake.Tilt(left, right, 0.5);
                             }
+                            slides.setPower(power);
                         } else{
                             slides.setPower(0);
                         }
                         initialized = true;
-                    }
+                    //}
                     return false;
                 }
             };
@@ -360,6 +358,34 @@ public class actions {
             return Rotate(center, velocity);
         }
 
+        public static Action RotatePos(Servo center, int pos){
+            return new Action() {
+                double position;
+                private boolean initalized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initalized){
+                        switch(pos){
+                            case 0:
+                                center.setPosition(0.9);
+                                break;
+                            case 1:
+                                center.setPosition(1);
+                                break;
+                            case 2:
+                                center.setPosition(0.8);
+                                break;
+                        }
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static Action rotatePos(Servo center, int pos) {
+            return RotatePos(center, pos);
+        }
+
         public static Action Tilt(Servo left, Servo right, boolean up){
             return new Action() {
                 private boolean initalized = false;
@@ -414,5 +440,6 @@ public class actions {
         public static Action tilt(Servo left, Servo right, double pos) {
             return Tilt(left, right, pos);
         }
+
     }
 }

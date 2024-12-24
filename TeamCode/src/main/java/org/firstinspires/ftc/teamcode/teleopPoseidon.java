@@ -42,6 +42,7 @@ public class teleopPoseidon extends OpMode {
     public Servo intakeServoRight;
     public Servo intakeServoLeft;
     public Servo intakeServoCenter;
+    public Servo intakeServoClaw;
 
     public Servo outtakeServoRight;
     public Servo outtakeServoLeft;
@@ -90,6 +91,9 @@ public class teleopPoseidon extends OpMode {
         intakeServoCenter = hardwareMap.get(Servo.class, "intakeServoCenter");
         intakeServoCenter.setDirection(Servo.Direction.FORWARD);
         //intakeServoCenter.setPosition(0);
+
+        intakeServoClaw = hardwareMap.get(Servo.class, "intakeServoClaw");
+        intakeServoClaw.setDirection(Servo.Direction.FORWARD);
 
         outtakeServoRight = hardwareMap.get(Servo.class, "outtakeServoRight");
         outtakeServoRight.setDirection(Servo.Direction.FORWARD);
@@ -220,9 +224,11 @@ public class teleopPoseidon extends OpMode {
         }
 
         if (gamepad2.a) {
-            runningActions.add(lift.outtake(outtakeServoRight, outtakeServoLeft, 0));
+            //runningActions.add(lift.outtake(outtakeServoRight, outtakeServoLeft, 0));
+            runningActions.add(intake.rotatePos(intakeServoClaw, 0));
         } else if (gamepad2.y) {
-            runningActions.add(lift.outtake(outtakeServoRight, outtakeServoLeft, 1));
+            //runningActions.add(lift.outtake(outtakeServoRight, outtakeServoLeft, 1));
+            runningActions.add(intake.rotatePos(intakeServoClaw, 1));
         }
 
         if (gamepad2.b) {
@@ -246,6 +252,7 @@ public class teleopPoseidon extends OpMode {
         telemetry.addData("Servo right position", intakeServoRight.getPosition());
         telemetry.addData("Servo center position", intakeServoCenter.getPosition());
         telemetry.addData("Servo left position", intakeServoLeft.getPosition());
+        telemetry.addData("Servo claw position", intakeServoClaw.getPosition());
         telemetry.addData("slides position", slides.getCurrentPosition());
         telemetry.addData("liftRight position", liftRight.getCurrentPosition());
         telemetry.addData("liftLeft position", liftLeft.getCurrentPosition());
