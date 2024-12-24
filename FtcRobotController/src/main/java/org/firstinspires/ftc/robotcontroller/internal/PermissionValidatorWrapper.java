@@ -42,7 +42,7 @@ import java.util.List;
 
 public class PermissionValidatorWrapper extends PermissionValidatorActivity {
 
-    public final String TAG = "PermissionValidatorWrapper";
+    private final String TAG = "PermissionValidatorWrapper";
 
     /*
      * The list of dangerous permissions the robot controller needs.
@@ -56,7 +56,7 @@ public class PermissionValidatorWrapper extends PermissionValidatorActivity {
         add(Manifest.permission.READ_PHONE_STATE);
     }};
 
-    public final static Class startApplication = FtcRobotControllerActivity.class;
+    private final static Class startApplication = FtcRobotControllerActivity.class;
 
     public String mapPermissionToExplanation(final String permission) {
         if (permission.equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {

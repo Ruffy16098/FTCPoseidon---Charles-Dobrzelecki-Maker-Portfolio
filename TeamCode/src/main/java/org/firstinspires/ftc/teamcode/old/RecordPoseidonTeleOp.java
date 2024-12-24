@@ -1,14 +1,35 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.old;
 
+import android.annotation.SuppressLint;
+import android.os.Environment;
+
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name="PoseidonTeleOp")
-public class PoseidonTeleOp extends LinearOpMode {
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.opencv.core.Mat;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvPipeline;
+import org.openftc.easyopencv.PipelineRecordingParameters;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+/** @noinspection ALL*/
+@Disabled
+@TeleOp(name="RecordPoseidonTeleOp")
+public class RecordPoseidonTeleOp extends LinearOpMode {
+    //Motor variables
     public DcMotor Front_L;
     public DcMotor Back_L;
     public DcMotor Front_R;
@@ -25,6 +46,7 @@ public class PoseidonTeleOp extends LinearOpMode {
     public Servo clawOutRotator;
     public Servo planeShooter;
 
+    //Servo variables
     private double clawInPosition = 0;
     private double clawOutPosition = 0;
     private double rotatorInPosition = 0;
@@ -38,6 +60,15 @@ public class PoseidonTeleOp extends LinearOpMode {
     private int planeShooterCount = 0;
     private boolean zeroPositionL = false;
     private boolean zeroPositionR = false;
+
+    // Webcam variables
+    private OpenCvCamera webcam;
+    private String videoFilePath;
+    private boolean isRecording = false;
+
+    // Path to the file that stores the run count
+    @SuppressLint("SdCardPath")
+    private static final String RUN_COUNT_FILE = Environment.getExternalStorageDirectory().getPath() + "/opmode_run_count.txt";
 
     @Override
     public void runOpMode() {
@@ -68,6 +99,7 @@ public class PoseidonTeleOp extends LinearOpMode {
         slidesRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slidesRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slidesRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slidesRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         slidesHorizontalLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slidesHorizontalLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -75,10 +107,6 @@ public class PoseidonTeleOp extends LinearOpMode {
         slidesHorizontalRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slidesHorizontalRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slidesHorizontalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        // Send telemetry message to signify robot waiting
-        telemetry.addData("Status", "Ready to run");
-        telemetry.update();
 
         planeShooter.setPosition(1);
 
@@ -96,9 +124,19 @@ public class PoseidonTeleOp extends LinearOpMode {
         clawInRotator.setPosition(1);
         rotatorInPosition = 1;
 
-        //Intake Rotator goes from 0.4 (floor) to 1 (starting position)
+        // Initialize webcam and start recording
+        initializeWebcam();
+
+        // Send telemetry message to signify robot waiting
+        telemetry.addData("Status", "Ready to run");
+        telemetry.update();
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+
+        // Start recording as soon as the OpMode starts
+        startWebcamRecording();
+
         while (opModeIsActive()) {
             // Run until the end of the match
             float leftjoystick_x = gamepad1.left_stick_x;
@@ -261,6 +299,108 @@ public class PoseidonTeleOp extends LinearOpMode {
 
             // Pace the loop
             sleep(150);
+        }
+
+        // Stop recording when the OpMode ends
+        stopWebcamRecording();
+    }
+
+    // Initialize the webcam
+    private void initializeWebcam() {
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
+
+        // Set a simple pipeline to just pass frames through
+        webcam.setPipeline(new SimplePipeline());
+
+        webcam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+        webcam.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                webcam.startStreaming(960, 720, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                telemetry.addData("Webcam Error", errorCode);
+                telemetry.update();
+            }
+        });
+    }
+
+    // Start recording the video
+    private void startWebcamRecording() {
+        if (webcam != null) {
+            /*  Backup file path naming system
+             *  Generate a random number between 1 and 1000 for unique filename
+                Random random = new Random();
+                int randomNumber = random.nextInt(1000) + 1;
+                videoFilePath = String.format("/sdcard/poseidonRecording_%d.mp4", randomNumber);
+            */
+            int runCount = readRunCount();
+            videoFilePath = Environment.getExternalStorageDirectory().getPath() + "/poseidonRecording_" + runCount + ".mp4";
+
+            webcam.startRecordingPipeline(
+                    new PipelineRecordingParameters.Builder()
+                            .setBitrate(4, PipelineRecordingParameters.BitrateUnits.Mbps)
+                            .setEncoder(PipelineRecordingParameters.Encoder.H264)
+                            .setOutputFormat(PipelineRecordingParameters.OutputFormat.MPEG_4)
+                            .setFrameRate(30)
+                            .setPath(videoFilePath)
+                            .build());
+
+            telemetry.addData("Recording started", videoFilePath);
+            telemetry.update();
+            isRecording = true;
+
+            // Increment the run count for the next session
+            incrementRunCount();
+        }
+    }
+
+    // Stop recording the video
+    private void stopWebcamRecording() {
+        if (webcam != null && isRecording) {
+            webcam.stopRecordingPipeline();
+            telemetry.addData("Recording stopped", videoFilePath);
+            telemetry.update();
+            isRecording = false;
+        }
+    }
+
+    // Read the current run count from a file
+    private int readRunCount() {
+        File file = new File(RUN_COUNT_FILE);
+        int count = 1; // Default to 1 if the file does not exist
+        if (file.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                count = Integer.parseInt(reader.readLine().trim());
+            } catch (IOException | NumberFormatException e) {
+                telemetry.addData("Error reading run count", e.getMessage());
+                telemetry.update();
+            }
+        }
+        return count;
+    }
+
+    // Increment and save the run count
+    private void incrementRunCount() {
+        int count = readRunCount();
+        count++;
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(RUN_COUNT_FILE))) {
+            writer.write(String.valueOf(count));
+        } catch (IOException e) {
+            telemetry.addData("Error writing run count", e.getMessage());
+            telemetry.update();
+        }
+    }
+
+    // Simple pipeline for processing frames
+    static class SimplePipeline extends OpenCvPipeline {
+        @Override
+        public Mat processFrame(Mat input) {
+            // Just return the frame without any processing
+            return input;
         }
     }
 }

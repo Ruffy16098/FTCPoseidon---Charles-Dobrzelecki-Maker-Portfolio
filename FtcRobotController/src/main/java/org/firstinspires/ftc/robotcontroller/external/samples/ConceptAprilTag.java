@@ -69,17 +69,17 @@ import java.util.List;
 @Disabled
 public class ConceptAprilTag extends LinearOpMode {
 
-    public static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
+    private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     /**
      * The variable to store our instance of the AprilTag processor.
      */
-    public AprilTagProcessor aprilTag;
+    private AprilTagProcessor aprilTag;
 
     /**
      * The variable to store our instance of the vision portal.
      */
-    public VisionPortal visionPortal;
+    private VisionPortal visionPortal;
 
     @Override
     public void runOpMode() {
@@ -88,7 +88,7 @@ public class ConceptAprilTag extends LinearOpMode {
 
         // Wait for the DS start button to be touched.
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
-        telemetry.addData(">", "Touch Play to start OpMode");
+        telemetry.addData(">", "Touch START to start OpMode");
         telemetry.update();
         waitForStart();
 

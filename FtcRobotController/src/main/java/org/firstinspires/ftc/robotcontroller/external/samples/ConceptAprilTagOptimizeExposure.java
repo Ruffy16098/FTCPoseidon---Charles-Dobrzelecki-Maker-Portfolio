@@ -67,7 +67,7 @@ import java.util.concurrent.TimeUnit;
 @Disabled
 public class ConceptAprilTagOptimizeExposure extends LinearOpMode
 {
-    public VisionPortal visionPortal = null;        // Used to manage the video source.
+    private VisionPortal visionPortal = null;        // Used to manage the video source.
     private AprilTagProcessor aprilTag;              // Used for managing the AprilTag detection process.
     private int     myExposure  ;
     private int     minExposure ;
@@ -98,7 +98,7 @@ public class ConceptAprilTagOptimizeExposure extends LinearOpMode
 
         // Wait for the match to begin.
         telemetry.addData("Camera preview on/off", "3 dots, Camera Stream");
-        telemetry.addData(">", "Touch Play to start OpMode");
+        telemetry.addData(">", "Touch START to start OpMode");
         telemetry.update();
         waitForStart();
 
