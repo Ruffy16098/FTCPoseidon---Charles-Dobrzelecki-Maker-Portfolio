@@ -136,8 +136,31 @@ public class MeepMeepTesting {
                 .strafeToLinearHeading(new Vector2d(-15, 0), Math.toRadians(0))
                 .build();
 
+        Action blueRight = myBot.getDrive().actionBuilder(new Pose2d(-15, 63, Math.toRadians(270)))
+                //.splineToLinearHeading(new Pose2d(new Vector2d(-, ), Math.toRadians(270)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-36, 36), Math.toRadians(270)), Math.toRadians(270))
+                .strafeTo(new Vector2d(-36, 12))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-44, 12), Math.toRadians(270)), Math.toRadians(90))
+                .strafeTo(new Vector2d(-44, 56))
+                .waitSeconds(1)
+                .strafeTo(new Vector2d(-44, 12))
+                .waitSeconds(1)
+                .splineToLinearHeading(new Pose2d(new Vector2d(-52, 12), Math.toRadians(270)), Math.toRadians(90))
+                .strafeTo(new Vector2d(-52, 56))
+                .waitSeconds(1)
+                .strafeTo(new Vector2d(-52, 12))
+                .waitSeconds(1)
+                .splineToLinearHeading(new Pose2d(new Vector2d(-60, 12), Math.toRadians(270)), Math.toRadians(90))
+                .strafeTo(new Vector2d(-60, 56))
+                //.splineToLinearHeading(new Pose2d(new Vector2d(-44, 60), Math.toRadians(270)), Math.toRadians(90))
+                /*.strafeToLinearHeading(new Vector2d(-48, 39), Math.toRadians(270))
+                .turnTo(Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(-58, 39), Math.toRadians(270))
+                .turnTo(Math.toRadians(90))*/
+                .build();
+
         // chose which auto you want to run here
-        myBot.runAction(emote);
+        myBot.runAction(blueRight);
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)

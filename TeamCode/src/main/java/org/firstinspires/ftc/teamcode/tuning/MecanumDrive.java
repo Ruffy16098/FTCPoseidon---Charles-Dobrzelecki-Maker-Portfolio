@@ -65,22 +65,22 @@ public final class MecanumDrive {
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
                 RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
 
-        // drive model parameters
-        // went 23.5*3 = 71.5 in
-        // went 77177 ticks
-        // 70.75 / 69130.5 =
-        public double inPerTick = 9.264418155668139e-4;
-        // need to get the actual tick value from lateral ramp
-        public double lateralInPerTick = 0.0005083246010122126;
-        //0.00042796503184830816
-        //0.00038631041728516476
-        //0.0004034149973710741
-        public double trackWidthTicks = 14334.103340952532;
+        /*
+        drive model parameters
+        23 9/16 = 23.5625 in
+        23.5625 per tile
+        moving 4 tiles
+        23.5625 * 4 = 94.25 in
+        amount of ticks = 104345
+        94.25 / 104345 = 9.032536297858067e-4 = 0.0009032536297858067
+         */
+        public double inPerTick = 0.0009032536297858067;
+        public double lateralInPerTick = 0.0005433917054061616;
+        public double trackWidthTicks = 15652.289231559673;
 
         // feedforward parameters (in tick units)
-        //1.6875064514760738
-        public double kS = 1.9300233508696643;
-        public double kV = 0.00012716669834596386;
+        public double kS = 1.830715599393418;
+        public double kV = 0.0001127617164108395;
         public double kA = 0.00003;
 
         // path profile parameters (in inches)
@@ -93,9 +93,9 @@ public final class MecanumDrive {
         public double maxAngAccel = Math.PI;
 
         // path controller gains
-        public double axialGain = 1;
-        public double lateralGain = 1;
-        public double headingGain = 1; // shared with turn
+        public double axialGain = 3;
+        public double lateralGain = 2;
+        public double headingGain = 0; // shared with turn
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;
