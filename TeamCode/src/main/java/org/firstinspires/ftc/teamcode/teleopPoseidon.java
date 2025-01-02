@@ -83,14 +83,12 @@ public class teleopPoseidon extends OpMode {
 
         intakeServoRight = hardwareMap.get(Servo.class, "intakeServoRight");
         intakeServoRight.setDirection(Servo.Direction.FORWARD);
-        //intakeServoRight.setPosition(0);
 
         intakeServoLeft = hardwareMap.get(Servo.class, "intakeServoLeft");
         intakeServoLeft.setDirection(Servo.Direction.REVERSE);
 
         intakeServoCenter = hardwareMap.get(Servo.class, "intakeServoCenter");
         intakeServoCenter.setDirection(Servo.Direction.FORWARD);
-        //intakeServoCenter.setPosition(0);
 
         intakeServoClaw = hardwareMap.get(Servo.class, "intakeServoClaw");
         intakeServoClaw.setDirection(Servo.Direction.FORWARD);
@@ -103,15 +101,13 @@ public class teleopPoseidon extends OpMode {
 
         outtakeServoCenter = hardwareMap.get(Servo.class, "outtakeServoCenter");
         outtakeServoCenter.setDirection(Servo.Direction.FORWARD);
-
-        //intakeServoLeft.setPosition(0.5);
-        //intakeServoRight.setPosition(0.5);
-        //intakeServoCenter.setPosition(0.76);
     }
 
     boolean pos = true;
     double pastPos = 0.05;
     double posChange;
+    boolean isInOpen = false;
+    boolean isOutOpen = false;
     @Override
     public void loop() {
         TelemetryPacket packet = new TelemetryPacket();
@@ -160,26 +156,26 @@ public class teleopPoseidon extends OpMode {
         Intake mode
             Dpad up/Dpad down = up/down for intake (done)
             Dpad left/Dpad right = left/right for intake (done)
-            Right trigger = intake sucking (done)
-            Left trigger = intake hawk tuah (done)
+            Right trigger = intake sucking and hawk tuah (done)
+            Left trigger = outtake sucking and hawk tuah (done)
 
         Outtake mode
             Y = dump
             A = grabby from outtake
-            B = grab
-            X = let's go
+            B = nothing yet
+            X = nothing yet
 
         All mode
             Joystick Left Y axis - hort (done)
             Joystick Right Y axis - vert (done)
-            Right bumper - outtake and intake comes in
-            Left bumper - specimen
+            Right bumper - specimen
+            Left bumper - outtake and intake comes in
          */
 
         // intake
 
         // slides actions
-        if (gamepad2.right_bumper){
+        if (gamepad2.left_bumper){
             runningActions.add(new SequentialAction(
                 lift.Outtake(outtakeServoRight, outtakeServoLeft, 0),
                 lift.ElevateOut(liftRight, liftLeft,0),
@@ -188,28 +184,40 @@ public class teleopPoseidon extends OpMode {
                 intake.extendOut(slides, 7.51))
             );
         } else {
-            runningActions.add(intake.extend(slides, intakeServoLeft, intakeServoRight, -gamepad2.right_stick_y/2));
+            runningActions.add(intake.extend(slides, intakeServoLeft, intakeServoRight, -gamepad2.left_stick_y/2));
         }
 
         // grabber actions
-        if (gamepad2.right_trigger > 0) {
-            runningActions.add(intake.spin(intakeMotor, -1));
-        } else if (gamepad2.left_trigger > 0) {
-            runningActions.add(intake.spin(intakeMotor, 1));
+        if (gamepad2.left_trigger > 0) {
+            if (isInOpen) {
+                // pos to be determined
+                runningActions.add(intake.rotatePos(intakeServoClaw, -1));
+            } else {
+                // pos to be determined
+                runningActions.add(intake.rotatePos(intakeServoClaw, 1));
+            }
+            isInOpen = !isInOpen;
+        } else if (gamepad2.right_trigger > 0) {
+            if (isOutOpen) {
+                // pos to be determined
+                runningActions.add(intake.rotatePos(outtakeServoCenter, -1));
+            } else {
+                // pos to be determined
+                runningActions.add(intake.rotatePos(outtakeServoCenter, 1));
+            }
+            isOutOpen = !isOutOpen;
         } else {
             runningActions.add(intake.spin(intakeMotor, 0));
         }
 
         // rotates the intake
-        if (gamepad2.dpad_left && !gamepad2.right_bumper){
+        if (gamepad2.dpad_left && !gamepad2.left_bumper){
             runningActions.add(intake.rotate(intakeServoCenter, intakeServoCenter.getPosition() + 0.02));
-        } else if (gamepad2.dpad_right && !gamepad2.right_bumper) {
+        } else if (gamepad2.dpad_right && !gamepad2.left_bumper) {
             runningActions.add(intake.rotate(intakeServoCenter, intakeServoCenter.getPosition() - 0.02));
-        } else if (gamepad2.dpad_down && !gamepad2.right_bumper){
-            //runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, false));
+        } else if (gamepad2.dpad_down && !gamepad2.left_bumper){
             runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, intakeServoRight.getPosition() + 0.02));
-        } else if (gamepad2.dpad_up && !gamepad2.right_bumper){
-            //runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, true));
+        } else if (gamepad2.dpad_up && !gamepad2.left_bumper){
             runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, intakeServoRight.getPosition() - 0.02));
         }
 
@@ -217,10 +225,10 @@ public class teleopPoseidon extends OpMode {
 
         // if the joystick isn't active, than the lifts will keep it self up right
         // elevateOut to current position must be the second to last conditional in the whole statements
-        if (gamepad2.left_stick_y == 0) {
+        if (gamepad2.right_stick_y == 0) {
             runningActions.add(lift.elevateOut(liftRight, liftLeft, liftRight.getCurrentPosition()/79.84615384615385));
         } else {
-            runningActions.add(lift.elevate(liftRight, liftLeft, -gamepad2.left_stick_y/2));
+            runningActions.add(lift.elevate(liftRight, liftLeft, -gamepad2.right_stick_y/2));
         }
 
         if (gamepad2.a) {
