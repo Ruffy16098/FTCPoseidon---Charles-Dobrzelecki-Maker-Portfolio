@@ -331,21 +331,17 @@ public class actions {
 
 
         // idea is that it would get a velocity on how much to add or subtract from the current position...
-        public static Action Rotate(Servo center, double velocity){
+        public static Action Rotate(Servo center, double pos){
+            double position = pos;
+            if (position > 1){
+                position = 1;
+            } else if (position < 0) {
+                position = 0;
+            }
             return new Action() {
-                double position;
                 private boolean initalized = false;
-                double pos;
-                @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initalized){
-                        if(velocity > 1){
-                             pos = 1;
-                        } else if (velocity < 0) {
-                            pos = 0;
-                        }else{
-                            pos = velocity;
-                        }
                         center.setPosition(pos);
                         initalized = true;
                     }
@@ -354,8 +350,8 @@ public class actions {
             };
         }
 
-        public static Action rotate(Servo center, double velocity) {
-            return Rotate(center, velocity);
+        public static Action rotate(Servo center, double pos) {
+            return Rotate(center, pos);
         }
 
         public static Action RotatePos(Servo center, int pos){
