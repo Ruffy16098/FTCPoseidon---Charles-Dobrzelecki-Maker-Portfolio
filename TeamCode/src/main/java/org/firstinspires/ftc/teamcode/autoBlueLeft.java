@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Config
-@Autonomous(name = "autoBlueLeft", group = "Autonomous")
+@Autonomous(name = "autoLeft", group = "Autonomous")
 public class autoBlueLeft extends LinearOpMode {
 
     private FtcDashboard dash = FtcDashboard.getInstance();
@@ -102,7 +102,7 @@ public class autoBlueLeft extends LinearOpMode {
         outtakeServoCenter = hardwareMap.get(Servo.class, "outtakeServoCenter");
         outtakeServoCenter.setDirection(Servo.Direction.FORWARD);
 
-        Pose2d initialPose = new Pose2d(15, 63, Math.toRadians(90));
+        Pose2d initialPose = new Pose2d(15, 63, Math.toRadians(270));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         Actions.runBlocking(lift.rotatePos(outtakeServoCenter, 0));
@@ -119,7 +119,7 @@ public class autoBlueLeft extends LinearOpMode {
                 lift.elevateOut(liftRight, liftLeft, 10)
         );
 
-        Action sampleOne = new SequentialAction(
+        Action sampleOneIntake = new SequentialAction(
                 intake.tilt(intakeServoLeft, intakeServoRight, true),
                 intake.rotate(intakeServoCenter, 0.76),
                 drive.actionBuilder(new Pose2d(9,32, Math.toRadians(90)))
@@ -150,9 +150,32 @@ public class autoBlueLeft extends LinearOpMode {
                 new SleepAction(2)
         );
 
+        TrajectoryActionBuilder sampleOneBack = drive.actionBuilder(initialPose)
+                // goes behind samples
+                .splineToLinearHeading(new Pose2d(new Vector2d(36, 36), Math.toRadians(270)), Math.toRadians(270))
+                .strafeTo(new Vector2d(36, 12))
+
+                // pushes first sample back, and pushes it to the side
+                .splineToLinearHeading(new Pose2d(new Vector2d(44, 12), Math.toRadians(270)), Math.toRadians(90))
+                .strafeTo(new Vector2d(44, 48))
+                .strafeTo(new Vector2d(36, 48))
+                .splineToLinearHeading(new Pose2d(new Vector2d(42, 58), Math.toRadians(270)), Math.toRadians(0))
+                .strafeTo(new Vector2d(52, 58))
+
+                // pushes second sample back
+                .strafeTo(new Vector2d(48, 58))
+                .splineToLinearHeading(new Pose2d(new Vector2d(36, 28), Math.toRadians(270)), Math.toRadians(270))
+                .splineToLinearHeading(new Pose2d(new Vector2d(53, 14), Math.toRadians(270)), Math.toRadians(90))
+                .strafeTo(new Vector2d(53, 56))
+
+                // park
+                .strafeTo(new Vector2d(52, 40))
+                .splineToLinearHeading(new Pose2d(new Vector2d(26, 12), Math.toRadians(180)), Math.toRadians(180));
+
+
         Actions.runBlocking(new SequentialAction(
-                specimenOne,
-                sampleOne
+                //specimenOne,
+                sampleOneBack.build()
             )
         );
     }

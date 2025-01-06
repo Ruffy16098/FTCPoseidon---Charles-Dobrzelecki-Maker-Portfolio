@@ -52,6 +52,7 @@ public class autoRight extends LinearOpMode {
     public Servo outtakeServoLeft;
     public Servo outtakeServoCenter;
 
+
     @Override
     public void runOpMode() {
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
@@ -124,22 +125,23 @@ public class autoRight extends LinearOpMode {
                 //.waitSeconds(1)
                 .build();
 
-        Action getBehind = drive.actionBuilder(initialPose)
-                .splineToLinearHeading(new Pose2d(new Vector2d(-36, 36), Math.toRadians(270)), Math.toRadians(270))
-                .strafeTo(new Vector2d(-36, 14))
+        TrajectoryActionBuilder getBehindGrabSamples = drive.actionBuilder(initialPose)
+                .splineToLinearHeading(new Pose2d(new Vector2d(-34, 36), Math.toRadians(270)), Math.toRadians(270))
+                .strafeTo(new Vector2d(-34, 14))
 
-                .waitSeconds(2)
+                //.waitSeconds(0.25)
 
-                .splineToLinearHeading(new Pose2d(new Vector2d(-44, 14), Math.toRadians(270)), Math.toRadians(90))
-                .strafeTo(new Vector2d(-44, 56))
-                .waitSeconds(2)
+                .splineToLinearHeading(new Pose2d(new Vector2d(-43, 14), Math.toRadians(270)), Math.toRadians(90))
+                .strafeTo(new Vector2d(-43, 56))
+                //.waitSeconds(0.25)
 
-                .strafeTo(new Vector2d(-44, 14))
-                .turn(Math.toRadians(-4))
-                .waitSeconds(2)
-                .splineToLinearHeading(new Pose2d(new Vector2d(-54, 14), Math.toRadians(270)), Math.toRadians(90))
-                .strafeTo(new Vector2d(-54, 56))
-                .waitSeconds(1)
+                .strafeTo(new Vector2d(-43, 14))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-53, 14), Math.toRadians(270)), Math.toRadians(90))
+                //.waitSeconds(0.25)
+                .strafeTo(new Vector2d(-53, 56));
+
+                // goes up
+
 
                 /*.strafeTo(new Vector2d(-54, 14+1))
                 .turn(Math.toRadians(-4))
@@ -149,12 +151,33 @@ public class autoRight extends LinearOpMode {
 
                  */
 
+                //.build();
+
+        Action hangSpecimen = getBehindGrabSamples.endTrajectory().fresh()
+                .strafeTo(new Vector2d(-47, 48))
+                .afterDisp(0.75, new SequentialAction(
+                        lift.rotatePos(outtakeServoCenter, 1),
+                        lift.outtake(outtakeServoRight, outtakeServoLeft, 1)
+                ))
+                .waitSeconds(1.5)
+                .strafeToLinearHeading(new Vector2d(-47, 63), Math.toRadians(270))
+                .afterDisp(0, new SequentialAction(
+                        lift.rotatePos(outtakeServoCenter, 0)
+                ))
+                .waitSeconds(1)
+                .strafeToLinearHeading(new Vector2d(-9, 32), Math.toRadians(90))
+                .afterDisp(0, new SequentialAction(
+                        lift.outtake(outtakeServoRight, outtakeServoLeft, 1),
+                        lift.elevateOut(liftRight, liftLeft, 20)
+                ))
+                .waitSeconds(3)
                 .build();
 
 
 
         Actions.runBlocking(new SequentialAction(
-                getBehind
+                getBehindGrabSamples.build(),
+                hangSpecimen
                 )
         );
     }
