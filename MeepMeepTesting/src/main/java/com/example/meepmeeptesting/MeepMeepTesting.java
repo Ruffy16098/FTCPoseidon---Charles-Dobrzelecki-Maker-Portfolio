@@ -136,10 +136,14 @@ public class MeepMeepTesting {
                 .strafeToLinearHeading(new Vector2d(-15, 0), Math.toRadians(0))
                 .build();
 
-        Action right = myBot.getDrive().actionBuilder(new Pose2d(-15, 63, Math.toRadians(270)))
+        Action right = myBot.getDrive().actionBuilder(new Pose2d(-15, 63, Math.toRadians(90)))
                 //.splineToLinearHeading(new Pose2d(new Vector2d(-, ), Math.toRadians(270)), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(new Vector2d(-36, 36), Math.toRadians(270)), Math.toRadians(270))
+                .strafeTo(new Vector2d(-9, 32))
+                .waitSeconds(1)
+                .splineToLinearHeading(new Pose2d(new Vector2d(-22.5, 45.5), Math.toRadians(180)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-36, 32), Math.toRadians(270)), Math.toRadians(270))
                 .strafeTo(new Vector2d(-36, 12))
+
 
                 .splineToLinearHeading(new Pose2d(new Vector2d(-44, 12), Math.toRadians(270)), Math.toRadians(90))
                 .strafeTo(new Vector2d(-44, 56))
@@ -164,6 +168,7 @@ public class MeepMeepTesting {
                 .strafeTo(new Vector2d(-47, 48))
                 .waitSeconds(0.5)
                 .strafeToLinearHeading(new Vector2d(-47, 63), Math.toRadians(270))
+
                 .build();
 
         Action left = myBot.getDrive().actionBuilder(new Pose2d(15, 63, Math.toRadians(270)))

@@ -160,7 +160,7 @@ public class actions {
                                 center.setPosition(1);
                                 break;
                             case 2:
-                                center.setPosition(0.8);
+                                center.setPosition(0.1);
                                 break;
                         }
                     }
@@ -190,8 +190,8 @@ public class actions {
                                 right.setPosition(.98);
                                 break;
                             case 2:
-                                left.setPosition(0.5);
-                                right.setPosition(0.5);
+                                left.setPosition(0.8);
+                                right.setPosition(0.8);
                                 break;
                         }
                         initalized = true;

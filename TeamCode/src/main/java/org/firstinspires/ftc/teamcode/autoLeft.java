@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode;
-import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -18,7 +16,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.tuning.MecanumDrive;
 
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import static org.firstinspires.ftc.teamcode.actions.intake;
@@ -29,7 +26,7 @@ import java.util.List;
 
 @Config
 @Autonomous(name = "autoLeft", group = "Autonomous")
-public class autoBlueLeft extends LinearOpMode {
+public class autoLeft extends LinearOpMode {
 
     private FtcDashboard dash = FtcDashboard.getInstance();
     private List<Action> runningActions = new ArrayList<>();

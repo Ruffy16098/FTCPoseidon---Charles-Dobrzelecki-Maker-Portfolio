@@ -103,10 +103,11 @@ public class autoRight extends LinearOpMode {
         outtakeServoCenter = hardwareMap.get(Servo.class, "outtakeServoCenter");
         outtakeServoCenter.setDirection(Servo.Direction.FORWARD);
 
-        Pose2d initialPose = new Pose2d(-15, 63, Math.toRadians(270));
+        Pose2d initialPose = new Pose2d(-15, 63, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         Actions.runBlocking(lift.rotatePos(outtakeServoCenter, 0));
+        //Actions.runBlocking(lift.outtake(outtakeServoRight, outtakeServoLeft, 2));
 
         waitForStart();
 
@@ -126,19 +127,39 @@ public class autoRight extends LinearOpMode {
                 .build();
 
         TrajectoryActionBuilder getBehindGrabSamples = drive.actionBuilder(initialPose)
-                .splineToLinearHeading(new Pose2d(new Vector2d(-34, 36), Math.toRadians(270)), Math.toRadians(270))
-                .strafeTo(new Vector2d(-34, 14))
+                // hangs a specimen
+                .afterDisp(0, new ParallelAction(
+                        lift.outtake(outtakeServoRight, outtakeServoLeft, 2),
+                        lift.elevateOut(liftRight, liftLeft, 18)
+                ))
+                .strafeTo(new Vector2d(-10, 32))
+                .afterDisp(0, new SequentialAction(
+                        lift.elevateOut(liftRight, liftLeft, 12),
+                        new SleepAction(0.5),
+                        lift.rotatePos(outtakeServoCenter, 1)
+                ))
+                .waitSeconds(0.5)
+                .splineToLinearHeading(new Pose2d(new Vector2d(-23, 45), Math.toRadians(180)), Math.toRadians(180))
+                .afterDisp(0, new ParallelAction(
+                        lift.elevateOut(liftRight, liftLeft, 0),
+                        lift.outtake(outtakeServoRight, outtakeServoLeft, 2)
+                ))
 
-                //.waitSeconds(0.25)
+                .splineToLinearHeading(new Pose2d(new Vector2d(-36, 32), Math.toRadians(270)), Math.toRadians(270))
+                .strafeTo(new Vector2d(-36, 21))
 
-                .splineToLinearHeading(new Pose2d(new Vector2d(-43, 14), Math.toRadians(270)), Math.toRadians(90))
-                .strafeTo(new Vector2d(-43, 56))
-                //.waitSeconds(0.25)
+                //.waitSeconds(0.5)
 
-                .strafeTo(new Vector2d(-43, 14))
-                .splineToLinearHeading(new Pose2d(new Vector2d(-53, 14), Math.toRadians(270)), Math.toRadians(90))
+                // sample 1
+                .splineToLinearHeading(new Pose2d(new Vector2d(-44, 21), Math.toRadians(270)), Math.toRadians(90))
+                .strafeTo(new Vector2d(-46, 56))
+                //.waitSeconds(0.25
+
+                // sample 2
+                .strafeTo(new Vector2d(-46, 21))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-55, 21), Math.toRadians(270)), Math.toRadians(90))
                 //.waitSeconds(0.25)
-                .strafeTo(new Vector2d(-53, 56));
+                .strafeTo(new Vector2d(-55, 56));
 
                 // goes up
 
@@ -154,23 +175,89 @@ public class autoRight extends LinearOpMode {
                 //.build();
 
         Action hangSpecimen = getBehindGrabSamples.endTrajectory().fresh()
-                .strafeTo(new Vector2d(-47, 48))
-                .afterDisp(0.75, new SequentialAction(
+                // specimen 1
+
+                // get ready to grab specimen
+                .strafeToLinearHeading(new Vector2d(-47, 48), Math.toRadians(270))
+                .afterDisp(0, new ParallelAction(
                         lift.rotatePos(outtakeServoCenter, 1),
                         lift.outtake(outtakeServoRight, outtakeServoLeft, 1)
                 ))
-                .waitSeconds(1.5)
-                .strafeToLinearHeading(new Vector2d(-47, 63), Math.toRadians(270))
+
+                .waitSeconds(0.5)
+
+                // grabs specimen and sets up for hanging
+                .strafeToLinearHeading(new Vector2d(-47, 63+3), Math.toRadians(270))
                 .afterDisp(0, new SequentialAction(
-                        lift.rotatePos(outtakeServoCenter, 0)
+                        lift.rotatePos(outtakeServoCenter, 2),
+                        new SleepAction(0.5),
+                        new ParallelAction(
+                                lift.outtake(outtakeServoRight, outtakeServoLeft, 2),
+                                lift.elevateOut(liftRight, liftLeft, 18),
+                                lift.rotatePos(outtakeServoCenter, 0)
+                        )
                 ))
+
+                .waitSeconds(0.5)
+
+                // gets more ready
+                //.strafeToLinearHeading(new Vector2d(-18.5, 45.5+1), Math.toRadians(180))
+                .afterDisp(1, new ParallelAction(
+                        lift.outtake(outtakeServoRight, outtakeServoLeft, 2),
+                        lift.elevateOut(liftRight, liftLeft, 18)
+                ))
+
+                // hangs
+                .strafeToLinearHeading(new Vector2d(-10, 32+2), Math.toRadians(90))
+                .afterDisp(0, new SequentialAction(
+                        lift.elevateOut(liftRight, liftLeft, 12),
+                        new SleepAction(0.25),
+                        lift.rotatePos(outtakeServoCenter, 1)
+                ))
+
+                .waitSeconds(0.25)
+
+                // specimen 2
+
+                // get ready to grab specimen
+                .strafeToLinearHeading(new Vector2d(-47, 48), Math.toRadians(270))
+                .afterDisp(0, new ParallelAction(
+                        lift.elevateOut(liftRight, liftLeft, 0),
+                        lift.rotatePos(outtakeServoCenter, 1),
+                        lift.outtake(outtakeServoRight, outtakeServoLeft, 1)
+                ))
+
+                .waitSeconds(0.5)
+
+                // grabs specimen and sets up for hanging
+                .strafeToLinearHeading(new Vector2d(-47, 63+3), Math.toRadians(270))
+                .afterDisp(0, new SequentialAction(
+                        lift.rotatePos(outtakeServoCenter, 2),
+                        new SleepAction(0.5),
+                        new ParallelAction(
+                                lift.outtake(outtakeServoRight, outtakeServoLeft, 2),
+                                lift.elevateOut(liftRight, liftLeft, 18),
+                                lift.rotatePos(outtakeServoCenter, 0)
+                        )
+                ))
+
                 .waitSeconds(1)
-                .strafeToLinearHeading(new Vector2d(-9, 32), Math.toRadians(90))
-                .afterDisp(0, new SequentialAction(
-                        lift.outtake(outtakeServoRight, outtakeServoLeft, 1),
-                        lift.elevateOut(liftRight, liftLeft, 20)
+
+                // gets more ready
+                //.strafeToLinearHeading(new Vector2d(-18.5, 45.5+1), Math.toRadians(180))
+                .afterDisp(0, new ParallelAction(
+                        lift.outtake(outtakeServoRight, outtakeServoLeft, 2),
+                        lift.elevateOut(liftRight, liftLeft, 18)
                 ))
-                .waitSeconds(3)
+
+                // hangs
+                .strafeToLinearHeading(new Vector2d(-10, 32+4), Math.toRadians(90))
+                .afterDisp(0, new SequentialAction(
+                        lift.elevateOut(liftRight, liftLeft, 12),
+                        new SleepAction(0.25),
+                        lift.rotatePos(outtakeServoCenter, 1)
+                ))
+
                 .build();
 
 
