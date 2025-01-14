@@ -13,6 +13,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 
 // Non-RR imports
+import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -58,7 +59,7 @@ public class actions {
                     if (!initialized) {
                         liftRight.setMode(RUN_USING_ENCODER);
                         liftLeft.setMode(RUN_USING_ENCODER);
-                        if (!(liftRight.getCurrentPosition() > 2991 && power > 0)){
+                        if (!(liftRight.getCurrentPosition() > 3500 && power > 0)){
                             liftRight.setPower(power);
                             liftLeft.setPower(power);
                         } else {
@@ -145,14 +146,14 @@ public class actions {
             return Rotate(center, velocity);
         }
 
-        public static Action RotatePos(Servo center, int pos){
+        public static Action RotatePos(Servo center, int caseNum){
             return new Action() {
                 double position;
                 private boolean initalized = false;
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initalized){
-                        switch(pos){
+                        switch(caseNum){
                             case 0:
                                 center.setPosition(0);
                                 break;
@@ -169,8 +170,8 @@ public class actions {
             };
         }
 
-        public static Action rotatePos(Servo center, int pos) {
-            return RotatePos(center, pos);
+        public static Action rotatePos(Servo center, int caseNum) {
+            return RotatePos(center, caseNum);
         }
 
         static Action Outtake (Servo right, Servo left, int pos){
@@ -182,8 +183,8 @@ public class actions {
                     if (!initalized){
                         switch(pos){
                             case 0:
-                                left.setPosition(0.1);
-                                right.setPosition(0.1);
+                                left.setPosition(0.05);
+                                right.setPosition(0.05);
                                 break;
                             case 1:
                                 left.setPosition(.98);
@@ -203,6 +204,28 @@ public class actions {
 
         public static Action outtake(Servo right, Servo left, int pos) {
             return Outtake(right, left, pos);
+        }
+
+
+        static Action Specimen(DcMotor liftRight, DcMotor liftLeft, Servo center){
+            return new Action() {
+                private boolean initalized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if(!initalized) {
+                        // save for later
+                        // lift right 880
+                        // 880 / 79.84615384615385 =
+                        Actions.runBlocking(elevateOut(liftRight, liftLeft, 10));
+                        if(liftRight.getCurrentPosition() <= 880){
+                            Actions.runBlocking(rotatePos(center, 1));
+                        }
+
+                    }
+                    initalized = true;
+                    return false;
+                }
+            };
         }
     }
 
@@ -331,8 +354,8 @@ public class actions {
 
 
         // idea is that it would get a velocity on how much to add or subtract from the current position...
-        public static Action Rotate(Servo center, double pos){
-            double position = pos;
+        public static Action Rotate(Servo center, double vel){
+            double position = vel;
             if (position > 1){
                 position = 1;
             } else if (position < 0) {
@@ -342,7 +365,7 @@ public class actions {
                 private boolean initalized = false;
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initalized){
-                        center.setPosition(pos);
+                        center.setPosition(vel);
                         initalized = true;
                     }
                     return false;
@@ -350,18 +373,18 @@ public class actions {
             };
         }
 
-        public static Action rotate(Servo center, double pos) {
-            return Rotate(center, pos);
+        public static Action rotate(Servo center, double vel) {
+            return Rotate(center, vel);
         }
 
-        public static Action RotatePos(Servo center, int pos){
+        public static Action RotatePos(Servo center, int caseNum){
             return new Action() {
                 double position;
                 private boolean initalized = false;
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initalized){
-                        switch(pos){
+                        switch(caseNum){
                             case 0:
                                 center.setPosition(0.9);
                                 break;
@@ -378,8 +401,8 @@ public class actions {
             };
         }
 
-        public static Action rotatePos(Servo center, int pos) {
-            return RotatePos(center, pos);
+        public static Action rotatePos(Servo center, int caseNum) {
+            return RotatePos(center, caseNum);
         }
 
         public static Action Tilt(Servo left, Servo right, boolean up){

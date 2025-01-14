@@ -158,56 +158,31 @@ public class teleopPoseidon extends OpMode {
             Dpad left/Dpad right = left/right for intake (done)
             Right trigger = intake sucking and hawk tuah (done)
             Left trigger = outtake sucking and hawk tuah (done)
-
-        Outtake mode
             Y = dump
-            A = grabby from outtake
+            A = grabby from intake
             B = nothing yet
             X = nothing yet
-
-        All mode
             Joystick Left Y axis - hort (done)
             Joystick Right Y axis - vert (done)
-            Right bumper - specimen
-            Left bumper - outtake and intake comes in
          */
 
         // intake
 
         // slides actions
-        if (gamepad2.left_bumper){
-            runningActions.add(new SequentialAction(
-                lift.Outtake(outtakeServoRight, outtakeServoLeft, 0),
-                lift.ElevateOut(liftRight, liftLeft,0),
-                intake.tilt(intakeServoLeft, intakeServoRight, true),
-                intake.rotate(intakeServoCenter, 0.77),
-                intake.extendOut(slides, 7.51))
-            );
-        } else {
-            runningActions.add(intake.extend(slides, intakeServoLeft, intakeServoRight, -gamepad2.left_stick_y/2));
-        }
+        runningActions.add(intake.extend(slides, intakeServoLeft, intakeServoRight, -gamepad2.left_stick_y/2));
 
         // grabber actions
+
         if (gamepad2.left_trigger > 0) {
-            if (isInOpen) {
-                // pos to be determined
-                runningActions.add(intake.rotatePos(intakeServoClaw, -1));
-            } else {
-                // pos to be determined
-                runningActions.add(intake.rotatePos(intakeServoClaw, 1));
-            }
-            isInOpen = !isInOpen;
-        } else if (gamepad2.right_trigger > 0) {
-            if (isOutOpen) {
-                // pos to be determined
-                runningActions.add(intake.rotatePos(outtakeServoCenter, -1));
-            } else {
-                // pos to be determined
-                runningActions.add(intake.rotatePos(outtakeServoCenter, 1));
-            }
-            isOutOpen = !isOutOpen;
-        } else {
-            runningActions.add(intake.spin(intakeMotor, 0));
+            runningActions.add(intake.rotatePos(intakeServoClaw, 0));
+        } else if (gamepad2.left_bumper) {
+            runningActions.add(intake.rotatePos(intakeServoClaw, 1));
+        }
+
+        if (gamepad2.right_trigger > 0) {
+            runningActions.add(lift.rotatePos(outtakeServoCenter, 0));
+        } else if (gamepad2.right_bumper) {
+            runningActions.add(lift.rotatePos(outtakeServoCenter, 1));
         }
 
         // rotates the intake
@@ -232,17 +207,11 @@ public class teleopPoseidon extends OpMode {
         }
 
         if (gamepad2.a) {
-            //runningActions.add(lift.outtake(outtakeServoRight, outtakeServoLeft, 0));
-            runningActions.add(intake.rotatePos(intakeServoClaw, 0));
+            runningActions.add(lift.outtake(outtakeServoRight, outtakeServoLeft, 0));
+            //runningActions.add(intake.rotatePos(intakeServoClaw, 0));
         } else if (gamepad2.y) {
-            //runningActions.add(lift.outtake(outtakeServoRight, outtakeServoLeft, 1));
-            runningActions.add(intake.rotatePos(intakeServoClaw, 1));
-        }
-
-        if (gamepad2.b) {
-            runningActions.add(lift.rotatePos(outtakeServoCenter, 0));
-        } else if (gamepad2.x) {
-            runningActions.add(lift.rotatePos(outtakeServoCenter, 1));
+            runningActions.add(lift.outtake(outtakeServoRight, outtakeServoLeft, 2));
+            //runningActions.add(intake.rotatePos(intakeServoClaw, 1));
         }
 
         // update running actions
