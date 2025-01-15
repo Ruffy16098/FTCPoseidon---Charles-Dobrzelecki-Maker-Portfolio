@@ -107,7 +107,6 @@ public class actions {
                         if (liftRight.getCurrentPosition() < 0) {
                             liftLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
                             liftRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-
                         }
                     }
                     return false;
@@ -154,9 +153,11 @@ public class actions {
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initalized){
                         switch(caseNum){
+                            // Should be open case
                             case 0:
                                 center.setPosition(0);
                                 break;
+                            // Should be closed case
                             case 1:
                                 center.setPosition(1);
                                 break;
@@ -215,17 +216,20 @@ public class actions {
                     if(!initalized) {
                         // save for later
                         // lift right 880
-                        // 880 / 79.84615384615385 =
+                        // 880 / 79.84615384615385 = 11.021
                         Actions.runBlocking(elevateOut(liftRight, liftLeft, 10));
                         if(liftRight.getCurrentPosition() <= 880){
                             Actions.runBlocking(rotatePos(center, 1));
                         }
-
                     }
                     initalized = true;
                     return false;
                 }
             };
+        }
+
+        public static Action specimen(DcMotor liftRight, DcMotor liftLeft, Servo center) {
+            return Specimen(liftRight, liftLeft, center);
         }
     }
 
