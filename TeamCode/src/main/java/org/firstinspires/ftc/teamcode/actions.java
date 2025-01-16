@@ -197,8 +197,8 @@ public class actions {
                         // save for later
                         // lift right 880
                         // 880 / 79.84615384615385 = 11.021
-                        Actions.runBlocking(elevateOut(liftRight, liftLeft, 10));
-                        if(liftRight.getCurrentPosition() <= 880){
+                        Actions.runBlocking(elevateOut(liftRight, liftLeft, 22));
+                        if(liftRight.getCurrentPosition() >= 1250){
                             Actions.runBlocking(rotatePos(center, 1));
                         }
                     }
@@ -455,15 +455,15 @@ public class actions {
                         Plan:
                         move slides to position while moving claws into position
                          */
-                        left.setPosition(0.92);
-                        right.setPosition(0.92);
+                        left.setPosition(0.94);
+                        right.setPosition(0.94);
                         center.setPosition(0.76);
                         outtakeLeft.setPosition(0.05);
                         outtakeRight.setPosition(0.05);
                         Actions.runBlocking(new ParallelAction(
                                 ExtendOut(slides, 8.75)
                                 ));
-                        if(slides.getCurrentPosition() <= 264 && slides.getCurrentPosition() >= 260){
+                        if(slides.getCurrentPosition() <= 260 && slides.getCurrentPosition() >= 256){
                             Actions.runBlocking(new SequentialAction(
                                     lift.RotatePos(outtakeClaw, 0),
                                     new SleepAction(0.5),

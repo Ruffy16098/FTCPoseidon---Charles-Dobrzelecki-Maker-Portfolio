@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.actions.intake;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,6 +16,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import java.util.ArrayList;
 import java.util.List;
 
+@Disabled
 @TeleOp(name="testingRandomStuff")
 public class testingRandomStuff extends OpMode {
     private FtcDashboard dash = FtcDashboard.getInstance();
