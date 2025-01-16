@@ -13,6 +13,9 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 
 // Non-RR imports
+import com.acmerobotics.roadrunner.ParallelAction;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -22,29 +25,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @Disabled
 public class actions {
-
-    // drive class
-    public static class drive {
-
-        // forward action or whatever
-        static Action Forward(){
-            return new Action() {
-                private boolean initialized = false;
-                @Override
-                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                    if (!initialized) {
-                        // drive controls here
-                        initialized = true;
-                    }
-                    return false;
-                }
-            };
-        }
-
-        public static Action forward() {
-            return Forward();
-        }
-    }
 
     // lift class
     public static class lift {
@@ -390,13 +370,13 @@ public class actions {
                     if (!initalized){
                         switch(caseNum){
                             case 0:
-                                center.setPosition(0.9);
+                                center.setPosition(0.8);
                                 break;
                             case 1:
                                 center.setPosition(1);
                                 break;
                             case 2:
-                                center.setPosition(0.8);
+                                center.setPosition(0.9);
                                 break;
                         }
                     }
@@ -462,6 +442,51 @@ public class actions {
 
         public static Action tilt(Servo left, Servo right, double pos) {
             return Tilt(left, right, pos);
+        }
+
+        public static Action Claws(Servo left, Servo right, Servo center, Servo claw, Servo outtakeLeft, Servo outtakeRight, Servo outtakeClaw, DcMotorEx slides) {
+            return new Action() {
+                private boolean initalized = false;
+                double futurePos;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initalized){
+                        /*
+                        Plan:
+                        move slides to position while moving claws into position
+                         */
+                        left.setPosition(0.92);
+                        right.setPosition(0.92);
+                        center.setPosition(0.76);
+                        outtakeLeft.setPosition(0.05);
+                        outtakeRight.setPosition(0.05);
+                        Actions.runBlocking(new ParallelAction(
+                                ExtendOut(slides, 8.75)
+                                ));
+                        if(slides.getCurrentPosition() <= 264 && slides.getCurrentPosition() >= 260){
+                            Actions.runBlocking(new SequentialAction(
+                                    lift.RotatePos(outtakeClaw, 0),
+                                    new SleepAction(0.5),
+                                    RotatePos(claw, 1)
+                            ));
+
+                        }else{
+                            Actions.runBlocking(new ParallelAction(
+                                    lift.RotatePos(outtakeClaw, 1),
+                                    RotatePos(claw, 2)
+                            ));
+                        }
+
+
+                        initalized = true;
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static Action claws(Servo left, Servo right, Servo center, Servo claw, Servo outtakeLeft, Servo outtakeRight, Servo outtakeClaw, DcMotorEx slides) {
+            return Claws(left, right, center, claw, outtakeLeft, outtakeRight, outtakeClaw, slides);
         }
 
     }

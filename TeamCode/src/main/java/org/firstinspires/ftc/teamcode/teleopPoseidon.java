@@ -60,25 +60,25 @@ public class teleopPoseidon extends OpMode {
         slides = hardwareMap.get(DcMotorEx.class, "slides");
         slides.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         slides.setDirection(DcMotorSimple.Direction.REVERSE);
-        slides.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        //slides.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         slides.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
         intakeMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        //intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         liftRight = hardwareMap.get(DcMotorEx.class, "liftRight");
         liftRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         liftRight.setDirection(DcMotorSimple.Direction.FORWARD);
-        liftRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        //liftRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         liftRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         liftLeft = hardwareMap.get(DcMotorEx.class, "liftLeft");
         liftLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         liftLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        liftLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        //liftLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         liftLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         intakeServoRight = hardwareMap.get(Servo.class, "intakeServoRight");
@@ -101,12 +101,29 @@ public class teleopPoseidon extends OpMode {
 
         outtakeServoCenter = hardwareMap.get(Servo.class, "outtakeServoCenter");
         outtakeServoCenter.setDirection(Servo.Direction.FORWARD);
+
+        intakeServoRight.setPosition(0.5);
+        intakeServoLeft.setPosition(0.5);
+        intakeServoCenter.setPosition(0.76);
     }
 
     boolean isInOpen = false;
     boolean isOutOpen = false;
     @Override
     public void loop() {
+        /*
+        FTC gamepad 2 controls
+            Dpad up/Dpad down = up/down for intake (done)
+            Dpad left/Dpad right = left/right for intake (done)
+            Right trigger = intake sucking and hawk tuah (done missing pos values)
+            Left trigger = outtake sucking and hawk tuah (done missing pos values)
+            Y = dump
+            A = grabby from intake
+            B = nothing yet
+            X = lifts go up to score specimen
+            Joystick Left Y axis - hort
+            Joystick Right Y axis - vert
+         */
         TelemetryPacket packet = new TelemetryPacket();
         // updated based on gamepads
 
@@ -147,55 +164,41 @@ public class teleopPoseidon extends OpMode {
 
         // gamepad 2
 
-        /*
-        FTC gamepad 2 controls
 
-        Intake mode
-            Dpad up/Dpad down = up/down for intake (done)
-            Dpad left/Dpad right = left/right for intake (done)
-            Right trigger = intake sucking and hawk tuah (done missing pos values)
-            Left trigger = outtake sucking and hawk tuah (done missing pos values)
-            Y = dump
-            A = grabby from intake
-            B = nothing yet
-            X = lifts go up to score specimen
-            Joystick Left Y axis - hort
-            Joystick Right Y axis - vert
-         */
+
 
         // intake
 
         // slides actions
-        runningActions.add(intake.extend(slides, intakeServoLeft, intakeServoRight, -gamepad2.left_stick_y/2));
+        if(gamepad2.b){
+            runningActions.add(intake.claws(intakeServoLeft, intakeServoRight, intakeServoCenter, intakeServoClaw, outtakeServoLeft, outtakeServoRight, outtakeServoCenter, slides));
+        } else {
+            runningActions.add(intake.extend(slides, intakeServoLeft, intakeServoRight, -gamepad2.left_stick_y/2));
+        }
+
 
         // grabber actions
 
-        if (gamepad2.left_bumper) {
-            isInOpen = !isInOpen;
-            if (isInOpen) {
-                runningActions.add(intake.rotatePos(intakeServoClaw, 0));
-            } else {
-                runningActions.add(intake.rotatePos(intakeServoClaw, 1));
-            }
+        if (gamepad2.right_trigger > 0) {
+            runningActions.add(intake.rotatePos(intakeServoClaw, 0));
+        } else if (gamepad2.right_bumper) {
+            runningActions.add(intake.rotatePos(intakeServoClaw, 1));
         }
 
-        if (gamepad2.right_bumper) {
-            isOutOpen = !isOutOpen;
-            if (isOutOpen) {
-                runningActions.add(lift.rotatePos(outtakeServoCenter, 0));
-            } else {
-                runningActions.add(intake.rotatePos(outtakeServoCenter, 1));
-            }
+        if (gamepad2.left_trigger > 0) {
+            runningActions.add(lift.rotatePos(outtakeServoCenter, 0));
+        } else if (gamepad2.left_bumper) {
+            runningActions.add(lift.rotatePos(outtakeServoCenter, 1));
         }
 
         // rotates the intake
-        if (gamepad2.dpad_left && !gamepad2.left_bumper){
+        if (gamepad2.dpad_left){
             runningActions.add(intake.rotate(intakeServoCenter, intakeServoCenter.getPosition() + 0.02));
-        } else if (gamepad2.dpad_right && !gamepad2.left_bumper) {
+        } else if (gamepad2.dpad_right) {
             runningActions.add(intake.rotate(intakeServoCenter, intakeServoCenter.getPosition() - 0.02));
-        } else if (gamepad2.dpad_down && !gamepad2.left_bumper){
+        } else if (gamepad2.dpad_down){
             runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, intakeServoRight.getPosition() + 0.02));
-        } else if (gamepad2.dpad_up && !gamepad2.left_bumper){
+        } else if (gamepad2.dpad_up){
             runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, intakeServoRight.getPosition() - 0.02));
         }
 
@@ -203,9 +206,11 @@ public class teleopPoseidon extends OpMode {
 
         // if the joystick isn't active, than the lifts will keep it self up right
         // elevateOut to current position must be the second to last conditional in the whole statements
-        if (gamepad2.right_stick_y == 0) {
+        if (gamepad2.x) {
+            runningActions.add(lift.specimen(liftRight, liftLeft, outtakeServoCenter));
+        } else if (gamepad2.right_stick_y == 0) {
             runningActions.add(lift.elevateOut(liftRight, liftLeft, liftRight.getCurrentPosition()/79.84615384615385));
-        } else {
+        }  else {
             runningActions.add(lift.elevate(liftRight, liftLeft, -gamepad2.right_stick_y/2));
         }
 
@@ -215,8 +220,6 @@ public class teleopPoseidon extends OpMode {
         } else if (gamepad2.y) {
             runningActions.add(lift.outtake(outtakeServoRight, outtakeServoLeft, 2));
             //runningActions.add(intake.rotatePos(intakeServoClaw, 1));
-        } else if (gamepad2.x) {
-            runningActions.add(lift.specimen(liftRight, liftLeft, outtakeServoCenter));
         }
 
         // update running actions
