@@ -179,15 +179,15 @@ public class teleopPoseidon extends OpMode {
 
         // grabber actions
 
-        if (gamepad2.right_trigger > 0) {
+        if (gamepad2.left_trigger > 0) {
             runningActions.add(intake.rotatePos(intakeServoClaw, 0));
-        } else if (gamepad2.right_bumper) {
+        } else if (gamepad2.left_bumper) {
             runningActions.add(intake.rotatePos(intakeServoClaw, 1));
         }
 
-        if (gamepad2.left_trigger > 0) {
+        if (gamepad2.right_trigger > 0) {
             runningActions.add(lift.rotatePos(outtakeServoCenter, 0));
-        } else if (gamepad2.left_bumper) {
+        } else if (gamepad2.right_bumper) {
             runningActions.add(lift.rotatePos(outtakeServoCenter, 1));
         }
 
@@ -196,9 +196,9 @@ public class teleopPoseidon extends OpMode {
             runningActions.add(intake.rotate(intakeServoCenter, intakeServoCenter.getPosition() + 0.02));
         } else if (gamepad2.dpad_right) {
             runningActions.add(intake.rotate(intakeServoCenter, intakeServoCenter.getPosition() - 0.02));
-        } else if (gamepad2.dpad_down){
-            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, intakeServoRight.getPosition() + 0.02));
         } else if (gamepad2.dpad_up){
+            runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, intakeServoRight.getPosition() + 0.02));
+        } else if (gamepad2.dpad_down){
             runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, intakeServoRight.getPosition() - 0.02));
         }
 
@@ -211,7 +211,7 @@ public class teleopPoseidon extends OpMode {
         } else if (gamepad2.right_stick_y == 0) {
             runningActions.add(lift.elevateOut(liftRight, liftLeft, liftRight.getCurrentPosition()/79.84615384615385));
         }  else {
-            runningActions.add(lift.elevate(liftRight, liftLeft, -gamepad2.right_stick_y/2));
+            runningActions.add(lift.elevate(liftRight, liftLeft, -gamepad2.right_stick_y));
         }
 
         if (gamepad2.a) {

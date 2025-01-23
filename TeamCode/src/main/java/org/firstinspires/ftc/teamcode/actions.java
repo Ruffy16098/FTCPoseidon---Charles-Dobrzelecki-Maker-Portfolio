@@ -172,8 +172,8 @@ public class actions {
                                 right.setPosition(.98);
                                 break;
                             case 2:
-                                left.setPosition(0.8);
-                                right.setPosition(0.8);
+                                left.setPosition(0.70);
+                                right.setPosition(0.70);
                                 break;
                         }
                         initalized = true;
@@ -198,7 +198,7 @@ public class actions {
                         // lift right 880
                         // 880 / 79.84615384615385 = 11.021
                         Actions.runBlocking(elevateOut(liftRight, liftLeft, 22));
-                        if(liftRight.getCurrentPosition() >= 1250){
+                        if(liftRight.getCurrentPosition() >= 1757){
                             Actions.runBlocking(rotatePos(center, 1));
                         }
                     }
@@ -297,7 +297,7 @@ public class actions {
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initialized) {
-                        slides.setPower(0.3);
+                        slides.setPower(0.5);
                         slides.setTargetPosition((int) finalIn);
                         slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         initialized = true;
@@ -461,9 +461,9 @@ public class actions {
                         outtakeLeft.setPosition(0.05);
                         outtakeRight.setPosition(0.05);
                         Actions.runBlocking(new ParallelAction(
-                                ExtendOut(slides, 8.75)
+                                ExtendOut(slides, 9)
                                 ));
-                        if(slides.getCurrentPosition() <= 260 && slides.getCurrentPosition() >= 256){
+                        if(slides.getCurrentPosition() <= 272 && slides.getCurrentPosition() >= 266){
                             Actions.runBlocking(new SequentialAction(
                                     lift.RotatePos(outtakeClaw, 0),
                                     new SleepAction(0.5),

@@ -107,13 +107,13 @@ public class autoRight extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         Actions.runBlocking(lift.rotatePos(outtakeServoCenter, 0));
-        //Actions.runBlocking(lift.outtake(outtakeServoRight, outtakeServoLeft, 2));
+        Actions.runBlocking(lift.outtake(outtakeServoRight, outtakeServoLeft, 2));
 
         waitForStart();
 
         Action colectFront = drive.actionBuilder(initialPose)
                 .afterDisp(0, intake.extendOut(slides, 12))
-                .strafeToLinearHeading(new Vector2d(-48-1, 39), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(-48-1, 41), Math.toRadians(270))
                 //.waitSeconds(1)
                 .afterDisp(1, intake.extendOut(slides, 20))
                 .turnTo(Math.toRadians(90))
@@ -132,7 +132,7 @@ public class autoRight extends LinearOpMode {
                         lift.outtake(outtakeServoRight, outtakeServoLeft, 2),
                         lift.elevateOut(liftRight, liftLeft, 11)
                 ))
-                .strafeTo(new Vector2d(-8, 32.75))
+                .strafeTo(new Vector2d(-8, 33))
                 .afterDisp(0, new SequentialAction(
                         lift.elevateOut(liftRight, liftLeft, 22),
                         new SleepAction(0.75),

@@ -99,22 +99,25 @@ public class autoLeft extends LinearOpMode {
         outtakeServoCenter = hardwareMap.get(Servo.class, "outtakeServoCenter");
         outtakeServoCenter.setDirection(Servo.Direction.FORWARD);
 
-        Pose2d initialPose = new Pose2d(15, 63, Math.toRadians(270));
+        Pose2d initialPose = new Pose2d(15, 63, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         Actions.runBlocking(lift.rotatePos(outtakeServoCenter, 0));
 
         waitForStart();
 
-        Action specimenOne = new SequentialAction(
-                //lift.rotatePos(outtakeServoCenter, 0),
-                lift.outtake(outtakeServoRight, outtakeServoLeft, 1),
-                drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(9, 32))
-                .build(),
-                new SleepAction(1),
-                lift.elevateOut(liftRight, liftLeft, 10)
-        );
+        TrajectoryActionBuilder specimen = drive.actionBuilder(initialPose)
+                // hangs a specimen
+                .afterDisp(0, new ParallelAction(
+                        lift.outtake(outtakeServoRight, outtakeServoLeft, 2),
+                        lift.elevateOut(liftRight, liftLeft, 11)
+                ))
+                .strafeTo(new Vector2d(8, 32.75))
+                .afterDisp(0, new SequentialAction(
+                        lift.elevateOut(liftRight, liftLeft, 22),
+                        new SleepAction(0.75),
+                        lift.rotatePos(outtakeServoCenter, 1)
+                ));
 
         Action sampleOneIntake = new SequentialAction(
                 intake.tilt(intakeServoLeft, intakeServoRight, true),
@@ -147,7 +150,7 @@ public class autoLeft extends LinearOpMode {
                 new SleepAction(2)
         );
 
-        TrajectoryActionBuilder sampleOneBack = drive.actionBuilder(initialPose)
+        TrajectoryActionBuilder sampleOneBack = specimen.endTrajectory().fresh()
                 // goes behind samples
                 .splineToLinearHeading(new Pose2d(new Vector2d(36, 36), Math.toRadians(270)), Math.toRadians(270))
                 .strafeTo(new Vector2d(36, 12))
@@ -171,7 +174,7 @@ public class autoLeft extends LinearOpMode {
 
 
         Actions.runBlocking(new SequentialAction(
-                //specimenOne,
+                specimen.build(),
                 sampleOneBack.build()
             )
         );
