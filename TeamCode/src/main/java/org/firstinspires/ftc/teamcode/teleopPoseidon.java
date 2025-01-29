@@ -104,7 +104,12 @@ public class teleopPoseidon extends OpMode {
 
         intakeServoRight.setPosition(0.5);
         intakeServoLeft.setPosition(0.5);
-        intakeServoCenter.setPosition(0.76);
+        intakeServoCenter.setPosition(0.74);
+        Actions.runBlocking(new ParallelAction(
+                lift.outtake(outtakeServoRight, outtakeServoLeft, 2),
+                intake.rotatePos(intakeServoClaw, 1),
+                lift.rotatePos(outtakeServoCenter, 1)
+        ));
     }
 
     boolean isInOpen = false;
