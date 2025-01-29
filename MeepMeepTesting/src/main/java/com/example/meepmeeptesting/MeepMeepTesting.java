@@ -137,38 +137,9 @@ public class MeepMeepTesting {
                 .build();
 
         Action right = myBot.getDrive().actionBuilder(new Pose2d(-15, 63, Math.toRadians(90)))
-                //.splineToLinearHeading(new Pose2d(new Vector2d(-, ), Math.toRadians(270)), Math.toRadians(180))
-                .strafeTo(new Vector2d(-9, 32))
-                .waitSeconds(1)
-                .splineToLinearHeading(new Pose2d(new Vector2d(-22.5, 45.5), Math.toRadians(180)), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(new Vector2d(-36, 32), Math.toRadians(270)), Math.toRadians(270))
-                .strafeTo(new Vector2d(-36, 12))
-
-
-                .splineToLinearHeading(new Pose2d(new Vector2d(-44, 12), Math.toRadians(270)), Math.toRadians(90))
-                .strafeTo(new Vector2d(-44, 56))
-                .waitSeconds(1)
-                .strafeTo(new Vector2d(-44, 12))
-                .waitSeconds(1)
-
-                .splineToLinearHeading(new Pose2d(new Vector2d(-52, 12), Math.toRadians(270)), Math.toRadians(90))
-                .strafeTo(new Vector2d(-52, 56))
-                .waitSeconds(1)
-                .strafeTo(new Vector2d(-52, 12))
-                .waitSeconds(1)
-
-                .splineToLinearHeading(new Pose2d(new Vector2d(-60, 12), Math.toRadians(270)), Math.toRadians(90))
-                .strafeTo(new Vector2d(-60, 56))
-                //.splineToLinearHeading(new Pose2d(new Vector2d(-44, 60), Math.toRadians(270)), Math.toRadians(90))
-                /*.strafeToLinearHeading(new Vector2d(-48, 39), Math.toRadians(270))
-                .turnTo(Math.toRadians(90))
-                .strafeToLinearHeading(new Vector2d(-58, 39), Math.toRadians(270))
-                .turnTo(Math.toRadians(90))*/
-
-                .strafeTo(new Vector2d(-47, 48))
-                .waitSeconds(0.5)
-                .strafeToLinearHeading(new Vector2d(-47, 63), Math.toRadians(270))
-
+                .strafeTo(new Vector2d(-6, 32))
+                //.splineToLinearHeading(new Pose2d(-27, 53, Math.toRadians(90)), 0)
+                .strafeToLinearHeading(new Vector2d(-48, 48), Math.toRadians(90))
                 .build();
 
         Action left = myBot.getDrive().actionBuilder(new Pose2d(15, 63, Math.toRadians(270)))
