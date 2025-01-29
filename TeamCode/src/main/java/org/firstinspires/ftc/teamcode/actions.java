@@ -164,16 +164,16 @@ public class actions {
                     if (!initalized){
                         switch(pos){
                             case 0:
-                                left.setPosition(0.05);
-                                right.setPosition(0.05);
+                                left.setPosition(0.075);
+                                right.setPosition(0.075);
                                 break;
                             case 1:
-                                left.setPosition(.98);
-                                right.setPosition(.98);
+                                left.setPosition(.01);
+                                right.setPosition(.01);
                                 break;
                             case 2:
-                                left.setPosition(0.70);
-                                right.setPosition(0.70);
+                                left.setPosition(0.8);
+                                right.setPosition(0.8);
                                 break;
                         }
                         initalized = true;
@@ -297,7 +297,7 @@ public class actions {
                 @Override
                 public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                     if (!initialized) {
-                        slides.setPower(0.5);
+                        slides.setPower(0.8);
                         slides.setTargetPosition((int) finalIn);
                         slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         initialized = true;
@@ -457,14 +457,19 @@ public class actions {
                          */
                         left.setPosition(0.94);
                         right.setPosition(0.94);
-                        center.setPosition(0.76);
-                        outtakeLeft.setPosition(0.05);
-                        outtakeRight.setPosition(0.05);
+                        center.setPosition(0.74);
+
                         Actions.runBlocking(new ParallelAction(
-                                ExtendOut(slides, 9)
+                                //238
+                                ExtendOut(slides, 7.91),
+                                lift.outtake(outtakeRight, outtakeLeft, 1),
+                                lift.RotatePos(outtakeClaw, 1),
+                                RotatePos(claw, 2)
                                 ));
-                        if(slides.getCurrentPosition() <= 272 && slides.getCurrentPosition() >= 266){
+                        /*if(slides.getCurrentPosition() <= 239 && slides.getCurrentPosition() >= 237){
+                            // 242 and 226
                             Actions.runBlocking(new SequentialAction(
+                                    new SleepAction(0.5),
                                     lift.RotatePos(outtakeClaw, 0),
                                     new SleepAction(0.5),
                                     RotatePos(claw, 1)
@@ -476,6 +481,8 @@ public class actions {
                                     RotatePos(claw, 2)
                             ));
                         }
+
+                         */
 
 
                         initalized = true;
