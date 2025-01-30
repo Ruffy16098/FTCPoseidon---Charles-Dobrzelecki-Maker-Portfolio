@@ -155,7 +155,7 @@ public class actions {
             return RotatePos(center, caseNum);
         }
 
-        static Action Outtake (Servo right, Servo left, int pos){
+        /*static Action Outtake (Servo right, Servo left, int pos){
             // pos 0 = set down, pos 1 = specimen, pos 2 = bucket
             return new Action() {
                 private boolean initalized = false;
@@ -185,6 +185,25 @@ public class actions {
 
         public static Action outtake(Servo right, Servo left, int pos) {
             return Outtake(right, left, pos);
+        }*/
+
+        public static Action Outtake(DcMotor motor, double power) {
+            return new Action() {
+                private boolean initialized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initialized) {
+                        motor.setMode(RUN_USING_ENCODER);
+                        motor.setPower(power);
+                    }
+                    initialized = true;
+                    return false;
+                }
+            };
+        }
+
+        public static Action outtake(DcMotor motor, double power) {
+            return Outtake(motor, power);
         }
 
 
@@ -230,12 +249,10 @@ public class actions {
                         slides.setMode(RUN_USING_ENCODER);
                         //if(!(slides.getCurrentPosition() > 628 && power > 0)) {
                             //if (!(slides.getCurrentPosition() < 226 && power < 0)) {
-                                slides.setPower(power);
+                        slides.setPower(power);
                             //}
-                        } else {
-                            //slides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                            slides.setPower(0);
-                        }
+                        //}
+                    }
                         initialized = true;
                     //}
                     return false;

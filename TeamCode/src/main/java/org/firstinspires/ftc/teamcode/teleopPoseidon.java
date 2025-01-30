@@ -38,6 +38,7 @@ public class teleopPoseidon extends OpMode {
     public DcMotorEx intakeMotor;
     public DcMotorEx liftRight;
     public DcMotorEx liftLeft;
+    private DcMotorEx outtakeMotor;
 
     public Servo intakeServoRight;
     public Servo intakeServoLeft;
@@ -106,7 +107,7 @@ public class teleopPoseidon extends OpMode {
         intakeServoLeft.setPosition(0.5);
         intakeServoCenter.setPosition(0.74);
         Actions.runBlocking(new ParallelAction(
-                lift.outtake(outtakeServoRight, outtakeServoLeft, 2),
+                lift.outtake(outtakeMotor, 0),
                 intake.rotatePos(intakeServoClaw, 1),
                 lift.rotatePos(outtakeServoCenter, 1)
         ));
@@ -220,11 +221,13 @@ public class teleopPoseidon extends OpMode {
         }
 
         if (gamepad2.a) {
-            runningActions.add(lift.outtake(outtakeServoRight, outtakeServoLeft, 0));
+            runningActions.add(lift.outtake(outtakeMotor, .5));
             //runningActions.add(intake.rotatePos(intakeServoClaw, 0));
         } else if (gamepad2.y) {
-            runningActions.add(lift.outtake(outtakeServoRight, outtakeServoLeft, 2));
+            runningActions.add(lift.outtake(outtakeMotor, -.5));
             //runningActions.add(intake.rotatePos(intakeServoClaw, 1));
+        } else {
+            runningActions.add(lift.outtake(outtakeMotor, -.5));
         }
 
         // update running actions
