@@ -37,7 +37,7 @@ public class autoLeft extends LinearOpMode {
     public DcMotorEx rightBack;
 
     public DcMotorEx slides;
-    public DcMotorEx intakeMotor;
+    public DcMotorEx outtakeMotor;
     public DcMotorEx liftRight;
     public DcMotorEx liftLeft;
 
@@ -62,11 +62,11 @@ public class autoLeft extends LinearOpMode {
         slides.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         slides.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
-        intakeMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        outtakeMotor = hardwareMap.get(DcMotorEx.class, "outtakeMotor");
+        outtakeMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        outtakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        outtakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        outtakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         liftRight = hardwareMap.get(DcMotorEx.class, "liftRight");
         liftRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -109,7 +109,7 @@ public class autoLeft extends LinearOpMode {
         TrajectoryActionBuilder specimen = drive.actionBuilder(initialPose)
                 // hangs a specimen
                 .afterDisp(0, new ParallelAction(
-                        lift.outtake(outtakeServoRight, outtakeServoLeft, 2),
+                        //lift.outtake(outtakeServoRight, outtakeServoLeft, 2),
                         lift.elevateOut(liftRight, liftLeft, 11)
                 ))
                 .strafeTo(new Vector2d(8, 32.75))
@@ -118,37 +118,6 @@ public class autoLeft extends LinearOpMode {
                         new SleepAction(0.75),
                         lift.rotatePos(outtakeServoCenter, 1)
                 ));
-
-        Action sampleOneIntake = new SequentialAction(
-                intake.tilt(intakeServoLeft, intakeServoRight, true),
-                intake.rotate(intakeServoCenter, 0.76),
-                drive.actionBuilder(new Pose2d(9,32, Math.toRadians(90)))
-                        .strafeToLinearHeading(new Vector2d(54,54), Math.toRadians(222))
-                        .waitSeconds(1)
-
-                        .turn(Math.toRadians(45))
-                        .strafeTo(new Vector2d(48, 47))
-                        .waitSeconds(1)
-                        .build(),
-                intake.extendOut(slides, 22),
-                new SleepAction(2),
-                intake.tilt(intakeServoLeft, intakeServoRight, false),
-                new SleepAction(1),
-                intake.spin(intakeMotor, -0.3),
-                new SleepAction(2),
-                intake.spin(intakeMotor, 0),
-                new SleepAction(2),
-                new ParallelAction(
-                        intake.extendOut(slides, 0),
-                        intake.tilt(intakeServoLeft, intakeServoRight, true)
-                ),
-                new SleepAction(5),
-                drive.actionBuilder(new Pose2d(54, 54, Math.toRadians(262)))
-                        .strafeToLinearHeading(new Vector2d(15,63), Math.toRadians(270))
-                        .waitSeconds(1)
-                        .build(),
-                new SleepAction(2)
-        );
 
         TrajectoryActionBuilder sampleOneBack = specimen.endTrajectory().fresh()
                 // goes behind samples

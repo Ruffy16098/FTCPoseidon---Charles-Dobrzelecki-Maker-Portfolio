@@ -64,11 +64,10 @@ public class teleopPoseidon extends OpMode {
         //slides.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         slides.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
-        intakeMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        //intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        outtakeMotor = hardwareMap.get(DcMotorEx.class, "outtakeMotor");
+        outtakeMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        outtakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        outtakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         liftRight = hardwareMap.get(DcMotorEx.class, "liftRight");
         liftRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -107,7 +106,7 @@ public class teleopPoseidon extends OpMode {
         intakeServoLeft.setPosition(0.5);
         intakeServoCenter.setPosition(0.74);
         Actions.runBlocking(new ParallelAction(
-                lift.outtake(outtakeMotor, 0),
+                //lift.outtake(outtakeMotor, 2),
                 intake.rotatePos(intakeServoClaw, 1),
                 lift.rotatePos(outtakeServoCenter, 1)
         ));
@@ -221,13 +220,21 @@ public class teleopPoseidon extends OpMode {
         }
 
         if (gamepad2.a) {
-            runningActions.add(lift.outtake(outtakeMotor, .5));
+            runningActions.add(new SequentialAction(
+                    lift.outtake(outtakeMotor, -0.1),
+                    new SleepAction(2),
+                    lift.outtake(outtakeMotor, 0.0)
+            ));
             //runningActions.add(intake.rotatePos(intakeServoClaw, 0));
         } else if (gamepad2.y) {
-            runningActions.add(lift.outtake(outtakeMotor, -.5));
+            runningActions.add(new SequentialAction(
+                    lift.outtake(outtakeMotor, 0.1),
+                    new SleepAction(2),
+                    lift.outtake(outtakeMotor, 0.0)
+            ));
             //runningActions.add(intake.rotatePos(intakeServoClaw, 1));
         } else {
-            runningActions.add(lift.outtake(outtakeMotor, -.5));
+            //runningActions.add(lift.outtake(outtakeMotor, 0.0));
         }
 
         // update running actions
@@ -249,8 +256,8 @@ public class teleopPoseidon extends OpMode {
         telemetry.addData("liftRight position", liftRight.getCurrentPosition());
         telemetry.addData("liftLeft position", liftLeft.getCurrentPosition());
         telemetry.addData("Outtake servo center position", outtakeServoCenter.getPosition());
-        telemetry.addData("Outtake servo right position", outtakeServoRight.getPosition());
-        telemetry.addData("Outtake servo left position", outtakeServoLeft.getPosition());
+        //telemetry.addData("Outtake servo right position", outtakeServoRight.getPosition());
+        //telemetry.addData("Outtake servo left position", outtakeServoLeft.getPosition());
         telemetry.update();
     }
 }

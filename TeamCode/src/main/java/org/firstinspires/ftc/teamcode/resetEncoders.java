@@ -35,7 +35,7 @@ public class resetEncoders extends OpMode {
     public DcMotorEx rightBack;
 
     public DcMotorEx slides;
-    public DcMotorEx intakeMotor;
+    public DcMotorEx outtakeMotor;
     public DcMotorEx liftRight;
     public DcMotorEx liftLeft;
 
@@ -63,11 +63,11 @@ public class resetEncoders extends OpMode {
         slides.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         slides.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
-        intakeMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        outtakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
+        outtakeMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        outtakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        outtakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        outtakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         liftRight = hardwareMap.get(DcMotorEx.class, "liftRight");
         liftRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);

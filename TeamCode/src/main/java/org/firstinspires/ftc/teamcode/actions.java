@@ -183,11 +183,13 @@ public class actions {
             };
         }
 
+
+
         public static Action outtake(Servo right, Servo left, int pos) {
             return Outtake(right, left, pos);
         }*/
 
-        public static Action Outtake(DcMotor motor, double power) {
+        public static Action Outtake(DcMotorEx motor, double power) {
             return new Action() {
                 private boolean initialized = false;
                 @Override
@@ -202,8 +204,45 @@ public class actions {
             };
         }
 
-        public static Action outtake(DcMotor motor, double power) {
+        public static Action outtake(DcMotorEx motor, double power) {
             return Outtake(motor, power);
+        }
+
+        static Action Outtake (DcMotorEx motor, int pos){
+            // pos 0 = set down, pos 1 = specimen, pos 2 = bucket
+            return new Action() {
+                private boolean initalized = false;
+                @Override
+                public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                    if (!initalized){
+                        switch(pos){
+                            case 0:
+                                new SequentialAction(
+                                     Outtake(motor, -0.1),
+                                     new SleepAction(2),
+                                     Outtake(motor, 0.0)
+                                );
+                                break;
+                            case 1:
+                                //motor.setTargetPosition(-237);
+                                break;
+                            case 2:
+                                new SequentialAction(
+                                        Outtake(motor, 0.1),
+                                        new SleepAction(2),
+                                        Outtake(motor, 0.0)
+                                );
+                                break;
+                        }
+                        initalized = true;
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static Action outtake(DcMotorEx motor, int pos) {
+            return Outtake(motor, pos);
         }
 
 
@@ -479,8 +518,8 @@ public class actions {
                         Actions.runBlocking(new ParallelAction(
                                 //238
                                 ExtendOut(slides, 7.91),
-                                lift.outtake(outtakeRight, outtakeLeft, 1),
-                                lift.RotatePos(outtakeClaw, 1),
+                                //lift.outtake(outtakeRight, outtakeLeft, 1),
+                                lift.RotatePos(outtakeClaw, 0),
                                 RotatePos(claw, 2)
                                 ));
                         /*if(slides.getCurrentPosition() <= 239 && slides.getCurrentPosition() >= 237){
