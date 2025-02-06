@@ -6,6 +6,8 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.har
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
+import android.view.ViewDebug;
+
 import androidx.annotation.NonNull;
 
 // RR-specific imports
@@ -13,6 +15,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 
 // Non-RR imports
+import com.acmerobotics.roadrunner.InstantAction;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
@@ -218,8 +221,8 @@ public class actions {
                         switch(pos){
                             case 0:
                                 new SequentialAction(
-                                     Outtake(motor, -0.1),
-                                     new SleepAction(2),
+                                     Outtake(motor, -0.2),
+                                     new SleepAction(1),
                                      Outtake(motor, 0.0)
                                 );
                                 break;
@@ -228,8 +231,8 @@ public class actions {
                                 break;
                             case 2:
                                 new SequentialAction(
-                                        Outtake(motor, 0.1),
-                                        new SleepAction(2),
+                                        Outtake(motor, 0.2),
+                                        new SleepAction(1),
                                         Outtake(motor, 0.0)
                                 );
                                 break;
@@ -426,13 +429,13 @@ public class actions {
                     if (!initalized){
                         switch(caseNum){
                             case 0:
-                                center.setPosition(0.8);
+                                center.setPosition(0.45);
                                 break;
                             case 1:
                                 center.setPosition(1);
                                 break;
                             case 2:
-                                center.setPosition(0.9);
+                                center.setPosition(0.6);
                                 break;
                         }
                     }
@@ -500,7 +503,7 @@ public class actions {
             return Tilt(left, right, pos);
         }
 
-        public static Action Claws(Servo left, Servo right, Servo center, Servo claw, Servo outtakeLeft, Servo outtakeRight, Servo outtakeClaw, DcMotorEx slides) {
+        public static Action Home(Servo left, Servo right, Servo center, Servo claw, Servo outtakeClaw, DcMotorEx slides, DcMotorEx outtake) {
             return new Action() {
                 private boolean initalized = false;
                 double futurePos;
@@ -511,34 +514,19 @@ public class actions {
                         Plan:
                         move slides to position while moving claws into position
                          */
-                        left.setPosition(0.94);
-                        right.setPosition(0.94);
+                        right.setPosition(0.5);
+                        left.setPosition(0.5);
                         center.setPosition(0.74);
 
                         Actions.runBlocking(new ParallelAction(
-                                //238
-                                ExtendOut(slides, 7.91),
-                                //lift.outtake(outtakeRight, outtakeLeft, 1),
-                                lift.RotatePos(outtakeClaw, 0),
+                                ExtendOut(slides, 0),
                                 RotatePos(claw, 2)
                                 ));
-                        /*if(slides.getCurrentPosition() <= 239 && slides.getCurrentPosition() >= 237){
-                            // 242 and 226
-                            Actions.runBlocking(new SequentialAction(
-                                    new SleepAction(0.5),
-                                    lift.RotatePos(outtakeClaw, 0),
-                                    new SleepAction(0.5),
-                                    RotatePos(claw, 1)
-                            ));
-
+                        if(slides.getCurrentPosition() <= 100 && slides.getCurrentPosition() >= 0){
+                            outtake.setPower(-0.2);
                         }else{
-                            Actions.runBlocking(new ParallelAction(
-                                    lift.RotatePos(outtakeClaw, 1),
-                                    RotatePos(claw, 2)
-                            ));
+                            outtake.setPower(0.2);
                         }
-
-                         */
 
 
                         initalized = true;
@@ -548,8 +536,8 @@ public class actions {
             };
         }
 
-        public static Action claws(Servo left, Servo right, Servo center, Servo claw, Servo outtakeLeft, Servo outtakeRight, Servo outtakeClaw, DcMotorEx slides) {
-            return Claws(left, right, center, claw, outtakeLeft, outtakeRight, outtakeClaw, slides);
+        public static Action home(Servo left, Servo right, Servo center, Servo claw, Servo outtakeLeft, DcMotorEx slides, DcMotorEx outtake) {
+            return Home(left, right, center, claw, outtakeLeft, slides, outtake);
         }
 
     }

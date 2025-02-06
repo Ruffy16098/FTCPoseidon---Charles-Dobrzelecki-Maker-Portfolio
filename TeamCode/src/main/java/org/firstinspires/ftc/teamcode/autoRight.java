@@ -156,25 +156,50 @@ public class autoRight extends LinearOpMode {
 
         TrajectoryActionBuilder grabSamples = startSpecimen.endTrajectory().fresh()
                 .afterDisp(0, new ParallelAction(
-                        lift.elevateOut(liftRight, liftLeft, 0),
-                        new SequentialAction(
-                            lift.outtake(outtakeMotor, 0.1),
-                            new SleepAction(2),
-                            lift.outtake(outtakeMotor, 0.0)
-                    )
+                        lift.elevateOut(liftRight, liftLeft, 0)
                 ))
                 .splineToLinearHeading(new Pose2d(new Vector2d(-22, 46), Math.toRadians(90)), Math.toRadians(180))
                 .splineToLinearHeading(new Pose2d(new Vector2d(-36, 33), Math.toRadians(90)), Math.toRadians(270))
+                .afterDisp(0, new ParallelAction(
+                        intake.rotatePos(intakeServoClaw,  1),
+                        intake.extendOut(slides, 12.1)
+                ))
                 .strafeTo(new Vector2d(-36, 12))
-
-                .strafeTo(new Vector2d(-49.25, 12))
+                .strafeTo(new Vector2d(-48.5, 12))
+                .afterDisp(0, new SequentialAction(
+                        intake.rotatePos(intakeServoClaw,  0),
+                        new SleepAction(0.5),
+                        intake.extendOut(slides, 24)
+                ))
+                //.waitSeconds(0.5)
+                .strafeTo(new Vector2d(-48.5, 36))
                 .afterDisp(0, new SequentialAction(
                         intake.rotatePos(intakeServoClaw,  1),
-                        intake.extendOut(slides, 13),
-                        new SleepAction(2),
-                        intake.rotatePos(intakeServoClaw,  0)
+                        new SleepAction(0.5),
+                        intake.extendOut(slides, 12.1)
                 ))
-                .waitSeconds(5);
+
+                .strafeTo(new Vector2d(-48.5, 12))
+                .strafeTo(new Vector2d(-56.75, 12))
+                .afterDisp(0, new SequentialAction(
+                        intake.rotatePos(intakeServoClaw,  0),
+                        new SleepAction(0.5),
+                        intake.extendOut(slides, 24)
+                ))
+                //.waitSeconds(0.5)
+                .strafeTo(new Vector2d(-56.75, 36))
+                .afterDisp(0, new SequentialAction(
+                        intake.rotatePos(intakeServoClaw,  1),
+                        //new SleepAction(0.5),
+                        intake.extendOut(slides, 0)
+                ))
+                .afterDisp(0, new SequentialAction(
+                        lift.outtake(outtakeMotor, -0.1),
+                        new SleepAction(2),
+                        lift.outtake(outtakeMotor, 0.0)
+                ))
+                .waitSeconds(0.5)
+                .strafeTo(new Vector2d(-54, 56));
 
 
 
@@ -202,6 +227,7 @@ public class autoRight extends LinearOpMode {
                 .strafeTo(new Vector2d(-46, 19))
                 .splineToLinearHeading(new Pose2d(new Vector2d(-54, 21), Math.toRadians(270)), Math.toRadians(90))
                 //.waitSeconds(0.25)
+
                 .strafeTo(new Vector2d(-54, 56));
 
                 // goes up
@@ -381,8 +407,8 @@ public class autoRight extends LinearOpMode {
 
         Actions.runBlocking(new SequentialAction(
                 startSpecimen.build(),
-                pushSamples.build(),
-                hangSpecimen
+                grabSamples.build()
+                //hangSpecimen
                 )
         );
     }

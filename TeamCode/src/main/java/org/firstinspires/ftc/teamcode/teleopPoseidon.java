@@ -176,7 +176,7 @@ public class teleopPoseidon extends OpMode {
 
         // slides actions
         if(gamepad2.b){
-            runningActions.add(intake.claws(intakeServoLeft, intakeServoRight, intakeServoCenter, intakeServoClaw, outtakeServoLeft, outtakeServoRight, outtakeServoCenter, slides));
+            runningActions.add(intake.home(intakeServoLeft, intakeServoRight, intakeServoCenter, intakeServoClaw, outtakeServoLeft, slides, outtakeMotor));
         } else {
             runningActions.add(intake.extend(slides, intakeServoLeft, intakeServoRight, -gamepad2.left_stick_y/2));
         }
@@ -205,15 +205,16 @@ public class teleopPoseidon extends OpMode {
             runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, intakeServoRight.getPosition() + 0.02));
         } else if (gamepad2.dpad_down){
             runningActions.add(intake.tilt(intakeServoLeft, intakeServoRight, intakeServoRight.getPosition() - 0.02));
+        } else if (gamepad2.x){
+            intakeServoRight.setPosition(0.5);
+            intakeServoLeft.setPosition(0.5);
         }
 
         // lifts actions
 
         // if the joystick isn't active, than the lifts will keep it self up right
         // elevateOut to current position must be the second to last conditional in the whole statements
-        if (gamepad2.x) {
-            runningActions.add(lift.specimen(liftRight, liftLeft, outtakeServoCenter));
-        } else if (gamepad2.right_stick_y == 0) {
+        if (gamepad2.right_stick_y == 0) {
             runningActions.add(lift.elevateOut(liftRight, liftLeft, liftRight.getCurrentPosition()/79.84615384615385));
         }  else {
             runningActions.add(lift.elevate(liftRight, liftLeft, -gamepad2.right_stick_y));
