@@ -349,7 +349,7 @@ public class actions {
             // 628 / 20.875 = 30.08383233532934
 
             // ticks per inch
-            in = in * 30.08383233532934;
+            in = in * 31;
             double finalIn = in;
             return new Action() {
                 private boolean initialized = false;

@@ -172,7 +172,7 @@ public class teleopPoseidon extends OpMode {
         if(gamepad2.b){
             runningActions.add(intake.home(intakeServoLeft, intakeServoRight, intakeServoCenter, intakeServoClaw, outtakeServoLeft, slides, outtakeMotor));
         } else {
-            runningActions.add(intake.extend(slides, intakeServoLeft, intakeServoRight, -gamepad2.left_stick_y/2));
+            runningActions.add(intake.extend(slides, -gamepad2.left_stick_y/2));
         }
 
 
