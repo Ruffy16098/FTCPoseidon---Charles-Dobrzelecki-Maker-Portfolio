@@ -137,9 +137,86 @@ public class MeepMeepTesting {
                 .build();
 
         Action right = myBot.getDrive().actionBuilder(new Pose2d(-15, 63, Math.toRadians(90)))
-                .strafeTo(new Vector2d(-6, 32))
-                //.splineToLinearHeading(new Pose2d(-27, 53, Math.toRadians(90)), 0)
-                .strafeToLinearHeading(new Vector2d(-48, 48), Math.toRadians(90))
+                // hang starting specimen
+                .strafeToSplineHeading(new Vector2d(-15, 60), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(new Vector2d(1, 33), Math.toRadians(90)), Math.toRadians(270))
+                .waitSeconds(0.4)
+
+                // get behind samples
+                .splineToLinearHeading(new Pose2d(new Vector2d(-23, 45), Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(new Vector2d(-36, 32), Math.toRadians(270)), Math.toRadians(270))
+                .strafeToSplineHeading(new Vector2d(-36, 21), Math.toRadians(270))
+
+                // sample 1
+                .splineToLinearHeading(new Pose2d(new Vector2d(-44, 21), Math.toRadians(270)), Math.toRadians(90))
+                .strafeToSplineHeading(new Vector2d(-44, 50), Math.toRadians(270))
+
+                // sample 2
+                .splineToLinearHeading(new Pose2d(new Vector2d(-46, 48), Math.toRadians(270)), Math.toRadians(270))
+                .strafeToSplineHeading(new Vector2d(-46, 21), Math.toRadians(270))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-55, 21), Math.toRadians(270)), Math.toRadians(90))
+                .strafeTo(new Vector2d(-55, 50))
+
+                // goal: .13 less
+                /*
+                // sample 3
+                .strafeToSplineHeading(new Vector2d(-55, 19), Math.toRadians(270))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-62, 21), Math.toRadians(270)), Math.toRadians(90))
+                .strafeTo(new Vector2d(-62, 56))
+                */
+
+                // grabs second specimen
+                .splineToSplineHeading(new Pose2d(new Vector2d(-47, 45), Math.toRadians(90)), Math.toRadians(90))
+                .strafeToSplineHeading(new Vector2d(-47, 67), Math.toRadians(90))
+
+                // goes and hangs second specimen
+                //.strafeToLinearHeading(new Vector2d(-1, 31), Math.toRadians(90))
+
+                .strafeToSplineHeading(new Vector2d(-26.5, 50), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-6, 33), Math.toRadians(90)), Math.toRadians(270))
+
+
+                // 14.94
+                // goes and grabs third specimen
+
+                .strafeToSplineHeading(new Vector2d(-26.5, 50), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-47, 67), Math.toRadians(90)), Math.toRadians(90))
+
+                // goes and hangs third specimen
+                /*
+                .splineToLinearHeading(new Pose2d(new Vector2d(-25.5, 50), Math.toRadians(90)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-4, 33), Math.toRadians(90)), Math.toRadians(270))
+                .strafeToSplineHeading(new Vector2d(-47, 65), Math.toRadians(90))
+                /*
+                // goes and grabs fourth specimen
+                .strafeToSplineHeading(new Vector2d(-4, 35), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-25.5, 50), Math.toRadians(90)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-47, 67), Math.toRadians(90)), Math.toRadians(90))
+
+                // goes and hangs fourth specimen
+                .strafeToSplineHeading(new Vector2d(-47, 65), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-24.5, 50), Math.toRadians(90)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-2, 33), Math.toRadians(90)), Math.toRadians(270))
+
+                // goes and grabs fifth specimen
+                .strafeToSplineHeading(new Vector2d(-2, 35), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-24.5, 50), Math.toRadians(90)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-47, 67), Math.toRadians(90)), Math.toRadians(90))
+
+                /*
+                // goes and hangs fifth specimen
+                .strafeToSplineHeading(new Vector2d(-47, 65), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-23.5, 50), Math.toRadians(90)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(new Vector2d(0, 33), Math.toRadians(90)), Math.toRadians(270))
+
+                // parks
+                .strafeToSplineHeading(new Vector2d(0, 35), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-23.5, 50), Math.toRadians(90)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-47, 67), Math.toRadians(90)), Math.toRadians(90))
+
+                 */
+
+
                 .build();
 
         Action left = myBot.getDrive().actionBuilder(new Pose2d(15, 63, Math.toRadians(270)))
