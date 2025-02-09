@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Config
-@Autonomous(name = "pushingSpecimens", group = "Autonomous")
-public class pushingSpecimens extends LinearOpMode {
+@Autonomous(name = "grabSpecimens", group = "Autonomous")
+public class grabSpecimens extends LinearOpMode {
 
     private FtcDashboard dash = FtcDashboard.getInstance();
     private List<Action> runningActions = new ArrayList<>();
@@ -84,7 +84,6 @@ public class pushingSpecimens extends LinearOpMode {
 
         intakeServoRight = hardwareMap.get(Servo.class, "intakeServoRight");
         intakeServoRight.setDirection(Servo.Direction.FORWARD);
-        //intakeServoRight.setPosition(0);
 
         intakeServoLeft = hardwareMap.get(Servo.class, "intakeServoLeft");
         intakeServoLeft.setDirection(Servo.Direction.REVERSE);
@@ -112,7 +111,6 @@ public class pushingSpecimens extends LinearOpMode {
                 intake.rotatePos(intakeServoClaw, 1),
                 lift.rotatePos(outtakeServoCenter, 0)
                 //intake.extendOut(slides, 1.6)
-
         ));
         intakeServoRight.setPosition(0.5);
         intakeServoLeft.setPosition(0.5);
@@ -124,7 +122,6 @@ public class pushingSpecimens extends LinearOpMode {
                 // hangs a specimen
                 .strafeToSplineHeading(new Vector2d(-15, 60), Math.toRadians(90))
                 .afterDisp(0, new ParallelAction(
-                        //lift.outtake(outtakeMotor, 2),
                         lift.elevateOut(liftRight, liftLeft, 14)
                 ))
                 .splineToLinearHeading(new Pose2d(new Vector2d(1, 33), Math.toRadians(90)), Math.toRadians(270))
@@ -136,89 +133,9 @@ public class pushingSpecimens extends LinearOpMode {
                 .waitSeconds(0.4);
 
         TrajectoryActionBuilder grabSamples = startSpecimen.endTrajectory().fresh()
-                .afterDisp(0, new ParallelAction(
-                        lift.elevateOut(liftRight, liftLeft, 0)
-                ))
-                .splineToLinearHeading(new Pose2d(new Vector2d(-22, 46), Math.toRadians(90)), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(new Vector2d(-36, 33), Math.toRadians(90)), Math.toRadians(270))
-                .afterDisp(0, new SequentialAction(
-                        intake.rotatePos(intakeServoClaw,  1),
-                        intake.extendOut(slides, 11)
-                ))
-                .splineToLinearHeading(new Pose2d(new Vector2d(-36, 14), Math.toRadians(90)), Math.toRadians(90))
-                //.strafeTo(new Vector2d(-36, 14))
-                .strafeTo(new Vector2d(-48.5, 14))
-                .afterDisp(0, new SequentialAction(
-                        intake.rotatePos(intakeServoClaw,  0),
-                        new SleepAction(0.2),
-                        intake.extendOut(slides, 24)
-                ))
-                .waitSeconds(0.3)
-                .strafeTo(new Vector2d(-48.5, 36))
-                .afterDisp(0, new SequentialAction(
-                        intake.rotatePos(intakeServoClaw,  1),
-                        intake.extendOut(slides, 11.25)
-                ))
+                ;
 
-
-                .strafeToSplineHeading(new Vector2d(-48, 18), Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(new Vector2d(-57.75, 13), Math.toRadians(90)), Math.toRadians(180))
-                .afterDisp(0, new SequentialAction(
-                        intake.rotatePos(intakeServoClaw,  0)
-                        //new SleepAction(0.5),
-                        //intake.extendOut(slides, 24)
-                ))
-
-                .waitSeconds(0.25)
-                .strafeTo(new Vector2d(-57.75, 36))
-                .afterDisp(0, new SequentialAction(
-                        intake.rotatePos(intakeServoClaw,  1),
-                        //new SleepAction(0.5),
-                        intake.extendOut(slides, 0)
-                ))
-                .afterDisp(0, new SequentialAction(
-                        lift.outtake(outtakeMotor, -0.1),
-                        new SleepAction(2),
-                        lift.outtake(outtakeMotor, 0.0)
-                ))
-
-
-                .waitSeconds(0.5);
-
-
-
-        TrajectoryActionBuilder pushSamples = startSpecimen.endTrajectory().fresh()
-                .afterDisp(0, new ParallelAction(
-                        lift.elevateOut(liftRight, liftLeft, 0),
-                        new SequentialAction(
-                            lift.outtake(outtakeMotor, -0.1),
-                            new SleepAction(2),
-                            lift.outtake(outtakeMotor, 0.0)
-                       )
-                ))
-
-                // get behind samples
-                .splineToLinearHeading(new Pose2d(new Vector2d(-23, 45), Math.toRadians(180)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(new Vector2d(-36, 32), Math.toRadians(270)), Math.toRadians(270))
-                .strafeToSplineHeading(new Vector2d(-36, 21), Math.toRadians(270))
-
-                // sample 1
-                .splineToLinearHeading(new Pose2d(new Vector2d(-44, 21), Math.toRadians(270)), Math.toRadians(90))
-                .strafeToSplineHeading(new Vector2d(-44, 51), Math.toRadians(270))
-
-                // sample 2
-                .splineToLinearHeading(new Pose2d(new Vector2d(-46, 48), Math.toRadians(270)), Math.toRadians(270))
-                .strafeToSplineHeading(new Vector2d(-44, 21), Math.toRadians(270))
-                .splineToLinearHeading(new Pose2d(new Vector2d(-55, 21), Math.toRadians(270)), Math.toRadians(90))
-                .strafeTo(new Vector2d(-55, 51));;
-
-                // sample 3
-                /*.strafeToSplineHeading(new Vector2d(-55, 19), Math.toRadians(270))
-                .splineToLinearHeading(new Pose2d(new Vector2d(-62, 21), Math.toRadians(270)), Math.toRadians(90))
-                .strafeTo(new Vector2d(-62, 56))
-                 */
-
-        Action hangSpecimen = pushSamples.endTrajectory().fresh()
+        Action hangSpecimen = grabSamples.endTrajectory().fresh()
                 // grabs second specimen
                 .strafeToSplineHeading(new Vector2d(-47, 45), Math.toRadians(90))
                 .strafeToLinearHeading(new Vector2d(-47, 68.5), Math.toRadians(90-10))
@@ -255,9 +172,7 @@ public class pushingSpecimens extends LinearOpMode {
                 ))
                 .waitSeconds(0.4)
 
-
                 // goes and grabs third specimen
-
                 .strafeToSplineHeading(new Vector2d(-23, 50), Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(new Vector2d(-47, 69), Math.toRadians(90-10)), Math.toRadians(90))
                 .afterDisp(0, new SequentialAction(
@@ -293,7 +208,6 @@ public class pushingSpecimens extends LinearOpMode {
                 ))
                 .waitSeconds(0.4)
 
-
                 // goes and grabs fourth specimen
                 .strafeToSplineHeading(new Vector2d(-23, 50), Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(new Vector2d(-47, 69), Math.toRadians(90-10)), Math.toRadians(90))
@@ -309,7 +223,6 @@ public class pushingSpecimens extends LinearOpMode {
                                 ))
 
                 ))
-
 
                 // goes and hangs fourth specimen
                 .strafeToSplineHeading(new Vector2d(-21, 50), Math.toRadians(90))
@@ -346,12 +259,10 @@ public class pushingSpecimens extends LinearOpMode {
                  */
                 .build();
 
-
-
         Actions.runBlocking(new SequentialAction(
-                startSpecimen.build(),
-                pushSamples.build(),
-                hangSpecimen
+                        startSpecimen.build(),
+                        grabSamples.build(),
+                        hangSpecimen
                 )
         );
     }

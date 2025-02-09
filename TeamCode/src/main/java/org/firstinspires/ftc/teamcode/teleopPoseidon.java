@@ -61,7 +61,6 @@ public class teleopPoseidon extends OpMode {
         slides = hardwareMap.get(DcMotorEx.class, "slides");
         slides.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         slides.setDirection(DcMotorSimple.Direction.REVERSE);
-        //slides.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         slides.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         outtakeMotor = hardwareMap.get(DcMotorEx.class, "outtakeMotor");
@@ -78,7 +77,6 @@ public class teleopPoseidon extends OpMode {
         liftLeft = hardwareMap.get(DcMotorEx.class, "liftLeft");
         liftLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         liftLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        //liftLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         liftLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         intakeServoRight = hardwareMap.get(Servo.class, "intakeServoRight");
@@ -106,7 +104,6 @@ public class teleopPoseidon extends OpMode {
         intakeServoLeft.setPosition(0.5);
         intakeServoCenter.setPosition(0.74);
         Actions.runBlocking(new ParallelAction(
-                //lift.outtake(outtakeMotor, 2),
                 intake.rotatePos(intakeServoClaw, 1),
                 lift.rotatePos(outtakeServoCenter, 1)
         ));
@@ -169,9 +166,6 @@ public class teleopPoseidon extends OpMode {
 
         // gamepad 2
 
-
-
-
         // intake
 
         // slides actions
@@ -183,7 +177,6 @@ public class teleopPoseidon extends OpMode {
 
 
         // grabber actions
-
         if (gamepad2.left_trigger > 0) {
             runningActions.add(intake.rotatePos(intakeServoClaw, 0));
         } else if (gamepad2.left_bumper) {
@@ -257,8 +250,6 @@ public class teleopPoseidon extends OpMode {
         telemetry.addData("liftRight position", liftRight.getCurrentPosition());
         telemetry.addData("liftLeft position", liftLeft.getCurrentPosition());
         telemetry.addData("Outtake servo center position", outtakeServoCenter.getPosition());
-        //telemetry.addData("Outtake servo right position", outtakeServoRight.getPosition());
-        //telemetry.addData("Outtake servo left position", outtakeServoLeft.getPosition());
         telemetry.update();
     }
 }

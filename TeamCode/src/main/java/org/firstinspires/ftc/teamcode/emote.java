@@ -16,6 +16,7 @@ import com.acmerobotics.roadrunner.TurnConstraints;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.tuning.MecanumDrive;
@@ -30,6 +31,7 @@ import static org.firstinspires.ftc.teamcode.actions.lift;
 import java.util.ArrayList;
 import java.util.List;
 
+@Disabled
 @Config
 @Autonomous(name = "emote", group = "Autonomous")
 public class emote extends LinearOpMode {
