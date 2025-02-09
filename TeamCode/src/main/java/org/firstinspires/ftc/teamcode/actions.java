@@ -142,7 +142,7 @@ public class actions {
                                 break;
                             // Should be closed case
                             case 1:
-                                center.setPosition(1);
+                                center.setPosition(0.2);
                                 break;
                             case 2:
                                 center.setPosition(0.1);
