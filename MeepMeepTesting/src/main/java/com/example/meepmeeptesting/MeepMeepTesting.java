@@ -22,10 +22,11 @@ public class MeepMeepTesting {
                 // hang starting specimen
                 .strafeToSplineHeading(new Vector2d(-15, 60), Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(new Vector2d(1, 33), Math.toRadians(90)), Math.toRadians(270))
-                .waitSeconds(0.4)
+                //.waitSeconds(0.4)
 
                 // get behind samples
-                .splineToLinearHeading(new Pose2d(new Vector2d(-23, 45), Math.toRadians(180)), Math.toRadians(180))
+
+                .splineToLinearHeading(new Pose2d(new Vector2d(-23, 45), Math.toRadians(90)), Math.toRadians(180))
                 .splineToSplineHeading(new Pose2d(new Vector2d(-36, 32), Math.toRadians(270)), Math.toRadians(270))
                 .strafeToSplineHeading(new Vector2d(-36, 21), Math.toRadians(270))
 
@@ -39,43 +40,53 @@ public class MeepMeepTesting {
                 .splineToLinearHeading(new Pose2d(new Vector2d(-55, 21), Math.toRadians(270)), Math.toRadians(90))
                 .strafeTo(new Vector2d(-55, 50))
 
-                /*
+
                 // sample 3
                 .strafeToSplineHeading(new Vector2d(-55, 19), Math.toRadians(270))
                 .splineToLinearHeading(new Pose2d(new Vector2d(-62, 21), Math.toRadians(270)), Math.toRadians(90))
                 .strafeTo(new Vector2d(-62, 56))
-                */
+
 
                 // grabs second specimen
                 .splineToSplineHeading(new Pose2d(new Vector2d(-47, 45), Math.toRadians(90)), Math.toRadians(90))
                 .strafeToSplineHeading(new Vector2d(-47, 67), Math.toRadians(90))
 
+
                 // goes and hangs second specimen
-                .strafeToSplineHeading(new Vector2d(-26.5, 50), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-26.5, 50), Math.toRadians(90)), Math.toRadians(270))
+                //.strafeToSplineHeading(new Vector2d(-26.5, 50), Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(new Vector2d(-1, 33), Math.toRadians(90)), Math.toRadians(270))
 
                 // goes and grabs third specimen
-                .strafeToSplineHeading(new Vector2d(-26.5, 50), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-26.5, 50), Math.toRadians(90)), Math.toRadians(180))
+                //.strafeToSplineHeading(new Vector2d(-26.5, 50), Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(new Vector2d(-47, 67), Math.toRadians(90)), Math.toRadians(90))
 
+
                 // goes and hangs third specimen
-                .strafeToSplineHeading(new Vector2d(-26.5, 50), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-26.5, 50), Math.toRadians(90)), Math.toRadians(270))
+                //.strafeToSplineHeading(new Vector2d(-26.5, 50), Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(new Vector2d(-3, 33), Math.toRadians(90)), Math.toRadians(270))
 
                 // goes and grabs fourth specimen
-                .strafeToSplineHeading(new Vector2d(-26.5, 50), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-26.5, 50), Math.toRadians(90)), Math.toRadians(180))
+                //.strafeToSplineHeading(new Vector2d(-26.5, 50), Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(new Vector2d(-47, 67), Math.toRadians(90)), Math.toRadians(90))
 
                 // goes and hangs fourth specimen
-                .strafeToSplineHeading(new Vector2d(-26.5, 50), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-26.5, 50), Math.toRadians(90)), Math.toRadians(270))
+                //.strafeToSplineHeading(new Vector2d(-26.5, 50), Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(new Vector2d(-5, 33), Math.toRadians(90)), Math.toRadians(270))
 
+
                 // goes and grabs fifth specimen
-                .strafeToSplineHeading(new Vector2d(-26.5, 50), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-26.5, 50), Math.toRadians(90)), Math.toRadians(180))
+                //.strafeToSplineHeading(new Vector2d(-26.5, 50), Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(new Vector2d(-47, 67), Math.toRadians(90)), Math.toRadians(90))
 
                 // goes and hangs fifth specimen
-                .strafeToSplineHeading(new Vector2d(-26.5, 50), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(new Vector2d(-26.5, 50), Math.toRadians(90)), Math.toRadians(270))
+                //.strafeToSplineHeading(new Vector2d(-26.5, 50), Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(new Vector2d(-7, 33), Math.toRadians(90)), Math.toRadians(270))
 
                 // parks
