@@ -215,18 +215,23 @@ public class teleopPoseidon extends OpMode {
 
         if (gamepad2.a) {
             runningActions.add(new SequentialAction(
-                    lift.outtake(outtakeMotor, -0.1),
-                    new SleepAction(2),
+                    lift.outtake(outtakeMotor, -0.2),
+                    new SleepAction(1),
                     lift.outtake(outtakeMotor, 0.0)
             ));
-            //runningActions.add(intake.rotatePos(intakeServoClaw, 0));
+
+
+            //runningActions.add((lift.outtake(outtakeMotor, -0.2)));
         } else if (gamepad2.y) {
+
             runningActions.add(new SequentialAction(
-                    lift.outtake(outtakeMotor, 0.1),
-                    new SleepAction(2),
+                    lift.outtake(outtakeMotor, 0.2),
+                    new SleepAction(1),
                     lift.outtake(outtakeMotor, 0.0)
             ));
-            //runningActions.add(intake.rotatePos(intakeServoClaw, 1));
+
+
+            //runningActions.add((lift.outtake(outtakeMotor, 0.2)));
         } else {
             //runningActions.add(lift.outtake(outtakeMotor, 0.0));
         }

@@ -522,12 +522,6 @@ public class actions {
                                 ExtendOut(slides, 0),
                                 RotatePos(claw, 2)
                                 ));
-                        if(slides.getCurrentPosition() <= 100 && slides.getCurrentPosition() >= 0){
-                            outtake.setPower(-0.2);
-                        }else{
-                            outtake.setPower(0.2);
-                        }
-
 
                         initalized = true;
                     }
