@@ -154,13 +154,7 @@ public class pushSpecimens extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(new Vector2d(-46, 48), Math.toRadians(270)), Math.toRadians(270))
                 .strafeToSplineHeading(new Vector2d(-44, 21), Math.toRadians(270))
                 .splineToLinearHeading(new Pose2d(new Vector2d(-55, 21), Math.toRadians(270)), Math.toRadians(90))
-                .strafeTo(new Vector2d(-55, 51));;
-
-                // sample 3
-                /*.strafeToSplineHeading(new Vector2d(-55, 19), Math.toRadians(270))
-                .splineToLinearHeading(new Pose2d(new Vector2d(-62, 21), Math.toRadians(270)), Math.toRadians(90))
-                .strafeTo(new Vector2d(-62, 56))
-                 */
+                .strafeTo(new Vector2d(-55, 51));
 
         Action hangSpecimen = pushSamples.endTrajectory().fresh()
                 // grabs second specimen
@@ -272,18 +266,6 @@ public class pushSpecimens extends LinearOpMode {
                 .strafeToSplineHeading(new Vector2d(-47, 60), Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(new Vector2d(-47, 69), Math.toRadians(90-10)), Math.toRadians(90))
 
-                /*
-                // goes and grabs fifth specimen
-
-                .strafeToSplineHeading(new Vector2d(-2, 35), Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(new Vector2d(-24.5, 50), Math.toRadians(90)), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(new Vector2d(-47, 67), Math.toRadians(90)), Math.toRadians(90))
-
-                // goes and hangs fifth specimen
-                .strafeToSplineHeading(new Vector2d(-47, 65), Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(new Vector2d(-23.5, 50), Math.toRadians(90)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(new Vector2d(0, 33), Math.toRadians(90)), Math.toRadians(270))
-                 */
                 .build();
 
         Actions.runBlocking(new SequentialAction(
